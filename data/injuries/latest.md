@@ -119,11 +119,11 @@ Show Display Settings Add Lineup Alerts
 
     **O/U**  229.0 Pts 229.5 Pts 229.5 Pts 229.5 Pts –
 
-[![](https://assets.rotowire.com/images/props/underdog.svg)](https://www.rotowire.com/picks/underdog/) [Make The Right Picks](https://www.rotowire.com/picks/underdog/) [![](https://assets.rotowire.com/images/picks-promo-screen.png)](https://www.rotowire.com/picks/underdog/)
+[![](https://assets.rotowire.com/images/props/sleeper.svg)](https://www.rotowire.com/picks/sleeper/) [Make The Right Picks](https://www.rotowire.com/picks/sleeper/) [![](https://assets.rotowire.com/images/picks-promo-screen.png)](https://www.rotowire.com/picks/sleeper/)
 
-If you play on Underdog, you should check out the RotoWire Picks tool. Get our best picks for today's NBA games.
+If you play on Sleeper, you should check out the RotoWire Picks tool. Get our best picks for today's NBA games.
 
-[See Our Top Picks For Underdog](https://www.rotowire.com/picks/underdog/)
+[See Our Top Picks For Sleeper](https://www.rotowire.com/picks/sleeper/)
 
 7:30 PM ET
 
@@ -277,7 +277,7 @@ If you play on Underdog, you should check out the RotoWire Picks tool. Get our b
 
 **Referees:**  [James Capers](https://www.rotowire.com/basketball/ref.php?id=3560), [CJ Washington](https://www.rotowire.com/basketball/ref.php?id=524990), [Rodney Mott](https://www.rotowire.com/basketball/ref.php?id=3593)
 
-**LINE**  NYK -1004 NYK -900 NYK -980 NYK -1000 –
+**LINE**  NYK -1014 NYK -900 NYK -980 NYK -1100 –
 
 **SPREAD**  NYK -15.0 NYK -14.5 NYK -14.5 NYK -15.5 –
 
@@ -511,7 +511,7 @@ If you play on Underdog, you should check out the RotoWire Picks tool. Get our b
 
 **Referees:**  [Gediminas Petraitis](https://www.rotowire.com/basketball/ref.php?id=720664), [Pat Fraher](https://www.rotowire.com/basketball/ref.php?id=3576),
 
-**LINE**  DET -201 DET -200 DET -208 DET -200 –
+**LINE**  DET -200 DET -200 DET -208 DET -200 –
 
 **SPREAD**  DET -5.0 DET -4.5 DET -5.5 DET -4.5 –
 
@@ -881,9 +881,9 @@ If you play on Underdog, you should check out the RotoWire Picks tool. Get our b
 
 **Referees:**  [Mark Lindsay](https://www.rotowire.com/basketball/ref.php?id=350431), ,
 
-**LINE**  SAS -1179 SAS -1000 SAS -1180 SAS -1200 –
+**LINE**  SAS -1169 SAS -1000 SAS -1180 SAS -1200 –
 
-**SPREAD**  SAS -16.0 SAS -16.5 SAS -15.5 SAS -16.5 –
+**SPREAD**  SAS -16.0 SAS -16.5 SAS -16.5 SAS -16.5 –
 
     **O/U**  230.0 Pts 230.5 Pts 229.5 Pts 230.5 Pts –
 
@@ -954,11 +954,11 @@ If you play on Underdog, you should check out the RotoWire Picks tool. Get our b
 
 **Referees:**  [John Goble](https://www.rotowire.com/basketball/ref.php?id=304287), [Brent Barnaky](https://www.rotowire.com/basketball/ref.php?id=534510), [Intae Hwang](https://www.rotowire.com/basketball/ref.php?id=1420199)
 
-**LINE**  DEN -173 DEN -168 DEN -174 DEN -185 –
+**LINE**  DEN -172 DEN -168 DEN -174 DEN -180 –
 
 **SPREAD**  DEN -4.0 DEN -4.5 DEN -4.5 DEN -4.5 –
 
-    **O/U**  231.5 Pts 230.5 Pts 231.5 Pts 231.5 Pts –
+    **O/U**  231.5 Pts 230.5 Pts 230.5 Pts 231.5 Pts –
 
 10:00 PM ET
 
@@ -1033,11 +1033,11 @@ If you play on Underdog, you should check out the RotoWire Picks tool. Get our b
 
 **Referees:**  [Sean Wright](https://www.rotowire.com/basketball/ref.php?id=304736), [Kevin Cutler](https://www.rotowire.com/basketball/ref.php?id=413140), [JT Orr](https://www.rotowire.com/basketball/ref.php?id=526241)
 
-**LINE**  GSW -147 GSW -152 GSW -149 GSW -145 –
+**LINE**  GSW -148 GSW -152 GSW -149 GSW -150 –
 
 **SPREAD**  GSW -3.0 GSW -3.5 GSW -2.5 GSW -2.5 –
 
-    **O/U**  228.0 Pts 226.5 Pts 228.5 Pts 228.5 Pts –
+    **O/U**  227.5 Pts 226.5 Pts 227.5 Pts 228.5 Pts –
 
 10:00 PM ET
 
