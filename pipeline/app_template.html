@@ -1,0 +1,340 @@
+<title>NBA Game Simulator</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: same family as the NHL and tennis simulators: tabs, a slate of expandable game rows, and a two-column board of
+   market panels. Arena palette: cool concrete ground, home in deep court blue, away in shot-clock orange. */
+:root{
+  --bg:#EDF0F2; --panel:#FFFFFF; --ink:#16202A; --muted:#5A6672; --line:#D3DAE0; --soft:#E4E9ED;
+  --accent:#1D4E89; --accent-ink:#FFFFFF; --a:#1D4E89; --b:#C2561E; --good:#2E7D4F; --warn:#8A5E00; --warn-bg:#FFF2D2;
+  --display:"Big Shoulders Display","Arial Narrow",Arial,sans-serif;
+  --body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E141A; --panel:#161F28; --ink:#E3E9EE; --muted:#97A3AE; --line:#29343F; --soft:#1C2731;
+  --accent:#78A6DC; --accent-ink:#0E141A; --a:#78A6DC; --b:#EE8A55; --good:#6CC08C; --warn:#F0C25A; --warn-bg:#2C2617; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E141A; --panel:#161F28; --ink:#E3E9EE; --muted:#97A3AE; --line:#29343F; --soft:#1C2731;
+  --accent:#78A6DC; --accent-ink:#0E141A; --a:#78A6DC; --b:#EE8A55; --good:#6CC08C; --warn:#F0C25A; --warn-bg:#2C2617; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1140px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+header.top{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 16px}
+h1{font-family:var(--display);font-weight:800;font-size:2.2rem;letter-spacing:.02em;margin:0;text-transform:uppercase;text-wrap:balance}
+.asof{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px;min-width:0}
+label,.lbl{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
+select,button,input{font:inherit;color:var(--ink)}
+select{width:100%;min-width:0;padding:8px 10px;border:1px solid var(--line);border-radius:4px;background:var(--panel)}
+select:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.seg button{border:0;background:var(--panel);padding:7px 12px;cursor:pointer;font-weight:500;font-size:.88rem}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tabs button{border:0;background:none;padding:10px 14px;font-family:var(--display);font-size:1.15rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.view{display:flex;flex-direction:column;gap:18px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+.bar .note{font-size:.8rem;color:var(--muted);flex:1 1 260px}
+.daygrp{padding:0;overflow:hidden}
+.daygrp>header{padding:10px 16px;background:var(--soft);border-bottom:1px solid var(--line)}
+.daygrp>header b{font-family:var(--display);font-size:1.3rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.colhd,.grow{display:grid;grid-template-columns:4.6em minmax(0,1fr) 4.6em 5.4em 5.4em 1.2em;gap:4px 12px;align-items:center}
+.colhd{padding:6px 16px;font-size:.66rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;border-bottom:1px solid var(--line)}
+.colhd span:nth-child(n+3){text-align:right}
+.grow{padding:10px 16px;border:0;border-bottom:1px solid var(--line);width:100%;background:var(--panel);text-align:left;cursor:pointer;font:inherit;color:var(--ink)}
+.grow:hover{background:var(--soft)}
+.grow .t{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+.grow .who{display:flex;flex-direction:column;gap:3px;min-width:0}
+.grow .tm{display:flex;align-items:baseline;gap:8px;min-width:0}
+.grow .tm b{font-weight:600;white-space:nowrap}
+.grow .tm small{color:var(--muted);font-size:.74rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.grow .c{font-family:var(--mono);font-variant-numeric:tabular-nums;display:flex;flex-direction:column;gap:3px;text-align:right;font-size:.88rem}
+.grow .c small{color:var(--muted);font-size:.72rem}
+.grow .chev{color:var(--muted);transition:transform .15s}
+.grow[aria-expanded="true"] .chev{transform:rotate(90deg)}
+.detail{padding:16px;background:var(--bg);border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:18px}
+.dot{width:10px;height:10px;border-radius:50%;flex:none;display:inline-block}
+.board{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto auto;padding:0;overflow:hidden}
+.board .hd{font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:10px 14px 6px;font-weight:600;border-bottom:1px solid var(--line);text-align:right}
+.board .hd:first-child{text-align:left}
+.board .c{padding:12px 14px;display:flex;align-items:center;border-bottom:1px solid var(--line);min-width:0}
+.tname{display:flex;align-items:center;gap:10px;min-width:0}
+.tname b{font-family:var(--display);font-size:1.55rem;font-weight:700;text-transform:uppercase;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tname small{color:var(--muted);font-size:.78rem;display:block;font-family:var(--body)}
+.big{font-family:var(--display);font-size:2.1rem;font-weight:800;font-variant-numeric:tabular-nums;justify-content:flex-end}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;justify-content:flex-end}
+.meta{grid-column:1/-1;padding:10px 14px;font-size:.82rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;background:var(--soft)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.panel h2{font-family:var(--display);font-size:1.3rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin:0 0 10px}
+.panel h3{font-family:var(--display);font-size:1.05rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin:12px 0 4px;display:flex;align-items:center;gap:8px}
+.panel .sub{font-size:.8rem;color:var(--muted);margin:-6px 0 10px}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th,td{padding:5px 6px;text-align:right;border-bottom:1px solid var(--soft);font-size:.86rem;white-space:nowrap}
+th{font-size:.68rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600}
+th:first-child,td:first-child{text-align:left}
+td{font-family:var(--mono)} td:first-child{font-family:var(--body)}
+tr.mark td{background:var(--soft);font-weight:500}
+.tblwrap{overflow-x:auto}
+.props{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.prop{border:1px solid var(--line);border-radius:4px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;background:var(--panel)}
+.prop .pv{font-family:var(--display);font-size:1.6rem;font-weight:700;font-variant-numeric:tabular-nums}
+.prop .po{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+.prop .pl{font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600}
+.bands{display:grid;grid-template-columns:auto 1fr 3.8em 4.6em;gap:4px 10px;align-items:center;font-size:.84rem}
+.bands .bb{height:12px;border-radius:2px}
+.bands .v{font-family:var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+.how{font-size:.88rem} .how p{margin:0 0 8px;max-width:78ch}
+.warn{background:var(--warn-bg);color:var(--warn);border-radius:4px;padding:8px 10px;font-size:.82rem}
+.foot{font-size:.78rem;color:var(--muted);max-width:90ch}
+.gs{font-size:.6rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--muted);color:var(--muted);border-radius:3px;padding:0 4px;white-space:nowrap}
+.gs.pin{border-color:var(--good);color:var(--good)}
+.gs.out{border-color:var(--b);color:var(--b)}
+.controls{display:grid;grid-template-columns:1fr auto 1fr;gap:12px 14px;align-items:end}
+.field{display:flex;flex-direction:column;gap:4px;min-width:0}
+.row2{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:12px 14px;align-items:end}
+.run{background:var(--accent);color:var(--accent-ink);border:0;border-radius:4px;padding:9px 22px;font-weight:700;cursor:pointer;font-family:var(--display);font-size:1.2rem;letter-spacing:.06em;text-transform:uppercase}
+.run:disabled{opacity:.6;cursor:wait}
+.swap{border:1px solid var(--line);background:var(--panel);border-radius:4px;padding:8px 10px;cursor:pointer}
+.roster{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.plist{display:flex;flex-direction:column;gap:2px;max-height:340px;overflow:auto}
+.plist label{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;text-transform:none;letter-spacing:0;font-weight:400;font-size:.86rem;color:var(--ink);padding:3px 4px;border-radius:3px}
+.plist label:hover{background:var(--soft)}
+.plist .m{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+.plist label.isout span:nth-child(2){text-decoration:line-through;color:var(--muted)}
+@media (max-width:720px){.grid,.roster{grid-template-columns:1fr}.controls{grid-template-columns:1fr}
+  .colhd,.grow{grid-template-columns:3.8em minmax(0,1fr) 4em 4.6em 1em}.colhd span:nth-child(5),.grow .c.tot{display:none}
+  .board{grid-template-columns:minmax(0,1fr) auto auto auto}.board .hide-s{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1>NBA Game Simulator</h1>
+    <span class="asof" id="asof"></span>
+  </header>
+  <nav class="tabs" role="tablist">
+    <button type="button" role="tab" id="tabToday" aria-selected="true" aria-controls="todayView">Today's games</button>
+    <button type="button" role="tab" id="tabSim" aria-selected="false" aria-controls="simView">Simulator</button>
+    <button type="button" role="tab" id="tabRec" aria-selected="false" aria-controls="recView">Track record</button>
+  </nav>
+
+  <section class="view" id="todayView" role="tabpanel" aria-labelledby="tabToday">
+    <div class="bar">
+      <div class="seg" id="modeSeg" role="group" aria-label="Prices">
+        <button type="button" data-v="anch" aria-pressed="true">Pinnacle-anchored</button>
+        <button type="button" data-v="model" aria-pressed="false">Model only</button>
+      </div>
+      <span class="note" id="slateNote"></span>
+    </div>
+    <div id="slate"></div>
+  </section>
+
+  <section class="view" id="simView" role="tabpanel" aria-labelledby="tabSim" hidden>
+    <section class="panel controls" aria-label="Game setup">
+      <div class="field"><label for="selAway">Away</label><select id="selAway"></select></div>
+      <button type="button" class="swap" id="swapBtn" aria-label="Swap teams">⇄</button>
+      <div class="field"><label for="selHome">Home</label><select id="selHome"></select></div>
+      <div class="row2">
+        <div class="field"><span class="lbl">Venue</span><div class="seg" id="venueSeg"><button type="button" data-v="home" aria-pressed="true">Home court</button><button type="button" data-v="neutral" aria-pressed="false">Neutral</button></div></div>
+        <div class="field"><span class="lbl">Simulations</span><div class="seg" id="nSeg"><button type="button" data-v="5000" aria-pressed="false">5,000</button><button type="button" data-v="20000" aria-pressed="true">20,000</button><button type="button" data-v="50000" aria-pressed="false">50,000</button></div></div>
+        <button type="button" class="run" id="runBtn">Simulate</button>
+      </div>
+    </section>
+    <section class="panel"><h2>Who plays</h2><p class="sub">Uncheck a player to rule him out. His minutes go to the others in proportion to their usual minutes, and the team's ratings move by his impact. Starts from tonight's injury report when the game is on the slate.</p>
+      <div class="roster"><div><h3 id="rosAwayH"></h3><div class="plist" id="rosAway"></div></div><div><h3 id="rosHomeH"></h3><div class="plist" id="rosHome"></div></div></div></section>
+    <div id="simOut" class="view"></div>
+  </section>
+
+  <section class="view" id="recView" role="tabpanel" aria-labelledby="tabRec" hidden></section>
+  <p class="foot" id="foot"></p>
+</div>
+
+<script>
+__ENGINE__
+const DATA=__DATA__;
+const SLATE=__SLATE__;
+const REC=__SCORE__;
+const $=id=>document.getElementById(id);
+const G=DATA.engine;
+const NAME=t=>DATA.names[t]||t;
+const NICK=t=>{const n=NAME(t).split(' ');return n.length>2&&/Trail|76ers/.test(NAME(t))?n.slice(-2).join(' '):n[n.length-1];};
+const pct=p=>(100*p).toFixed(1)+'%';
+function american(p){if(!(p>0&&p<1))return '—';return p>=.5?'−'+Math.round(100*p/(1-p)):'+'+Math.round(100*(1-p)/p);}
+const sgn=v=>v>0?'+'+v:(v<0?'−'+Math.abs(v):'0');
+const line=v=>{const a=Math.abs(v);return (v>0?'+':v<0?'−':'')+(Number.isInteger(a)?a.toFixed(0):a.toFixed(1));};
+function hashSeed(str){let h=2166136261;for(const c of str){h^=c.charCodeAt(0);h=Math.imul(h,16777619);}return (h>>>0)%1000000+1;}
+const tFmt=new Intl.DateTimeFormat('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/New_York'});
+const dFmt=new Intl.DateTimeFormat('en-US',{weekday:'long',month:'short',day:'numeric',timeZone:'America/New_York'});
+let MODE='anch';
+const pname=(team,pid)=>{const r=DATA.rosters.find(t=>t.abbr===team);const p=r&&r.roster.find(p=>p.pid===pid);return p?p.name:(DATA.pool[pid]||{}).name||pid;};
+
+/* ---------- market tables from a simulation ---------- */
+function spreadRows(H,center){const rows=[];const c=Math.round(center*2)/2;for(let k=-6;k<=6;k++){const L=c+k;rows.push({L,ph:coverNoPush(H,L),push:pushHome(H,L)});}return rows;}
+function totRows(hist,center,step){const rows=[];const c=Math.floor(center)+.5;for(let k=-5;k<=5;k++){const L=c+k*(step||1);rows.push({L,p:pGT(hist,L)});}return rows;}
+function spreadTable(H,home,away,mark){
+  const rows=spreadRows(H,-hmean(H.m));
+  return `<tr><th>${NICK(home)} line</th><th>${NICK(home)} covers</th><th>Fair</th><th>${NICK(away)} covers</th><th>Fair</th><th>Push</th></tr>`+
+    rows.map(r=>`<tr${mark!=null&&Math.abs(r.L-mark)<.01?' class="mark"':''}><td>${line(r.L)}</td><td>${pct(r.ph)}</td><td>${american(r.ph)}</td><td>${pct(1-r.ph)}</td><td>${american(1-r.ph)}</td><td>${r.push>0.0005?pct(r.push):'—'}</td></tr>`).join('');}
+function ouTable(hist,mark,label){const rows=totRows(hist,hmean(hist));
+  return `<tr><th>${label||'Line'}</th><th>Over</th><th>Fair</th><th>Under</th><th>Fair</th></tr>`+
+    rows.map(r=>`<tr${mark!=null&&Math.abs(r.L-mark)<.01?' class="mark"':''}><td>${r.L.toFixed(1)}</td><td>${pct(r.p)}</td><td>${american(r.p)}</td><td>${pct(1-r.p)}</td><td>${american(1-r.p)}</td></tr>`).join('');}
+function segTable(H,home,away){
+  const segs=[['H1','1st half'],['H2','2nd half (incl. OT)'],['Q1','1st quarter'],['Q2','2nd quarter'],['Q3','3rd quarter'],['Q4','4th quarter (no OT)']];
+  return `<tr><th>Period</th><th>${NICK(home)} wins</th><th>Tie</th><th>Fair spread</th><th>${NICK(home)} covers</th><th>Fair total</th><th>Over</th></tr>`+segs.map(([k,lab])=>{
+    const S=H.seg[k],hm=pGT(S.m,0),tie=pEQ(S.m,0);
+    const L=Math.floor(-hmean(S.m))+.5,cov=pGT(S.m,-L),tl=Math.floor(hmean(S.t))+.5;
+    return `<tr><td>${lab}</td><td>${pct(hm)}</td><td>${pct(tie)}</td><td>${line(L)}</td><td>${pct(cov)}</td><td>${tl.toFixed(1)}</td><td>${pct(pGT(S.t,tl))}</td></tr>`;}).join('');}
+function bandsHtml(H,home,away){
+  const B=[[1,5],[6,10],[11,15],[16,20],[21,99]];let n=0;for(const k in H.m)n+=H.m[k];
+  const pr=(lo,hi,s)=>{let c=0;for(const k in H.m){const v=+k*s;if(v>=lo&&v<=hi)c+=H.m[k];}return c/n;};
+  const rows=[];for(const [s,t,col] of [[1,home,'--a'],[-1,away,'--b']])for(const [lo,hi] of B){const p=pr(lo,hi,s);rows.push([`${NICK(t)} by ${hi>90?lo+'+':lo+'–'+hi}`,p,col]);}
+  const mx=Math.max(...rows.map(r=>r[1]));
+  return `<div class="bands">${rows.map(([l,p,c])=>`<span>${l}</span><div class="bb" style="width:${(100*p/mx).toFixed(1)}%;background:var(${c})"></div><span class="v">${pct(p)}</span><span class="v">${american(p)}</span>`).join('')}</div>
+   <p class="sub" style="margin:8px 0 0">Final margin, overtime included.</p>`;}
+function propsHtml(D,players,hist,team){
+  const P=playerProps(D,players,hist,10).sort((a,b)=>b.m.pts-a.m.pts);
+  const mk=(D.props.markets||['pts']),lab=D.props.labels||{};
+  if(!P.length)return '';
+  return `<h3><span class="dot" style="background:var(${team.c})"></span>${NAME(team.t)}</h3><div class="tblwrap"><table><tr><th>Player</th><th>Min</th>${mk.map(k=>`<th>${lab[k]||k}</th>`).join('')}</tr>`+
+    P.map(p=>`<tr><td>${p.name}${p.pp<.8?` <span class="gs" title="Chance he gets in, from recent games">${Math.round(100*p.pp)}% to play</span>`:''}</td><td>${p.min.toFixed(0)}</td>${mk.map(k=>`<td title="mean ${p.m[k].toFixed(1)}">o${p.line[k]} ${pct(p.p[k])} <span style="color:var(--muted)">${american(p.p[k])}</span></td>`).join('')}</tr>`).join('')+`</table></div>`;}
+
+/* ---------- one game's full read-out ---------- */
+function gameCalc(g,N,mode,outH,outA,neutral){
+  const ha=g.home_avail||{},aa=g.away_avail||{};
+  const sh=gameShifts(DATA,g,outH??ha.out,outA??aa.out,ha.extra,aa.extra);
+  let T=matchupInputs(DATA,G,g.home,g.away,neutral??(g.neutral===1),sh.shH,sh.shA);
+  const mk=g.mkt;const anch=mode==='anch'&&mk&&mk.s!=null&&outH==null;
+  if(anch)T=shifted(T,mk.s,mk.d);
+  const H=simulateGame(T,G,N,hashSeed(g.id||(g.home+g.away))+2);
+  return {H,T,sh,anch};}
+function renderDetail(el,g,c){
+  const H=c.H,home=g.home,away=g.away,od=g.odds||{},ph=mlHome(H);
+  const mh=hmean(H.m),spL=Math.floor(-mh)+.5,tl=Math.floor(expTotal(H))+.5;
+  const pinSp=od.sp_home_line,pinT=od.tot_line;
+  const B=(t,col,p,pts,sub)=>`<div class="c"><div class="tname"><span class="dot" style="background:var(${col})"></span><div><b>${NICK(t)}</b><small>${sub}</small></div></div></div>
+    <div class="c big">${pct(p)}</div><div class="c num">${american(p)}</div><div class="c num">${pts.toFixed(1)}</div><div class="c num hide-s">${t===home?line(-Math.round(mh*2)/2):line(Math.round(mh*2)/2)}</div>`;
+  const outs=(av,t)=>(av&&av.out&&av.out.length)?av.out.map(id=>pname(t,id)).join(', '):'nobody listed';
+  el.innerHTML=`<section class="panel board"><div class="hd">Team</div><div class="hd">Win</div><div class="hd">Fair</div><div class="hd">Exp. pts</div><div class="hd hide-s">Fair spread</div>
+    ${B(away,'--b',1-ph,hmean(H.a),'Away · out: '+outs(g.away_avail,away))}${B(home,'--a',ph,hmean(H.h),(g.neutral?'Neutral site':'Home')+' · out: '+outs(g.home_avail,home))}
+    <div class="meta"><span>${c.anch?'<span class="gs pin">Anchored to Pinnacle</span>':'<span class="gs">Model only</span>'}</span><span>Total ${expTotal(H).toFixed(1)}</span><span>Overtime ${pct(H.ot/H.n)}</span>
+    ${od.home_fair!=null?`<span>Pinnacle no-vig win: ${NICK(home)} ${pct(od.home_fair)}</span>`:''}<span>${H.n.toLocaleString()} simulated games</span></div></section>
+  <div class="grid">
+    <section class="panel"><h2>Spread</h2><p class="sub">Final margin incl. overtime. Highlighted: ${pinSp!=null?"Pinnacle's line":'the fair line'}. Fair prices drop pushes.</p><div class="tblwrap"><table>${spreadTable(H,home,away,pinSp??spL)}</table></div></section>
+    <section class="panel"><h2>Game total</h2><p class="sub">Overtime included. Highlighted: ${pinT!=null?"Pinnacle's line":'the fair line'}.</p><div class="tblwrap"><table>${ouTable(H.t,pinT??tl)}</table></div></section>
+    <section class="panel"><h2>Team totals</h2><h3><span class="dot" style="background:var(--b)"></span>${NAME(away)}</h3><div class="tblwrap"><table>${ouTable(H.a,null)}</table></div>
+      <h3><span class="dot" style="background:var(--a)"></span>${NAME(home)}</h3><div class="tblwrap"><table>${ouTable(H.h,null)}</table></div></section>
+    <section class="panel"><h2>Winning margin</h2>${bandsHtml(H,home,away)}</section>
+  </div>
+  <section class="panel"><h2>Halves and quarters</h2><p class="sub">Each period on its own. Win % counts a tied period as not won; fair spread is the half-point line nearest the expected margin.</p><div class="tblwrap"><table>${segTable(H,home,away)}</table></div></section>
+  <section class="panel"><h2>Player props</h2><p class="sub">Chance of going over the line shown, then the fair price; lines are each player's simulated average rounded down to the half point. Props assume the player plays (they are void if he doesn't). Markets shown are the ones that passed the held-out test.</p>
+    ${propsHtml(DATA,c.sh.a.players,{pts:H.a,fgm:H.stat.a.fgm,fg3m:H.stat.a.fg3m,reb:H.stat.a.reb},{t:away,c:'--b'})}
+    ${propsHtml(DATA,c.sh.h.players,{pts:H.h,fgm:H.stat.h.fgm,fg3m:H.stat.h.fg3m,reb:H.stat.h.reb},{t:home,c:'--a'})}</section>
+  <section class="panel how"><h2>How this number was built</h2>${howHtml(g,c,H)}</section>`;}
+function howHtml(g,c,H){
+  const od=g.odds||{},sh=c.sh,p=[];
+  p.push(`<p>Team strength comes from every possession of recent games (turnovers, shot mix at the rim, mid-range and three, make rates, free-throw trips, offensive rebounds and pace), weighted toward recent games, each side against the opponent's defense, with home court.</p>`);
+  p.push(`<p>Availability: tonight's lineups move the ${NICK(g.home)} offense-minus-opponent-defense by ${sh.ptsH>=0?'+':''}${sh.ptsH.toFixed(1)} points per 100 possessions and ${NICK(g.away)} by ${sh.ptsA>=0?'+':''}${sh.ptsA.toFixed(1)}${g.rest&&(g.rest.b2b_h||g.rest.b2b_a)?` (including the back-to-back for ${[g.rest.b2b_h?NICK(g.home):'',g.rest.b2b_a?NICK(g.away):''].filter(Boolean).join(' and ')})`:''}. Source: ${(g.home_avail||{}).source||'—'}.</p>`);
+  if(c.anch){const mk=g.mkt;p.push(`<p>Anchored: both offenses' shooting was moved by a common amount until the simulated total matched Pinnacle's no-vig ${od.tot_line} (${pct(od.over_fair)} over), and split until the spread matched ${NICK(g.home)} ${line(od.sp_home_line)} (${pct(od.sp_home_fair)} to cover). Everything else on this page is priced from that simulation. Pinnacle's own moneyline was not used: their no-vig ${pct(od.home_fair)} vs the anchored simulation's ${pct(mlHome(H))} is the independent check. Model only, before anchoring: ${pct(mk.pm)}.</p>`);}
+  else if(g.odds)p.push(`<p>Model only. Pinnacle's no-vig numbers for comparison: ${NICK(g.home)} ${line(od.sp_home_line)} covers ${pct(od.sp_home_fair)}, total ${od.tot_line} over ${pct(od.over_fair)}, win ${pct(od.home_fair)}.</p>`);
+  else p.push(`<p>Model only: Pinnacle had not priced this game when the slate was built.</p>`);
+  return p.join('');}
+
+/* ---------- today's slate ---------- */
+function headline(g){
+  const mk=g.mkt||{},od=g.odds||{};
+  const anch=MODE==='anch'&&mk.s!=null;
+  return {p:anch?mk.pa:mk.pm,anch};}
+function renderSlate(){
+  const el=$('slate');
+  if(!SLATE.games.length){el.innerHTML='<section class="panel"><p>No games in the next two days.</p></section>';return;}
+  const days={};for(const g of SLATE.games){const d=dFmt.format(new Date(g.start));(days[d]=days[d]||[]).push(g);}
+  el.innerHTML=Object.entries(days).map(([d,list])=>`<section class="panel daygrp"><header><b>${d}</b></header>
+    <div class="colhd"><span>Tip (ET)</span><span>Game</span><span>Win</span><span>Spread</span><span>Total</span><span></span></div>
+    ${list.map(g=>`<button type="button" class="grow" id="row-${g.id}" data-id="${g.id}" aria-expanded="false"></button><div class="detail" id="det-${g.id}" hidden></div>`).join('')}</section>`).join('');
+  for(const g of SLATE.games)fillRow(g);
+  const nP=SLATE.games.filter(g=>g.mkt&&g.mkt.s!=null).length;
+  $('slateNote').textContent=`${SLATE.games.length} games · ${nP} priced by Pinnacle · ${MODE==='anch'?'anchored where Pinnacle prices the game, model only elsewhere':'model only for every game'}. Click a game for every market and player props.`;}
+function fillRow(g){
+  const b=$('row-'+g.id),h=headline(g),od=g.odds||{};
+  const no=t=>{const a=g[t+'_avail'];return a&&a.out&&a.out.length?` <span class="gs out">${a.out.length} out</span>`:'';};
+  const spr=h.anch&&od.sp_home_line!=null?`${NICK(g.home)} ${line(od.sp_home_line)}`:(g.fair?`${NICK(g.home)} ${line(g.fair[h.anch?'a':'m'].sp)}`:'');
+  const tot=h.anch&&od.tot_line!=null?od.tot_line.toFixed(1):(g.fair?g.fair[h.anch?'a':'m'].t.toFixed(1):'');
+  b.innerHTML=`<span class="t">${tFmt.format(new Date(g.start))}</span>
+    <span class="who"><span class="tm"><span class="dot" style="background:var(--b)"></span><b>${NICK(g.away)}</b>${no('away')}</span>
+      <span class="tm"><span class="dot" style="background:var(--a)"></span><b>${NICK(g.home)}</b>${no('home')}${h.anch?' <span class="gs pin">Pinnacle</span>':''}</span></span>
+    <span class="c"><span>${pct(1-h.p)}</span><span>${pct(h.p)}</span></span>
+    <span class="c"><small>${h.anch?'Pinnacle':'fair'}</small><span>${spr}</span></span>
+    <span class="c tot"><small>${h.anch?'Pinnacle':'fair'}</small><span>${tot}</span></span><span class="chev">›</span>`;}
+function toggle(b){
+  const g=SLATE.games.find(x=>x.id===b.dataset.id),det=$('det-'+g.id),open=b.getAttribute('aria-expanded')==='true';
+  b.setAttribute('aria-expanded',String(!open));det.hidden=open;
+  if(!open){det.innerHTML='<p class="sub">Simulating 20,000 games…</p>';setTimeout(()=>renderDetail(det,g,gameCalc(g,20000,MODE)),20);}}
+
+/* ---------- simulator ---------- */
+const SIM={home:null,away:null,neutral:false,N:20000,out:{}};
+function setSeg(el,v){[...el.querySelectorAll('button')].forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===String(v))));}
+function fillTeams(){const opts=DATA.teams.slice().sort((a,b)=>NAME(a).localeCompare(NAME(b))).map(t=>`<option value="${t}">${NAME(t)}</option>`).join('');
+  $('selHome').innerHTML=opts;$('selAway').innerHTML=opts;
+  const g=SLATE.games[0];SIM.home=g?g.home:'BOS';SIM.away=g?g.away:'NYK';$('selHome').value=SIM.home;$('selAway').value=SIM.away;resetOut();}
+function slateFor(){return SLATE.games.find(g=>g.home===SIM.home&&g.away===SIM.away);}
+function resetOut(){const g=slateFor();SIM.out={[SIM.home]:new Set(g?(g.home_avail||{}).out||[]:[]),[SIM.away]:new Set(g?(g.away_avail||{}).out||[]:[])};
+  if(SIM.home===SIM.away)SIM.out[SIM.home]=new Set();renderRoster();}
+function renderRoster(){
+  for(const [side,t] of [['Home',SIM.home],['Away',SIM.away]]){
+    const R=DATA.rosters.find(r=>r.abbr===t);$('ros'+side+'H').innerHTML=`<span class="dot" style="background:var(${side==='Home'?'--a':'--b'})"></span>${NAME(t)}`;
+    $('ros'+side).innerHTML=R.roster.map(p=>{const o=SIM.out[t].has(p.pid);return `<label class="${o?'isout':''}"><input type="checkbox" id="p-${side}-${p.pid}" data-t="${t}" data-pid="${p.pid}" ${o?'':'checked'}><span>${p.name} <span class="m">${p.pos||''}</span></span><span class="m">${p.pm.toFixed(0)} min${p.pp<.8?' · '+Math.round(100*p.pp)+'%':''}</span></label>`;}).join('');}}
+function runSim(){
+  if(SIM.home===SIM.away){$('simOut').innerHTML='<section class="panel"><p class="warn">Pick two different teams.</p></section>';return;}
+  $('runBtn').disabled=true;$('simOut').innerHTML='<section class="panel"><p class="sub">Simulating…</p></section>';
+  setTimeout(()=>{const sg=slateFor();
+    const g={id:sg?sg.id:SIM.home+SIM.away+'sim',home:SIM.home,away:SIM.away,neutral:SIM.neutral?1:0,rest:sg?sg.rest:null,
+      home_avail:{out:[...SIM.out[SIM.home]],extra:sg?(sg.home_avail||{}).extra:[],source:'your selection'},away_avail:{out:[...SIM.out[SIM.away]],extra:sg?(sg.away_avail||{}).extra:[]}};
+    const c=gameCalc(g,SIM.N,'model',g.home_avail.out,g.away_avail.out,SIM.neutral);
+    $('simOut').innerHTML='<div></div>';renderDetail($('simOut').firstChild,g,c);$('runBtn').disabled=false;},20);}
+
+/* ---------- track record ---------- */
+function llRow(lab,o){if(!o)return '';const f=v=>v==null?'—':v.toFixed(4);
+  return `<tr><td>${lab}</td><td>${o.n}</td><td>${f(o.model)}</td><td>${f(o.pin)}</td><td>${f(o.base)}</td></tr>`;}
+function renderRecord(){
+  const R=REC,el=$('recView');
+  const cal=(R.calib||[]).map(c=>`<tr><td>${c.bin}</td><td>${c.n}</td><td>${pct(c.pred)}</td><td>${pct(c.act)}</td></tr>`).join('');
+  const shape=(R.shape||[]).map(s=>`<tr><td>${s.k}</td><td>${s.pred}</td><td>${s.act}</td></tr>`).join('');
+  const rows=(R.recent||[]).map(x=>`<tr><td>${x.date}</td><td>${x.away} @ ${x.home}</td><td>${pct(x.p_home)}</td><td>${x.pin_home==null?'—':pct(x.pin_home)}</td><td>${x.score}</td><td>${x.exp_total.toFixed(1)} / ${x.pin_total==null?'—':x.pin_total} / ${x.total}</td></tr>`).join('');
+  el.innerHTML=`<section class="panel"><h2>Logged pre-game numbers</h2><p class="sub">${R.n_scored} games scored, ${R.n_pending} waiting · the last snapshot before each tip-off · log loss, lower is better. Model columns are model only (not anchored).</p>
+    ${R.n_scored?`<div class="tblwrap"><table><tr><th>Market</th><th>Games</th><th>Model</th><th>Pinnacle</th><th>Baseline</th></tr>
+    ${llRow('Moneyline, all games',R.ml)}${llRow('Moneyline, Pinnacle-priced games',R.ml_pin)}${llRow("Spread at Pinnacle's line",R.spread)}${llRow("Total at Pinnacle's line",R.total)}</table></div>
+    ${R.ml_pin&&R.ml_pin.gap!=null?`<p class="sub" style="margin-top:8px">Anchored moneyline vs Pinnacle's own (not used in the fit): average gap ${(100*R.ml_pin.gap).toFixed(1)} points, log loss ${R.ml_pin.anch==null?'—':R.ml_pin.anch.toFixed(4)}.</p>`:''}`:'<p>No finished games yet. Results are scored on the morning update after each game.</p>'}</section>
+    ${R.n_scored?`<div class="grid"><section class="panel"><h2>Calibration</h2><p class="sub">Model's home win probability, binned</p><div class="tblwrap"><table><tr><th>Home win %</th><th>Games</th><th>Predicted</th><th>Won</th></tr>${cal}</table></div></section>
+    <section class="panel"><h2>Game shape</h2><div class="tblwrap"><table><tr><th>Measure</th><th>Predicted</th><th>Actual</th></tr>${shape}</table></div></section></div>
+    ${playersRec(R.players)}
+    <section class="panel"><h2>Recent games</h2><div class="tblwrap"><table><tr><th>Date</th><th>Game</th><th>Model home</th><th>Pinnacle home</th><th>Score</th><th>Total model / Pinnacle / actual</th></tr>${rows}</table></div></section>`:playersRec(R.players)}
+    ${backtest()}`;}
+function playersRec(P){if(!P||!P.markets||!P.markets.length)return '';
+  return `<section class="panel"><h2>Player props</h2><p class="sub">${P.n} player lines scored · the model's own line · baseline: the player's season-to-date average priced the same way</p><div class="tblwrap"><table><tr><th>Market</th><th>Lines</th><th>Model</th><th>Baseline</th><th>Predicted / actual over</th></tr>
+  ${P.markets.map(m=>`<tr><td>${m.k}</td><td>${m.n}</td><td>${m.model.toFixed(4)}</td><td>${m.base.toFixed(4)}</td><td>${pct(m.pred)} / ${pct(m.act)}</td></tr>`).join('')}</table></div></section>`;}
+function backtest(){const B=DATA.tests;if(!B||!B.tables)return '';
+  return B.tables.map(T=>`<section class="panel"><h2>${T.title}</h2><p class="sub">${T.note}</p><div class="tblwrap"><table><tr>${T.cols.map(c=>`<th>${c}</th>`).join('')}</tr>${T.rows.map(r=>`<tr>${r.map(x=>`<td>${x}</td>`).join('')}</tr>`).join('')}</table></div></section>`).join('');}
+
+/* ---------- wiring ---------- */
+function showTab(t){for(const [tab,view,name] of [['tabToday','todayView','today'],['tabSim','simView','sim'],['tabRec','recView','rec']]){$(tab).setAttribute('aria-selected',String(t===name));$(view).hidden=t!==name;}
+  try{localStorage.setItem('nbaTab',t);}catch(e){}}
+$('tabToday').onclick=()=>showTab('today');$('tabSim').onclick=()=>showTab('sim');$('tabRec').onclick=()=>showTab('rec');
+$('slate').addEventListener('click',e=>{const b=e.target.closest('.grow');if(b)toggle(b);});
+$('modeSeg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;MODE=b.dataset.v;setSeg($('modeSeg'),MODE);renderSlate();});
+$('selHome').onchange=e=>{SIM.home=e.target.value;resetOut();};$('selAway').onchange=e=>{SIM.away=e.target.value;resetOut();};
+$('swapBtn').onclick=()=>{[SIM.home,SIM.away]=[SIM.away,SIM.home];$('selHome').value=SIM.home;$('selAway').value=SIM.away;resetOut();};
+$('venueSeg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;SIM.neutral=b.dataset.v==='neutral';setSeg($('venueSeg'),b.dataset.v);});
+$('nSeg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;SIM.N=+b.dataset.v;setSeg($('nSeg'),b.dataset.v);});
+for(const s of ['Home','Away'])$('ros'+s).addEventListener('change',e=>{const i=e.target;if(!i.dataset.pid)return;const set=SIM.out[i.dataset.t],id=+i.dataset.pid;
+  if(i.checked)set.delete(id);else set.add(id);i.closest('label').classList.toggle('isout',!i.checked);});
+$('runBtn').onclick=runSim;
+$('asof').textContent=`Results through ${DATA.asOf} · updated ${new Date(DATA.generated).toLocaleString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})} ET`;
+$('foot').textContent=DATA.notes.foot||'';
+renderSlate();fillTeams();renderRecord();
+try{const t=localStorage.getItem('nbaTab');if(t)showTab(t);}catch(e){}
+</script>

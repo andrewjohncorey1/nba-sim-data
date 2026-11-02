@@ -1,0 +1,9 @@
+data/raw/
+build/*
+!build/published_ratings.json
+validation/inputs_*.json
+validation/sim_*.json
+validation/games_*.parquet
+validation/props_*.parquet
+__pycache__/
+*.pyc

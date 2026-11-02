@@ -1,0 +1,5 @@
+base 2025 {"n": 1321, "margin_rmse": 14.0638, "total_rmse": 17.7778, "total_bias": -1.4221, "ml_ll": 0.5964}
+noavail 2025 {"n": 1321, "margin_rmse": 14.3075, "total_rmse": 17.8783, "total_bias": -1.4578, "ml_ll": 0.6106}
+rest 2025 {"n": 1321, "margin_rmse": 14.0027, "total_rmse": 17.8299, "total_bias": -1.7535, "ml_ll": 0.5933}
+restall 2025 {"n": 1321, "margin_rmse": 13.9959, "total_rmse": 17.8661, "total_bias": -1.7284, "ml_ll": 0.5934}
+restm 2025 {"n": 1321, "margin_rmse": 14.0026, "total_rmse": 17.7773, "total_bias": -1.4188, "ml_ll": 0.5933}

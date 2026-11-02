@@ -1,0 +1,350 @@
+{
+ "season": 2027,
+ "team_ids": {
+  "1": "ATL",
+  "2": "BOS",
+  "3": "NOP",
+  "4": "CHI",
+  "5": "CLE",
+  "6": "DAL",
+  "7": "DEN",
+  "8": "DET",
+  "9": "GSW",
+  "10": "HOU",
+  "11": "IND",
+  "12": "LAC",
+  "13": "LAL",
+  "14": "MIA",
+  "15": "MIL",
+  "16": "MIN",
+  "17": "BKN",
+  "18": "NYK",
+  "19": "ORL",
+  "20": "PHI",
+  "21": "PHX",
+  "22": "POR",
+  "23": "SAC",
+  "24": "SAS",
+  "25": "OKC",
+  "26": "UTA",
+  "27": "WAS",
+  "28": "TOR",
+  "29": "MEM",
+  "30": "CHA"
+ },
+ "team_names": {
+  "ATL": [
+   "Atlanta Hawks",
+   "Hawks"
+  ],
+  "BOS": [
+   "Boston Celtics",
+   "Celtics"
+  ],
+  "BKN": [
+   "Brooklyn Nets",
+   "Nets"
+  ],
+  "CHA": [
+   "Charlotte Hornets",
+   "Hornets"
+  ],
+  "CHI": [
+   "Chicago Bulls",
+   "Bulls"
+  ],
+  "CLE": [
+   "Cleveland Cavaliers",
+   "Cavaliers",
+   "Cavs"
+  ],
+  "DAL": [
+   "Dallas Mavericks",
+   "Mavericks",
+   "Mavs"
+  ],
+  "DEN": [
+   "Denver Nuggets",
+   "Nuggets"
+  ],
+  "DET": [
+   "Detroit Pistons",
+   "Pistons"
+  ],
+  "GSW": [
+   "Golden State Warriors",
+   "Warriors"
+  ],
+  "HOU": [
+   "Houston Rockets",
+   "Rockets"
+  ],
+  "IND": [
+   "Indiana Pacers",
+   "Pacers"
+  ],
+  "LAC": [
+   "Los Angeles Clippers",
+   "LA Clippers",
+   "Clippers"
+  ],
+  "LAL": [
+   "Los Angeles Lakers",
+   "LA Lakers",
+   "Lakers"
+  ],
+  "MEM": [
+   "Memphis Grizzlies",
+   "Grizzlies"
+  ],
+  "MIA": [
+   "Miami Heat",
+   "Heat"
+  ],
+  "MIL": [
+   "Milwaukee Bucks",
+   "Bucks"
+  ],
+  "MIN": [
+   "Minnesota Timberwolves",
+   "Timberwolves",
+   "Wolves"
+  ],
+  "NOP": [
+   "New Orleans Pelicans",
+   "Pelicans"
+  ],
+  "NYK": [
+   "New York Knicks",
+   "Knicks"
+  ],
+  "OKC": [
+   "Oklahoma City Thunder",
+   "Thunder"
+  ],
+  "ORL": [
+   "Orlando Magic",
+   "Magic"
+  ],
+  "PHI": [
+   "Philadelphia 76ers",
+   "76ers",
+   "Sixers"
+  ],
+  "PHX": [
+   "Phoenix Suns",
+   "Suns"
+  ],
+  "POR": [
+   "Portland Trail Blazers",
+   "Trail Blazers",
+   "Blazers"
+  ],
+  "SAC": [
+   "Sacramento Kings",
+   "Kings"
+  ],
+  "SAS": [
+   "San Antonio Spurs",
+   "Spurs"
+  ],
+  "TOR": [
+   "Toronto Raptors",
+   "Raptors"
+  ],
+  "UTA": [
+   "Utah Jazz",
+   "Jazz"
+  ],
+  "WAS": [
+   "Washington Wizards",
+   "Wizards"
+  ]
+ },
+ "arenas": {
+  "ATL": [
+   33.757,
+   -84.396,
+   -5
+  ],
+  "BOS": [
+   42.366,
+   -71.062,
+   -5
+  ],
+  "BKN": [
+   40.683,
+   -73.976,
+   -5
+  ],
+  "CHA": [
+   35.225,
+   -80.839,
+   -5
+  ],
+  "CHI": [
+   41.881,
+   -87.674,
+   -6
+  ],
+  "CLE": [
+   41.496,
+   -81.688,
+   -5
+  ],
+  "DAL": [
+   32.79,
+   -96.81,
+   -6
+  ],
+  "DEN": [
+   39.749,
+   -105.008,
+   -7
+  ],
+  "DET": [
+   42.341,
+   -83.055,
+   -5
+  ],
+  "GSW": [
+   37.768,
+   -122.388,
+   -8
+  ],
+  "HOU": [
+   29.751,
+   -95.362,
+   -6
+  ],
+  "IND": [
+   39.764,
+   -86.155,
+   -5
+  ],
+  "LAC": [
+   33.945,
+   -118.341,
+   -8
+  ],
+  "LAL": [
+   34.043,
+   -118.267,
+   -8
+  ],
+  "MEM": [
+   35.138,
+   -90.051,
+   -6
+  ],
+  "MIA": [
+   25.781,
+   -80.188,
+   -5
+  ],
+  "MIL": [
+   43.045,
+   -87.917,
+   -6
+  ],
+  "MIN": [
+   44.979,
+   -93.276,
+   -6
+  ],
+  "NOP": [
+   29.949,
+   -90.082,
+   -6
+  ],
+  "NYK": [
+   40.751,
+   -73.993,
+   -5
+  ],
+  "OKC": [
+   35.463,
+   -97.515,
+   -6
+  ],
+  "ORL": [
+   28.539,
+   -81.384,
+   -5
+  ],
+  "PHI": [
+   39.901,
+   -75.172,
+   -5
+  ],
+  "PHX": [
+   33.446,
+   -112.071,
+   -7
+  ],
+  "POR": [
+   45.532,
+   -122.667,
+   -8
+  ],
+  "SAC": [
+   38.58,
+   -121.5,
+   -8
+  ],
+  "SAS": [
+   29.427,
+   -98.438,
+   -6
+  ],
+  "TOR": [
+   43.643,
+   -79.379,
+   -5
+  ],
+  "UTA": [
+   40.768,
+   -111.901,
+   -7
+  ],
+  "WAS": [
+   38.898,
+   -77.021,
+   -5
+  ]
+ },
+ "model": {
+  "ratings": {
+   "half_life": 90,
+   "K_other": 3,
+   "K_make": 5,
+   "K_ft": 20,
+   "K_pace": 3,
+   "alpha": 1.0
+  },
+  "players": {
+   "half_life_p": 400,
+   "lam_p": 20
+  }
+ },
+ "props": {
+  "half_life": 180,
+  "prior_min": 300,
+  "markets": [
+   "pts"
+  ],
+  "phi": {
+   "pts": 10
+  },
+  "labels": {
+   "pts": "Points",
+   "reb": "Rebounds",
+   "ast": "Assists",
+   "fg3m": "Threes made",
+   "pra": "Pts+Reb+Ast"
+  }
+ },
+ "rest_effects": {
+  "note": "Back-to-back (margin only) improved 2024-25 (margin RMSE 14.024 -> 13.967, moneyline 0.5959 -> 0.5930) but not 2025-26 (14.263 -> 14.263, 0.5831 -> 0.5844), so it is off. Rest of 3+ days, travel and time zones were not significant on 2021-24 and are off."
+ }
+}

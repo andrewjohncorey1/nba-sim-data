@@ -1,0 +1,3 @@
+restm 2026 {"n": 1321, "margin_rmse": 14.2628, "total_rmse": 18.147, "total_bias": -1.3106, "ml_ll": 0.5844}
+base 2026 {"n": 1321, "margin_rmse": 14.2628, "total_rmse": 18.1472, "total_bias": -1.3139, "ml_ll": 0.5831}
+noavail 2026 {"n": 1321, "margin_rmse": 14.6567, "total_rmse": 18.3407, "total_bias": -1.6076, "ml_ll": 0.6021}

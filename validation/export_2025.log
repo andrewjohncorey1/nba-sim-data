@@ -1,0 +1,3 @@
+restm 2025 {"n": 1321, "margin_rmse": 13.9665, "total_rmse": 17.79, "total_bias": -1.3723, "ml_ll": 0.593}
+base 2025 {"n": 1321, "margin_rmse": 14.0243, "total_rmse": 17.7905, "total_bias": -1.3757, "ml_ll": 0.5959}
+noavail 2025 {"n": 1321, "margin_rmse": 14.3075, "total_rmse": 17.8783, "total_bias": -1.4578, "ml_ll": 0.6106}

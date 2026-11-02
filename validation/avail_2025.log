@@ -1,0 +1,2 @@
+{"season": 2025, "alpha": 0.0, "half_life_p": 400, "lam_p": 20, "n": 1321, "margin_rmse": 14.3075, "total_rmse": 17.8783, "total_bias": -1.4578, "ml_ll": 0.6106}
+{"season": 2025, "alpha": 1.0, "half_life_p": 400, "lam_p": 20, "n": 1321, "margin_rmse": 14.0638, "total_rmse": 17.7778, "total_bias": -1.4221, "ml_ll": 0.5964}

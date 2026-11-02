@@ -1,0 +1,48 @@
+{
+ "fit_on": "2021-22..2023-24 regular seasons",
+ "units": "points per 100 possessions of the offense",
+ "hm": {
+  "est": 1.925,
+  "se": 0.294
+ },
+ "own_b2b": {
+  "est": -0.786,
+  "se": 0.358
+ },
+ "own_rest3": {
+  "est": 0.114,
+  "se": 0.335
+ },
+ "own_trav": {
+  "est": 0.082,
+  "se": 0.438
+ },
+ "own_tzE": {
+  "est": -0.015,
+  "se": 0.364
+ },
+ "own_tzW": {
+  "est": -0.534,
+  "se": 0.374
+ },
+ "dfn_b2b": {
+  "est": 1.778,
+  "se": 0.358
+ },
+ "dfn_rest3": {
+  "est": -0.17,
+  "se": 0.335
+ },
+ "dfn_trav": {
+  "est": 0.07,
+  "se": 0.438
+ },
+ "dfn_tzE": {
+  "est": 0.359,
+  "se": 0.364
+ },
+ "dfn_tzW": {
+  "est": -0.176,
+  "se": 0.374
+ }
+}
