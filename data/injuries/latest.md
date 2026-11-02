@@ -113,17 +113,17 @@ Show Display Settings Add Lineup Alerts
 
 **Referees:**  [Marc Davis](https://www.rotowire.com/basketball/ref.php?id=3566), [Sean Corbin](https://www.rotowire.com/basketball/ref.php?id=3563), [Dedric Taylor](https://www.rotowire.com/basketball/ref.php?id=795085)
 
-**LINE**  CLE -175 CLE -178 CLE -179 CLE -175 –
+**LINE**  CLE -174 CLE -176 CLE -179 CLE -180 –
 
-**SPREAD**  CLE -4.0 CLE -4.5 CLE -3.5 CLE -4.5 –
+**SPREAD**  CLE -4.0 CLE -4.5 CLE -4.5 CLE -4.5 –
 
-    **O/U**  229.0 Pts 228.5 Pts 228.5 Pts 229.5 Pts –
+    **O/U**  229.0 Pts 229.5 Pts 229.5 Pts 229.5 Pts –
 
-[![](https://assets.rotowire.com/images/props/sleeper.svg)](https://www.rotowire.com/picks/sleeper/) [Make The Right Picks](https://www.rotowire.com/picks/sleeper/) [![](https://assets.rotowire.com/images/picks-promo-screen.png)](https://www.rotowire.com/picks/sleeper/)
+[![](https://assets.rotowire.com/images/props/underdog.svg)](https://www.rotowire.com/picks/underdog/) [Make The Right Picks](https://www.rotowire.com/picks/underdog/) [![](https://assets.rotowire.com/images/picks-promo-screen.png)](https://www.rotowire.com/picks/underdog/)
 
-If you play on Sleeper, you should check out the RotoWire Picks tool. Get our best picks for today's NBA games.
+If you play on Underdog, you should check out the RotoWire Picks tool. Get our best picks for today's NBA games.
 
-[See Our Top Picks For Sleeper](https://www.rotowire.com/picks/sleeper/)
+[See Our Top Picks For Underdog](https://www.rotowire.com/picks/underdog/)
 
 7:30 PM ET
 
@@ -210,7 +210,7 @@ If you play on Sleeper, you should check out the RotoWire Picks tool. Get our be
 
 **Referees:**  [Zach Zarba](https://www.rotowire.com/basketball/ref.php?id=240434), [Marat Kogut](https://www.rotowire.com/basketball/ref.php?id=531094), [Jenna Schroeder](https://www.rotowire.com/basketball/ref.php?id=1116812)
 
-**LINE**  ATL -194 ATL -180 ATL -199 ATL -200 –
+**LINE**  ATL -199 ATL -190 ATL -199 ATL -200 –
 
 **SPREAD**  ATL -5.0 ATL -4.5 ATL -5.5 ATL -4.5 –
 
@@ -365,11 +365,11 @@ If you play on Sleeper, you should check out the RotoWire Picks tool. Get our be
 
 **Referees:**  [James Williams](https://www.rotowire.com/basketball/ref.php?id=527087), [Ashley Moyer-Gleich](https://www.rotowire.com/basketball/ref.php?id=1116808), [Suyash Mehta](https://www.rotowire.com/basketball/ref.php?id=906581)
 
-**LINE**  ORL -145 ORL -142 ORL -148 ORL -150 –
+**LINE**  ORL -146 ORL -136 ORL -148 ORL -150 –
 
-**SPREAD**  ORL -3.0 ORL -2.5 ORL -2.5 ORL -2.5 –
+**SPREAD**  ORL -2.5 ORL -2.5 ORL -2.5 ORL -2.5 –
 
-    **O/U**  225.5 Pts 225.5 Pts 225.5 Pts 226.5 Pts –
+    **O/U**  226.0 Pts 225.5 Pts 225.5 Pts 226.5 Pts –
 
 7:30 PM ET
 
@@ -441,9 +441,9 @@ If you play on Sleeper, you should check out the RotoWire Picks tool. Get our be
 
 **Referees:**  [Mitchell Ervin](https://www.rotowire.com/basketball/ref.php?id=714823), [Eric Lewis](https://www.rotowire.com/basketball/ref.php?id=239638), [Leon Wood](https://www.rotowire.com/basketball/ref.php?id=3615)
 
-**LINE**  PHI -556 PHI -550 PHI -562 PHI -550 –
+**LINE**  PHI -540 PHI -520 PHI -537 PHI -550 –
 
-**SPREAD**  PHI -11.0 PHI -11.5 PHI -10.5 PHI -11.5 –
+**SPREAD**  PHI -10.5 PHI -10.5 PHI -10.5 PHI -11.5 –
 
     **O/U**  239.0 Pts 239.5 Pts 238.5 Pts 239.5 Pts –
 
@@ -511,11 +511,11 @@ If you play on Sleeper, you should check out the RotoWire Picks tool. Get our be
 
 **Referees:**  [Gediminas Petraitis](https://www.rotowire.com/basketball/ref.php?id=720664), [Pat Fraher](https://www.rotowire.com/basketball/ref.php?id=3576),
 
-**LINE**  DET -189 DET -194 DET -191 DET -190 –
+**LINE**  DET -201 DET -200 DET -208 DET -200 –
 
-**SPREAD**  DET -4.5 DET -4.5 DET -4.5 DET -4.5 –
+**SPREAD**  DET -5.0 DET -4.5 DET -5.5 DET -4.5 –
 
-    **O/U**  210.5 Pts 210.5 Pts 210.5 Pts 210.5 Pts –
+    **O/U**  210.5 Pts 210.5 Pts 209.5 Pts 210.5 Pts –
 
 8:00 PM ET
 
@@ -599,7 +599,7 @@ If you play on Sleeper, you should check out the RotoWire Picks tool. Get our be
 
 **Referees:**  [Scott Foster](https://www.rotowire.com/basketball/ref.php?id=3575), [Ray Acosta](https://www.rotowire.com/basketball/ref.php?id=719470), [Evan Scott](https://www.rotowire.com/basketball/ref.php?id=906505)
 
-**LINE**  DAL -425 DAL -430 DAL -408 DAL -425 –
+**LINE**  DAL -432 DAL -430 DAL -408 DAL -450 –
 
 **SPREAD**  DAL -10.5 DAL -9.5 DAL -10.5 DAL -10.5 –
 
@@ -665,11 +665,11 @@ If you play on Sleeper, you should check out the RotoWire Picks tool. Get our be
 
 **Referees:**  [Kevin Scott](https://www.rotowire.com/basketball/ref.php?id=525082), [John Butler](https://www.rotowire.com/basketball/ref.php?id=861396), [Brett Nansel](https://www.rotowire.com/basketball/ref.php?id=525624)
 
-**LINE**  MIN -452 MIN -450 MIN -452 MIN -450 –
+**LINE**  MIN -483 MIN -450 MIN -470 MIN -475 –
 
-**SPREAD**  MIN -10.5 MIN -10.5 MIN -10.5 MIN -10.5 –
+**SPREAD**  MIN -11.0 MIN -10.5 MIN -11.5 MIN -10.5 –
 
-    **O/U**  233.5 Pts 233.5 Pts 233.5 Pts 233.5 Pts –
+    **O/U**  233.5 Pts 233.5 Pts 234.5 Pts 233.5 Pts –
 
 8:00 PM ET
 
@@ -738,11 +738,11 @@ If you play on Sleeper, you should check out the RotoWire Picks tool. Get our be
 
 **Referees:**  [Tony Brothers](https://www.rotowire.com/basketball/ref.php?id=3558), [Ed Malloy](https://www.rotowire.com/basketball/ref.php?id=178532),
 
-**LINE**  MEM -195 MEM -178 MEM -196 MEM -190 –
+**LINE**  MEM -193 MEM -178 MEM -196 MEM -200 –
 
-**SPREAD**  MEM -5.0 MEM -4.5 MEM -5.5 MEM -4.5 –
+**SPREAD**  MEM -5.0 MEM -4.5 MEM -5.5 MEM -5.5 –
 
-    **O/U**  234.0 Pts 233.5 Pts 233.5 Pts 233.5 Pts –
+    **O/U**  233.5 Pts 233.5 Pts 233.5 Pts 233.5 Pts –
 
 8:30 PM ET
 
@@ -811,7 +811,7 @@ If you play on Sleeper, you should check out the RotoWire Picks tool. Get our be
 
 **Referees:**  [Courtney Kirkland](https://www.rotowire.com/basketball/ref.php?id=3587), [Eric Dalen](https://www.rotowire.com/basketball/ref.php?id=349837), [Matt Kallio](https://www.rotowire.com/basketball/ref.php?id=1263110)
 
-**LINE**  HOU -195 HOU -198 HOU -191 HOU -200 –
+**LINE**  HOU -194 HOU -198 HOU -191 HOU -200 –
 
 **SPREAD**  HOU -5.0 HOU -5.5 HOU -4.5 HOU -5.5 –
 
@@ -954,11 +954,11 @@ If you play on Sleeper, you should check out the RotoWire Picks tool. Get our be
 
 **Referees:**  [John Goble](https://www.rotowire.com/basketball/ref.php?id=304287), [Brent Barnaky](https://www.rotowire.com/basketball/ref.php?id=534510), [Intae Hwang](https://www.rotowire.com/basketball/ref.php?id=1420199)
 
-**LINE**  DEN -172 DEN -168 DEN -174 DEN -175 –
+**LINE**  DEN -173 DEN -168 DEN -174 DEN -185 –
 
 **SPREAD**  DEN -4.0 DEN -4.5 DEN -4.5 DEN -4.5 –
 
-    **O/U**  231.0 Pts 230.5 Pts 230.5 Pts 231.5 Pts –
+    **O/U**  231.5 Pts 230.5 Pts 231.5 Pts 231.5 Pts –
 
 10:00 PM ET
 
@@ -1033,9 +1033,9 @@ If you play on Sleeper, you should check out the RotoWire Picks tool. Get our be
 
 **Referees:**  [Sean Wright](https://www.rotowire.com/basketball/ref.php?id=304736), [Kevin Cutler](https://www.rotowire.com/basketball/ref.php?id=413140), [JT Orr](https://www.rotowire.com/basketball/ref.php?id=526241)
 
-**LINE**  GSW -149 GSW -152 GSW -149 GSW -155 –
+**LINE**  GSW -147 GSW -152 GSW -149 GSW -145 –
 
-**SPREAD**  GSW -3.0 GSW -3.5 GSW -2.5 GSW -3.5 –
+**SPREAD**  GSW -3.0 GSW -3.5 GSW -2.5 GSW -2.5 –
 
     **O/U**  228.0 Pts 226.5 Pts 228.5 Pts 228.5 Pts –
 
@@ -1118,9 +1118,9 @@ If you play on Sleeper, you should check out the RotoWire Picks tool. Get our be
 
 **Referees:**  [Josh Tiven](https://www.rotowire.com/basketball/ref.php?id=534511), [Jason Goldenberg](https://www.rotowire.com/basketball/ref.php?id=896908), [Chelisa Painter](https://www.rotowire.com/basketball/ref.php?id=1326850)
 
-**LINE**  TOR -200 TOR -186 TOR -204 TOR -200 –
+**LINE**  TOR -198 TOR -186 TOR -204 TOR -200 –
 
-**SPREAD**  TOR -5.0 TOR -4.5 TOR -4.5 TOR -4.5 –
+**SPREAD**  TOR -4.5 TOR -4.5 TOR -4.5 TOR -4.5 –
 
     **O/U**  221.0 Pts 220.5 Pts 221.5 Pts 221.5 Pts –
 
@@ -1185,9 +1185,9 @@ If you play on Sleeper, you should check out the RotoWire Picks tool. Get our be
 
 **Referees:**  [Nick Buchert](https://www.rotowire.com/basketball/ref.php?id=526234), [Jacyn Goble](https://www.rotowire.com/basketball/ref.php?id=719466), [Jenna Reneau](https://www.rotowire.com/basketball/ref.php?id=1348455)
 
-**LINE**  LAL -129 LAL -134 LAL -130 LAL -130 –
+**LINE**  LAL -127 LAL -134 LAL -125 LAL -130 –
 
-**SPREAD**  LAL -2.0 LAL -2.5 LAL -1.5 LAL -2.5 –
+**SPREAD**  LAL -2.0 LAL -2.5 LAL -1.5 LAL -1.5 –
 
     **O/U**  237.0 Pts 237.5 Pts 236.5 Pts 237.5 Pts –
 
