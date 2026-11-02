@@ -29,23 +29,19 @@ const P = D.props || {};
 for (const g of SLATE.games) {
   const ha = g.home_avail || {}, aa = g.away_avail || {};
   const sh = E.gameShifts(D, g, ha.out, aa.out, ha.extra, aa.extra);
-  const T = E.matchupInputs(D, G, g.home, g.away, g.neutral === 1, sh.shH, sh.shA);
+  const T0 = E.matchupInputs(D, G, g.home, g.away, g.neutral === 1, sh.shH, sh.shA);
+  const sa = E.selfAnchor(T0, G, hashSeed(g.id) + 7);          // match the ratings' own expected margin and total
+  const T = E.shifted(T0, sa.s, sa.d);
   const od = ODDS[g.id];
   const seed = hashSeed(g.id) + 2;
   let mk = null;
   if (od && (od.sp_home_line != null || od.tot_line != null)) {
-    mk = E.anchorToMarket(T, G, od.sp_home_line ?? null, od.sp_home_fair ?? null, od.tot_line ?? null, od.over_fair ?? null, hashSeed(g.id) + 5, 3000);
-    // final pass: re-solve the split on the exact simulation the app shows (same seed, 20,000 games)
-    if (od.sp_home_line != null) {
-      let lo = mk.d - 0.05, hi = mk.d + 0.05;
-      for (let i = 0; i < 8; i++) { const d = (lo + hi) / 2; if (E.coverNoPush(E.simulateGame(E.shifted(T, mk.s, d), G, N, seed), od.sp_home_line) < od.sp_home_fair) lo = d; else hi = d; }
-      mk.d = (lo + hi) / 2;
-    }
+    mk = E.anchorToMarket(T, G, od.sp_home_line ?? null, od.sp_home_fair ?? null, od.tot_line ?? null, od.over_fair ?? null, hashSeed(g.id) + 5, 6000);
   }
   const H = E.simulateGame(T, G, N, seed);
   const A = mk ? E.simulateGame(E.shifted(T, mk.s, mk.d), G, N, seed) : null;
   const fair = X => ({ sp: Math.round(-E.hmean(X.m) * 2) / 2, t: Math.round(E.expTotal(X) * 2) / 2 });
-  market[g.id] = { fm: fair(H), pm: +E.mlHome(H).toFixed(4), shH: +sh.shH.toFixed(5), shA: +sh.shA.toFixed(5), ptsH: +sh.ptsH.toFixed(2), ptsA: +sh.ptsA.toFixed(2) };
+  market[g.id] = { fm: fair(H), pm: +E.mlHome(H).toFixed(4), ss: +sa.s.toFixed(5), sd: +sa.d.toFixed(5), shH: +sh.shH.toFixed(5), shA: +sh.shA.toFixed(5), ptsH: +sh.ptsH.toFixed(2), ptsA: +sh.ptsA.toFixed(2) };
   if (mk) Object.assign(market[g.id], { s: +mk.s.toFixed(5), d: +mk.d.toFixed(5), miss: mk.miss == null ? null : +mk.miss.toFixed(4),
     pa: +E.mlHome(A).toFixed(4), fa: fair(A) });
   if (new Date(g.start).getTime() <= now) continue;          // only genuinely pre-game numbers are logged

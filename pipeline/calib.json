@@ -1,1 +1,6 @@
-{"durK":1.058,"tot_off":2.15,"calibrated_on":"2023-24 held-out simulation: possessions per team 98.5 vs 98.8 actual at durK 1.058; mean total 2.15 above actual before the offset"}
+{
+ "durK": 1.058,
+ "tot_off": 2.15,
+ "calibrated_on": "2023-24 held-out simulation: durK 1.058 (possessions per team 98.5 vs 98.8 actual), tot_off 2.15 (mean total 2.15 above actual before the offset), h1s 0.038 (first-half share of points 0.4945 vs 0.5004 actual; 0.064 gave 0.5043)",
+ "h1s": 0.038
+}

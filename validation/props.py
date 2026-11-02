@@ -4,7 +4,8 @@ Every player-game uses only earlier games: per-minute rates (recency-weighted, s
 x projected minutes (fitted to the team's 240, players.allocate), scaled by the simulated team quantity (points, made field goals
 for assists, threes made, rebounds) and priced with a negative binomial mixed over the simulated team distribution.
 The players are those who played (props are void otherwise). Lines: book-style = the player's season-to-date average
-rounded down + 0.5 (needs 5+ games), plus fixed points lines. Baselines price the same lines with the same
+rounded down + 0.5 (needs 5+ games), plus fixed lines for each stat. The
+negative-binomial dispersion is chosen per stat on all of its lines together (for each baseline too). Baselines price the same lines with the same
 distribution shape from the season-to-date average and from the last-10-games average."""
 import sys, os, json
 sys.path.insert(0, 'pipeline')
@@ -38,6 +39,8 @@ def mix_over(pmf, lo, scale, phi, L):
 
 
 GRID = [3, 5, 8, 12, 20, 40]
+FIXED = {'pts': (9.5, 14.5, 19.5, 24.5, 29.5), 'reb': (3.5, 5.5, 7.5, 9.5), 'ast': (1.5, 3.5, 5.5, 7.5),
+         'fg3m': (0.5, 1.5, 2.5, 3.5), 'pra': (14.5, 19.5, 24.5, 29.5, 34.5)}
 rows = []
 for d, gd in cur.groupby('date'):
     hist = PL[PL.date < d]
@@ -71,7 +74,7 @@ for d, gd in cur.groupby('date'):
                 hk = {'pts': 'pts', 'reb': 'reb', 'ast': 'fgm', 'fg3m': 'fg3m', 'pra': 'pts'}[k]
                 v, lo = pmfs[hk]
                 scale = means[k] / ET[hk]
-                lines = [('book', L)] + ([('fixed', x) for x in (9.5, 14.5, 19.5, 24.5)] if k == 'pts' else [])
+                lines = [('book', L)] + [('fixed', x) for x in FIXED[k]]
                 for kind, LL in lines:
                     r = dict(date=d, game_id=gid, pid=p, stat=k, kind=kind, line=LL, actual=getattr(act, k), mean=means[k], base=b)
                     for f in GRID:
@@ -86,16 +89,17 @@ def ll(y, p):
 
 
 res = {}
-for (k, kind), x in df.groupby(['stat', 'kind']):
-    best = {}
+chosen = {}
+for k, x in df.groupby('stat'):
+    chosen[k] = {}
     for c, name in (('m', 'model'), ('s', 'season_avg'), ('r', 'recent_10')):
-        fixed = PHI.get(k) if (c == 'm' and len(sys.argv) > 3) else None
+        if c == 'm' and len(sys.argv) > 3: chosen[k][name] = PHI[k]; continue
         cand = {f: ll(x.y, x[f'{c}{f}']) for f in GRID}
-        if fixed is not None and fixed in cand: best[name] = (fixed, cand[fixed])
-        else:
-            f = min(cand, key=cand.get); best[name] = (f, cand[f])
-    res[f'{k} {kind}'] = {'n': len(x), **{n: round(v[1], 4) for n, v in best.items()}, 'phi': {n: v[0] for n, v in best.items()},
-                          'pred_over': round(float(x[f"m{best['model'][0]}"].mean()), 3), 'act_over': round(float(x.y.mean()), 3),
+        chosen[k][name] = min(cand, key=cand.get)
+for (k, kind), x in df.groupby(['stat', 'kind']):
+    ph = chosen[k]
+    res[f'{k} {kind}'] = {'n': len(x), **{n: round(ll(x.y, x[f"{c}{ph[n]}"]), 4) for c, n in (('m', 'model'), ('s', 'season_avg'), ('r', 'recent_10'))},
+                          'phi': ph, 'pred_over': round(float(x[f"m{ph['model']}"].mean()), 3), 'act_over': round(float(x.y.mean()), 3),
                           'mae_model': round(float(np.mean(np.abs(x.actual - x['mean']))), 3), 'mae_season': round(float(np.mean(np.abs(x.actual - x.base))), 3)}
 print(json.dumps({'season': Y, 'phi_fixed': PHI if len(sys.argv) > 3 else None, 'half_life': HL, 'prior_min': PRIOR, 'results': res}, indent=0))
 df.to_parquet(f'validation/props_{Y}_{var}.parquet', index=False)

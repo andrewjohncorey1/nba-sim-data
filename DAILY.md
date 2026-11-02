@@ -36,7 +36,7 @@ plus $0.0067 per game). Pinnacle is pulled on the afternoon run only. Expected c
    Wait for each run to reach SUCCEEDED and note its default dataset id. Never retry a failed run more than once.
 
 4. **Build.** `pipeline/run_daily.sh <lineups_today_id>[,<lineups_tomorrow_id>] <pinnacle_id>` from the repo root,
-   with `-` for anything skipped or failed. Takes about two minutes.
+   with `-` for anything skipped or failed. Takes about two to four minutes.
    - If `FETCH` reports play-by-play more than two days old during the season, still publish, and mention it.
    - Output contains `RESULT FAIL`: commit and push only the new files under `data/`, do not publish, and send the
      user the PROBLEM lines.

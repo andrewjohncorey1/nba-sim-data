@@ -346,5 +346,131 @@
  },
  "rest_effects": {
   "note": "Back-to-back (margin only) improved 2024-25 (margin RMSE 14.024 -> 13.967, moneyline 0.5959 -> 0.5930) but not 2025-26 (14.263 -> 14.263, 0.5831 -> 0.5844), so it is off. Rest of 3+ days, travel and time zones were not significant on 2021-24 and are off."
+ },
+ "tests": {
+  "tables": [
+   {
+    "title": "Before launch: held-out season test",
+    "note": "Every game rated only on earlier games (refit daily). 2024-25 was used to choose settings; 2025-26 was untouched until the end. Log loss, lower is better; RMSE in points. Model only, no market input. The model beats the simple baselines everywhere but not the closing market: at DraftKings' closing spread and total it does worse than a coin flip, so on Pinnacle-priced games use the anchored numbers.",
+    "cols": [
+     "Market",
+     "2025-26 model",
+     "Point-diff. baseline",
+     "Rate baseline",
+     "DraftKings close"
+    ],
+    "rows": [
+     [
+      "Moneyline log loss",
+      "0.5854",
+      "0.6011",
+      "0.6871",
+      "0.5778"
+     ],
+     [
+      "Final margin RMSE",
+      "14.27",
+      "14.68",
+      "16.46",
+      "14.27"
+     ],
+     [
+      "Total RMSE",
+      "18.91",
+      "",
+      "20.20",
+      "18.32"
+     ],
+     [
+      "Spread at DraftKings' line",
+      "0.7063",
+      "",
+      "0.6931 (50/50)",
+      ""
+     ],
+     [
+      "Total at DraftKings' line",
+      "0.7097",
+      "",
+      "0.6931 (50/50)",
+      ""
+     ],
+     [
+      "Home -3.5",
+      "0.5942",
+      "",
+      "0.6924",
+      ""
+     ],
+     [
+      "Total over 225.5",
+      "0.6457",
+      "",
+      "0.6848",
+      ""
+     ],
+     [
+      "Home team total over 114.5",
+      "0.6369",
+      "",
+      "0.6923",
+      ""
+     ],
+     [
+      "1st-half total over 113.5",
+      "0.6681",
+      "",
+      "0.6906",
+      ""
+     ],
+     [
+      "Overtime (simulated / actual)",
+      "2.8% / 4.5%",
+      "",
+      "",
+      ""
+     ]
+    ]
+   },
+   {
+    "title": "What was kept",
+    "note": "Each addition kept only if it improved held-out predictions. Margin RMSE / moneyline log loss, closed-form test.",
+    "cols": [
+     "Addition",
+     "2024-25",
+     "2025-26",
+     "Kept"
+    ],
+    "rows": [
+     [
+      "Player availability",
+      "14.31 \u2192 14.02 / 0.611 \u2192 0.596",
+      "14.66 \u2192 14.26 / 0.602 \u2192 0.583",
+      "yes"
+     ],
+     [
+      "Back-to-back",
+      "14.02 \u2192 13.97 / 0.596 \u2192 0.593",
+      "14.26 \u2192 14.26 / 0.583 \u2192 0.584",
+      "no"
+     ],
+     [
+      "Rest days, travel, time zones",
+      "not significant, totals worse",
+      "",
+      "no"
+     ],
+     [
+      "Simulation matched to the ratings' closed form",
+      "moneyline 0.605 \u2192 0.601 (2023-24)",
+      "",
+      "yes"
+     ]
+    ]
+   }
+  ]
+ },
+ "notes": {
+  "foot": "Data: ESPN play-by-play and box scores via the sportsdataverse hoopR releases; injuries and expected lineups from RotoWire; prices from Pinnacle (no-vig). Fair prices are the simulation's probabilities with no margin. Model details and test results: README in nba-sim-data."
  }
 }

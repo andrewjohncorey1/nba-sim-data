@@ -209,6 +209,9 @@ function gameCalc(g,N,mode,outH,outA,neutral){
   const sh=gameShifts(DATA,g,outH??ha.out,outA??aa.out,ha.extra,aa.extra);
   let T=matchupInputs(DATA,G,g.home,g.away,neutral??(g.neutral===1),sh.shH,sh.shA);
   const mk=g.mkt;const anch=mode==='anch'&&mk&&mk.s!=null&&outH==null;
+  // match the ratings' own expected margin and total (precomputed for slate games, solved here for the simulator)
+  const sa=(mk&&mk.ss!=null&&outH==null)?{s:mk.ss,d:mk.sd}:selfAnchor(T,G,hashSeed(g.id||(g.home+g.away))+7);
+  T=shifted(T,sa.s,sa.d);
   if(anch)T=shifted(T,mk.s,mk.d);
   const H=simulateGame(T,G,N,hashSeed(g.id||(g.home+g.away))+2);
   return {H,T,sh,anch};}

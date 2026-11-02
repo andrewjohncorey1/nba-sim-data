@@ -7,3 +7,4 @@ validation/games_*.parquet
 validation/props_*.parquet
 __pycache__/
 *.pyc
+data/apify/

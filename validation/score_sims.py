@@ -75,7 +75,7 @@ out['calib'] = [[str(b), int(len(x)), round(float(x.pm.mean()), 3), round(float(
 # DraftKings closing lines (2025-26 only)
 import os
 lf = f'data/market_hist/espn_lines_{Y}.csv'
-if os.path.exists(lf):
+if os.path.exists(lf) and 'spread' in pd.read_csv(lf, nrows=1).columns:
     l = pd.read_csv(lf).dropna(subset=['spread']).drop_duplicates('game_id')
     d = g.merge(l, on='game_id')
     # spread is the home team's line (negative = home favoured)

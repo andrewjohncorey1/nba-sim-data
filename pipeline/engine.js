@@ -69,7 +69,7 @@ function simulateGame(T,G,N,seed){
       let clock=plen;
       let off=per===1||per===4?tip:(per<=3?1-tip:(r()<0.5?0:1));
       let prev='start';
-      const final=per>=4;
+      const final=per>=4,ps=(G.h1s||0)*(per<=2?1:-1);      // calibration: scoring split between the halves
       while(clock>0){
         const o=off,d=1-off,S=side[o],m=sc[o]-sc[d];
         if(G.debug&&per===4&&dbg===null&&clock<=150)dbg=Math.abs(sc[0]-sc[1]);
@@ -86,14 +86,14 @@ function simulateGame(T,G,N,seed){
           }else if(r()<LT.kill[tb][mb]){
             used=Math.min(clock,24);end='miss';
           }else{
-            res=playPoss(S,G,r,LT.shift[tb][mb],ltF3[tb][mb]);
+            res=playPoss(S,G,r,LT.shift[tb][mb]+ps,ltF3[tb][mb]);
             used=Math.min(clock,qd(prev)*LT.dur[tb][mb]/G.base_dur*durMul);
             // tied or down 1-2 inside the last shot clock: the offense plays for the last shot
             if(clock<=24&&m<=0&&m>=-2&&r()<(G.hold??0.8))used=Math.max(0.5,clock-2.5*r());
           }
         }else{
           const b=bin(SC.edges,m);
-          res=playPoss(S,G,r,SC.shift[b],scF3[b]);
+          res=playPoss(S,G,r,SC.shift[b]+ps,scF3[b]);
           used=Math.min(clock,qd(prev)*SC.dur[b]*durMul);
         }
         if(res){pts=res[0];end=res[1];fgm[o]+=res[2];f3m[o]+=res[3];reb[o]+=res[5];if(end==='miss')reb[d]++;}
@@ -206,24 +206,31 @@ function selfAnchor(T,G,seed,N){
 }
 
 /* ---------- Pinnacle anchoring ---------- */
-// Scale both offenses' make odds by a common logit shift s (total) and split d (spread) until the simulation matches
+// Shift both offenses' make odds by a common logit amount s (total) and a split d (spread) until the simulation matches
 // Pinnacle's no-vig cover probability at its spread and over probability at its total. Moneyline is not used.
 function shifted(T,s,d){const f=(c,x)=>({...c,m1:ex(lg(c.m1)+x),m2:ex(lg(c.m2)+x),m3:ex(lg(c.m3)+x)});
   return {h:f(T.h,s+d),a:f(T.a,s-d),pace:T.pace};}
 function coverNoPush(H,line){const p=pushHome(H,line);return p<1?coverHome(H,line)/(1-p):0.5;}
 function overNoPush(H,L){const p=pEQ(H.t,L);return p<1?overP(H,L)/(1-p):0.5;}
 function anchorToMarket(T,G,spLine,pCover,totLine,pOver,seed,N){
-  N=N||3000;
-  const solveD=s=>{let lo=-0.6,hi=0.6;for(let i=0;i<12;i++){const d=(lo+hi)/2,H=simulateGame(shifted(T,s,d),G,N,seed);if(coverNoPush(H,spLine)<pCover)lo=d;else hi=d;}return (lo+hi)/2;};
-  if(totLine==null||pOver==null){const d=spLine==null?0:solveD(0);return {s:0,d,miss:null,spreadOnly:true};}
-  if(spLine==null){let lo=-0.6,hi=0.6;for(let i=0;i<12;i++){const s=(lo+hi)/2,H=simulateGame(shifted(T,s,0),G,N,seed);if(overNoPush(H,totLine)<pOver)lo=s;else hi=s;}return {s:(lo+hi)/2,d:0,miss:null,totalOnly:true};}
-  let lo=-0.6,hi=0.6,best=null;
-  for(let it=0;it<11;it++){
-    const s=(lo+hi)/2,d=solveD(s),H=simulateGame(shifted(T,s,d),G,N,seed),po=overNoPush(H,totLine);
-    best={s,d,po};if(po<pOver)lo=s;else hi=s;
+  // secant steps on the common shift s (total) and the split d (spread); each probability moves mostly with its own
+  // shift, so the two are solved side by side, using the same random numbers every time
+  N=N||6000;
+  const hasS=spLine!=null&&pCover!=null,hasT=totLine!=null&&pOver!=null;
+  let s=0,d=0,kc=2.5,ko=2.5,pc=null,po=null,ps=null,pd=null,best=null;
+  for(let it=0;it<8;it++){
+    const H=simulateGame(shifted(T,s,d),G,N,seed);
+    const c=hasS?coverNoPush(H,spLine):null,o=hasT?overNoPush(H,totLine):null;
+    const err=Math.max(hasS?Math.abs(c-pCover):0,hasT?Math.abs(o-pOver):0);
+    if(!best||err<best.err)best={s,d,err,po:o,pc:c};
+    if(err<0.002)break;
+    if(pc!=null&&hasS&&Math.abs(d-pd)>1e-4)kc=Math.max(0.5,Math.min(8,(c-pc)/(d-pd)));
+    if(po!=null&&hasT&&Math.abs(s-ps)>1e-4)ko=Math.max(0.5,Math.min(8,(o-po)/(s-ps)));
+    pc=c;po=o;pd=d;ps=s;
+    if(hasS)d+=Math.max(-0.15,Math.min(0.15,(pCover-c)/kc));
+    if(hasT)s+=Math.max(-0.15,Math.min(0.15,(pOver-o)/ko));
   }
-  best.miss=Math.abs(best.po-pOver);
-  return best;
+  return {s:best.s,d:best.d,miss:hasT?Math.abs(best.po-pOver):null,missSpread:hasS?Math.abs(best.pc-pCover):null,spreadOnly:!hasT,totalOnly:!hasS};
 }
 
 /* ---------- player props ---------- */
