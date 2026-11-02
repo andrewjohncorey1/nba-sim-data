@@ -1,14 +1,20 @@
-"""Score the 2025-26 player-prop test at the dispersions chosen on 2024-25 (validation/props_tune_2025.log), for the
+"""Score the 2025-26 player-prop test at the dispersions chosen on 2024-25 (validation/props_2025_base.parquet), for the
 model and for each baseline. A market passes when the model beats both baselines on its book-style lines and on the
 fixed lines together. Writes validation/props_test_2026.json."""
 import json
 import numpy as np, pandas as pd
-tune = json.load(open('validation/props_tune_2025.log'))
-df = pd.read_parquet('validation/props_2026_base.parquet')
 ll = lambda y, p: float(-np.mean(y * np.log(np.clip(p, 1e-4, 1 - 1e-4)) + (1 - y) * np.log(np.clip(1 - p, 1e-4, 1 - 1e-4))))
-out = {}
+GRID = [3, 5, 8, 12, 20, 40]
+tune_df = pd.read_parquet('validation/props_2025_base.parquet')
+tune = {}
+for k, x in tune_df.groupby('stat'):            # dispersion per stat and per method, chosen on all 2024-25 lines
+    tune[k] = {n: min(GRID, key=lambda f: ll(x.y, x[f'{c}{f}'])) for c, n in (('m', 'model'), ('s', 'season_avg'), ('r', 'recent_10'))}
+    xx = x; tune[k + '_2025'] = {n: round(ll(xx.y, xx[f"{c}{tune[k][n]}"]), 4) for c, n in (('m', 'model'), ('s', 'season_avg'), ('r', 'recent_10'))}
+print('2024-25 (tuning):', json.dumps(tune))
+df = pd.read_parquet('validation/props_2026_base.parquet')
+out = {'tuning_2025': tune}
 for k in ('pts', 'reb', 'ast', 'fg3m', 'pra'):
-    ph = tune['results'][f'{k} book']['phi']
+    ph = tune[k]
     x = df[df.stat == k]
     row = {'phi': ph}
     for kind, xx in [('all', x), ('book', x[x.kind == 'book']), ('fixed', x[x.kind == 'fixed'])]:

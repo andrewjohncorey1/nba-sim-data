@@ -331,10 +331,17 @@
   "half_life": 180,
   "prior_min": 300,
   "markets": [
-   "pts"
+   "pts",
+   "ast",
+   "fg3m",
+   "pra"
   ],
   "phi": {
-   "pts": 10
+   "pts": 5,
+   "ast": 12,
+   "fg3m": 20,
+   "pra": 8,
+   "reb": 8
   },
   "labels": {
    "pts": "Points",
@@ -342,7 +349,8 @@
    "ast": "Assists",
    "fg3m": "Threes made",
    "pra": "Pts+Reb+Ast"
-  }
+  },
+  "note": "Dispersions chosen on 2024-25; markets kept only if they beat both baselines on 2025-26. Rebounds beat them on log loss but ran 5 points high on overs and had a worse average error than the season average, so they are off."
  },
  "rest_effects": {
   "note": "Back-to-back (margin only) improved 2024-25 (margin RMSE 14.024 -> 13.967, moneyline 0.5959 -> 0.5930) but not 2025-26 (14.263 -> 14.263, 0.5831 -> 0.5844), so it is off. Rest of 3+ days, travel and time zones were not significant on 2021-24 and are off."
@@ -465,6 +473,66 @@
       "moneyline 0.605 \u2192 0.601 (2023-24)",
       "",
       "yes"
+     ]
+    ]
+   },
+   {
+    "title": "Before launch: player props",
+    "note": "2025-26, every player-game rated on earlier games only; players who played (props are void otherwise). Lines: book-style (season average rounded down + 0.5) plus fixed lines. Baselines price the same lines from the player's season-to-date or last-10 average. Log loss over all lines, lower is better.",
+    "cols": [
+     "Market",
+     "Lines",
+     "Model",
+     "Season average",
+     "Last 10 games",
+     "Predicted / actual over",
+     "Kept"
+    ],
+    "rows": [
+     [
+      "Points",
+      "154,308",
+      "0.3616",
+      "0.3809",
+      "0.3773",
+      "23.5% / 25.5%",
+      "yes"
+     ],
+     [
+      "Assists",
+      "128,590",
+      "0.3891",
+      "0.4012",
+      "0.4025",
+      "28.4% / 28.8%",
+      "yes"
+     ],
+     [
+      "Threes made",
+      "128,590",
+      "0.4482",
+      "0.4583",
+      "0.4690",
+      "31.2% / 31.0%",
+      "yes"
+     ],
+     [
+      "Pts+Reb+Ast",
+      "154,308",
+      "0.4014",
+      "0.4337",
+      "0.4241",
+      "31.4% / 32.1%",
+      "yes"
+     ],
+     [
+      "Rebounds",
+      "128,590",
+      "0.4254",
+      "0.4381",
+      "0.4378",
+      "34.3% / 29.1%",
+      "no: overs 5 points high"
      ]
     ]
    }
