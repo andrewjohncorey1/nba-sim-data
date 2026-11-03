@@ -53,3 +53,84 @@ Stay Ahead of the Game
 You're all set!
 
 We'll send you the latest news and updates.
+# Tomorrow's NBA Lineups
+
+[![RotoWire](https://assets.rotowire.com/images/assets/logo_icon_red.svg) Every start/sit, every waiver, every trade, plus NBA and NHL all winter. We make the call. Every start/sit, every waiver, every trade. We make the call. Win my league](https://www.rotowire.com/subscribe/payment/?plan=fantasy&billing=12)
+
+Date
+
+[Today](https://www.rotowire.com/basketball/nba-lineups.php) [Tomorrow](https://www.rotowire.com/basketball/nba-lineups.php?date=tomorrow)
+
+Display Preference
+
+Standard
+
+Compact
+
+Simple
+
+Hide Games That Started
+
+Yes
+
+No
+
+Sportsbook Odds
+
+Composite
+
+DraftKings
+
+FanDuel
+
+BetMGM
+
+PointsBet
+
+Show Display Settings Add Lineup Alerts
+
+Tomorrow's schedule is reserved for RotoWire subscribers.
+
+Want to see the lineups? [Subscribe Now](https://www.rotowire.com/subscribe/).
+
+Estimated Chance To Play
+
+This is our best guess for players whose lineup status is in question. If a player doesn't have a color bar next to their position, that indicates that they're expected to play.
+
+Very Unlikely
+
+Unlikely
+
+Toss Up
+
+Likely
+
+Very Likely
+
+Beware the "late scratch"!
+
+Learn how we set lineups
+
+How We Set Our Daily NBA Lineups
+
+Our staff sets the expected daily lineups 24-30 hours before tip-off. The expected lineups are then tweaked throughout the day of the game.
+
+Lineups are only confirmed when an official NBA source provides that information.
+
+Unfortunately, the NBA does not require that starting lineups be submitted before tipoff, which is why we are sometimes limited to waiting until a game tips off to accurately pass on who is starting for some games. Also, sometimes players are "scratched" at the very last minute.
+
+If a player has a color bar next to his name, that reflects some level of uncertainty about whether he'll be active for the game. Most players have a color bar when dealing with an injury, but we will also add estimates if a player's status in doubt due to rest or other off-court issues.
+
+×
+
+Stay Ahead of the Game
+
+## Get updates faster, directly to your inbox
+
+ Send me the latest news
+
+?
+
+You're all set!
+
+We'll send you the latest news and updates.
