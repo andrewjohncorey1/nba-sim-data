@@ -96,19 +96,19 @@ Show Display Settings Add Lineup Alerts
     
     [Isaiah Joe](https://www.rotowire.com/basketball/player/isaiah-joe-5291 "Isaiah Joe") Out
 
-**Referees:**  Not announced yet
+**Referees:**  [Marc Davis](https://www.rotowire.com/basketball/ref.php?id=3566), [Natalie Sago](https://www.rotowire.com/basketball/ref.php?id=1143377), [Nate Green](https://www.rotowire.com/basketball/ref.php?id=859012)
 
-**LINE**  DET -128 DET -132 DET -125 DET -125 –
+**LINE**  DET -139 DET -138 DET -142 DET -145 –
 
-**SPREAD**  DET -2.0 DET -2.5 DET -2.5 DET -1.5 –
+**SPREAD**  DET -2.5 DET -2.5 DET -2.5 DET -2.5 –
 
-    **O/U**  218.0 Pts 217.5 Pts 217.5 Pts 217.5 Pts –
+    **O/U**  219.5 Pts 219.5 Pts 219.5 Pts 219.5 Pts –
 
-[![](https://assets.rotowire.com/images/props/prizepicks.svg)](https://www.rotowire.com/picks/prizepicks/) [Make The Right Picks](https://www.rotowire.com/picks/prizepicks/) [![](https://assets.rotowire.com/images/picks-promo-screen.png)](https://www.rotowire.com/picks/prizepicks/)
+[![](https://assets.rotowire.com/images/props/underdog.svg)](https://www.rotowire.com/picks/underdog/) [Make The Right Picks](https://www.rotowire.com/picks/underdog/) [![](https://assets.rotowire.com/images/picks-promo-screen.png)](https://www.rotowire.com/picks/underdog/)
 
-If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our best picks for today's NBA games.
+If you play on Underdog, you should check out the RotoWire Picks tool. Get our best picks for today's NBA games.
 
-[See Our Top Picks For PrizePicks](https://www.rotowire.com/picks/prizepicks/)
+[See Our Top Picks For Underdog](https://www.rotowire.com/picks/underdog/)
 
 7:00 PM ET
 
@@ -173,7 +173,7 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
 *   MAY NOT PLAY
 *   F
     
-    [A. Gill](https://www.rotowire.com/basketball/player/anthony-gill-5309 "Anthony Gill") Ques
+    [B. Coulibaly](https://www.rotowire.com/basketball/player/bilal-coulibaly-5945 "Bilal Coulibaly") Ques
 *   C
     
     [A. Sarr](https://www.rotowire.com/basketball/player/alex-sarr-6240 "Alex Sarr") Ques
@@ -190,13 +190,13 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
     
     [J. Watkins](https://www.rotowire.com/basketball/player/jamir-watkins-6573 "Jamir Watkins") Out
 
-**Referees:**  Not announced yet
+**Referees:**  [Gediminas Petraitis](https://www.rotowire.com/basketball/ref.php?id=720664), [Andy Nagy](https://www.rotowire.com/basketball/ref.php?id=903099), [Brandon Adair](https://www.rotowire.com/basketball/ref.php?id=958396)
 
-**LINE**  ATL -141 ATL -146 ATL -142 ATL -145 –
+**LINE**  ATL -150 ATL -156 ATL -154 ATL -145 –
 
-**SPREAD**  ATL -2.5 ATL -2.5 ATL -2.5 ATL -2.5 –
+**SPREAD**  ATL -3.0 ATL -3.5 ATL -2.5 ATL -2.5 –
 
-    **O/U**  232.5 Pts 231.5 Pts 232.5 Pts 232.5 Pts –
+    **O/U**  231.5 Pts 231.5 Pts 230.5 Pts 231.5 Pts –
 
 7:30 PM ET
 
@@ -211,7 +211,7 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
 *   Expected Lineup
 *   PG
     
-    [Ryan Rollins](https://www.rotowire.com/basketball/player/ryan-rollins-5668 "Ryan Rollins")
+    [B. Burries](https://www.rotowire.com/basketball/player/brayden-burries-6967 "Brayden Burries")
 *   SG
     
     [Tyler Herro](https://www.rotowire.com/basketball/player/tyler-herro-4780 "Tyler Herro")
@@ -227,8 +227,9 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
 *   Projected Minutes
 *   On/Off Court Stats
 *   MAY NOT PLAY
-*   None
+*   G
     
+    [K. Jones](https://www.rotowire.com/basketball/player/kam-jones-6565 "Kam Jones") Ques
 
 *   Expected Lineup
 *   PG
@@ -239,10 +240,10 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
     [Hugo Gonzalez](https://www.rotowire.com/basketball/player/hugo-gonzalez-6553 "Hugo Gonzalez")
 *   SF
     
-    [Paul George](https://www.rotowire.com/basketball/player/paul-george-3114 "Paul George")
+    [B. Scheierman](https://www.rotowire.com/basketball/player/baylor-scheierman-6280 "Baylor Scheierman")
 *   PF
     
-    [J. Tatum](https://www.rotowire.com/basketball/player/jayson-tatum-4108 "Jayson Tatum") Ques
+    [Paul George](https://www.rotowire.com/basketball/player/paul-george-3114 "Paul George")
 *   C
     
     [Neemias Queta](https://www.rotowire.com/basketball/player/neemias-queta-5333 "Neemias Queta")
@@ -252,20 +253,20 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
 *   G
     
     [P. Pritchard](https://www.rotowire.com/basketball/player/payton-pritchard-5131 "Payton Pritchard") Ques
-*   F
-    
-    [J. Tatum](https://www.rotowire.com/basketball/player/jayson-tatum-4108 "Jayson Tatum") Ques
 *   G
     
     [D. Carter](https://www.rotowire.com/basketball/player/devin-carter-6265 "Devin Carter") Out
+*   F
+    
+    [J. Tatum](https://www.rotowire.com/basketball/player/jayson-tatum-4108 "Jayson Tatum") Out
 
-**Referees:**  Not announced yet
+**Referees:**  [James Capers](https://www.rotowire.com/basketball/ref.php?id=3560), [Dedric Taylor](https://www.rotowire.com/basketball/ref.php?id=795085), [Julian Scott](https://www.rotowire.com/basketball/ref.php?id=1327320)
 
-**LINE**  BOS -553 BOS -480 BOS -567 BOS -550 –
+**LINE**  BOS -518 BOS -500 BOS -518 BOS -500 –
 
 **SPREAD**  BOS -11.5 BOS -11.5 BOS -11.5 BOS -11.5 –
 
-    **O/U**  225.0 Pts 224.5 Pts 225.5 Pts 225.5 Pts –
+    **O/U**  221.5 Pts 221.5 Pts 221.5 Pts 222.5 Pts –
 
 7:30 PM ET
 
@@ -283,7 +284,7 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
     [C. White](https://www.rotowire.com/basketball/player/coby-white-4801 "Coby White") Prob
 *   SG
     
-    [K. Knueppel](https://www.rotowire.com/basketball/player/kon-knueppel-6540 "Kon Knueppel") Prob
+    [Kon Knueppel](https://www.rotowire.com/basketball/player/kon-knueppel-6540 "Kon Knueppel")
 *   SF
     
     [B. Miller](https://www.rotowire.com/basketball/player/brandon-miller-5896 "Brandon Miller")
@@ -296,9 +297,6 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
 *   Projected Minutes
 *   On/Off Court Stats
 *   MAY NOT PLAY
-*   F
-    
-    [K. Knueppel](https://www.rotowire.com/basketball/player/kon-knueppel-6540 "Kon Knueppel") Prob
 *   G
     
     [C. White](https://www.rotowire.com/basketball/player/coby-white-4801 "Coby White") Prob
@@ -329,13 +327,13 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
     
     [Egor Demin](https://www.rotowire.com/basketball/player/egor-demin-6559 "Egor Demin") Out
 
-**Referees:**  Not announced yet
+**Referees:**  [Zach Zarba](https://www.rotowire.com/basketball/ref.php?id=240434), [Eric Lewis](https://www.rotowire.com/basketball/ref.php?id=239638), [Klajdi Mulla](https://www.rotowire.com/basketball/ref.php?id=1619015)
 
-**LINE**  CHA -162 CHA -158 CHA -162 CHA -160 –
+**LINE**  CHA -169 CHA -168 CHA -170 CHA -170 –
 
-**SPREAD**  CHA -3.5 CHA -3.5 CHA -3.5 CHA -3.5 –
+**SPREAD**  CHA -4.0 CHA -3.5 CHA -3.5 CHA -4.5 –
 
-    **O/U**  214.0 Pts 213.5 Pts 214.5 Pts 213.5 Pts –
+    **O/U**  213.0 Pts 212.5 Pts 213.5 Pts 213.5 Pts –
 
 7:30 PM ET
 
@@ -382,7 +380,7 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
     [Mikal Bridges](https://www.rotowire.com/basketball/player/mikal-bridges-4386 "Mikal Bridges")
 *   SF
     
-    [J. Hart](https://www.rotowire.com/basketball/player/josh-hart-4136 "Josh Hart") Ques
+    [Landry Shamet](https://www.rotowire.com/basketball/player/landry-shamet-4414 "Landry Shamet")
 *   PF
     
     [OG Anunoby](https://www.rotowire.com/basketball/player/og-anunoby-4121 "OG Anunoby")
@@ -394,13 +392,13 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
 *   MAY NOT PLAY
 *   F
     
-    [J. Hart](https://www.rotowire.com/basketball/player/josh-hart-4136 "Josh Hart") Ques
+    [Josh Hart](https://www.rotowire.com/basketball/player/josh-hart-4136 "Josh Hart") Out
 
-**Referees:**  Not announced yet
+**Referees:**  [Brian Forte](https://www.rotowire.com/basketball/ref.php?id=305382), [Ray Acosta](https://www.rotowire.com/basketball/ref.php?id=719470), [Brent Haskill](https://www.rotowire.com/basketball/ref.php?id=1349467)
 
-**LINE**  NYK -616 NYK -600 NYK -597 NYK -625 –
+**LINE**  NYK -622 NYK -590 NYK -597 NYK -625 –
 
-**SPREAD**  NYK -12.0 NYK -12.5 NYK -11.5 NYK -11.5 –
+**SPREAD**  NYK -12.0 NYK -11.5 NYK -12.5 NYK -11.5 –
 
     **O/U**  234.0 Pts 234.5 Pts 233.5 Pts 234.5 Pts –
 
@@ -452,7 +450,7 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
     [J. Fears](https://www.rotowire.com/basketball/player/jeremiah-fears-6546 "Jeremiah Fears")
 *   SF
     
-    [T. Murphy](https://www.rotowire.com/basketball/player/trey-murphy-5401 "Trey Murphy") Prob
+    [T. Murphy](https://www.rotowire.com/basketball/player/trey-murphy-5401 "Trey Murphy") Ques
 *   PF
     
     [Z. Williamson](https://www.rotowire.com/basketball/player/zion-williamson-4777 "Zion Williamson")
@@ -464,7 +462,7 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
 *   MAY NOT PLAY
 *   F
     
-    [T. Murphy](https://www.rotowire.com/basketball/player/trey-murphy-5401 "Trey Murphy") Prob
+    [T. Murphy](https://www.rotowire.com/basketball/player/trey-murphy-5401 "Trey Murphy") Ques
 *   G
     
     [J. Poole](https://www.rotowire.com/basketball/player/jordan-poole-4791 "Jordan Poole") Prob
@@ -472,13 +470,13 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
     
     [Yves Missi](https://www.rotowire.com/basketball/player/yves-missi-6268 "Yves Missi") Out
 
-**Referees:**  Not announced yet
+**Referees:**  [Courtney Kirkland](https://www.rotowire.com/basketball/ref.php?id=3587), [JB DeRosa](https://www.rotowire.com/basketball/ref.php?id=897257), [Intae Hwang](https://www.rotowire.com/basketball/ref.php?id=1420199)
 
-**LINE**  NOP -214 NOP -205 NOP -217 NOP -220 –
+**LINE**  NOP -204 NOP -200 NOP -203 NOP -200 –
 
-**SPREAD**  NOP -5.5 NOP -5.5 NOP -5.5 NOP -5.5 –
+**SPREAD**  NOP -5.0 NOP -4.5 NOP -4.5 NOP -4.5 –
 
-    **O/U**  235.0 Pts 234.5 Pts 234.5 Pts 234.5 Pts –
+    **O/U**  232.0 Pts 232.5 Pts 231.5 Pts 232.5 Pts –
 
 8:00 PM ET
 
@@ -509,9 +507,6 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
 *   Projected Minutes
 *   On/Off Court Stats
 *   MAY NOT PLAY
-*   C
-    
-    [K. Diop](https://www.rotowire.com/basketball/player/khalifa-diop-5681 "Khalifa Diop") Out
 *   F
     
     [N. Tomlin](https://www.rotowire.com/basketball/player/naeqwan-tomlin-6311 "Nae'Qwan Tomlin") Out
@@ -560,13 +555,13 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
     
     [J. Williams](https://www.rotowire.com/basketball/player/jalen-williams-5687 "Jalen Williams") Out
 
-**Referees:**  Not announced yet
+**Referees:**  [John Goble](https://www.rotowire.com/basketball/ref.php?id=304287), [John Butler](https://www.rotowire.com/basketball/ref.php?id=861396), [Jonathan Sterling](https://www.rotowire.com/basketball/ref.php?id=958789)
 
-**LINE**  OKC -136 OKC -134 OKC -135 OKC -140 –
+**LINE**  OKC -164 OKC -164 OKC -161 OKC -165 –
 
-**SPREAD**  OKC -2.5 OKC -2.5 OKC -2.5 OKC -2.5 –
+**SPREAD**  OKC -3.5 OKC -3.5 OKC -3.5 OKC -3.5 –
 
-    **O/U**  228.0 Pts 227.5 Pts 228.5 Pts 228.5 Pts –
+    **O/U**  226.5 Pts 227.5 Pts 226.5 Pts 227.5 Pts –
 
 8:00 PM ET
 
@@ -645,13 +640,13 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
     
     [S. Pippen](https://www.rotowire.com/basketball/player/scotty-pippen-5685 "Scotty Pippen") Out
 
-**Referees:**  Not announced yet
+**Referees:**  [Ben Taylor](https://www.rotowire.com/basketball/ref.php?id=525497), [Mousa Dagher](https://www.rotowire.com/basketball/ref.php?id=1089940), [Agon Abazi](https://www.rotowire.com/basketball/ref.php?id=1449812)
 
-**LINE**  MEM -260 MEM -260 MEM -265 MEM -275 –
+**LINE**  MEM -234 MEM -230 MEM -237 MEM -235 –
 
-**SPREAD**  MEM -6.5 MEM -6.5 MEM -6.5 MEM -6.5 –
+**SPREAD**  MEM -6.0 MEM -5.5 MEM -6.5 MEM -6.5 –
 
-    **O/U**  229.0 Pts 229.5 Pts 229.5 Pts 229.5 Pts –
+    **O/U**  228.5 Pts 228.5 Pts 228.5 Pts 228.5 Pts –
 
 8:30 PM ET
 
@@ -682,15 +677,15 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
 *   Projected Minutes
 *   On/Off Court Stats
 *   MAY NOT PLAY
-*   F
-    
-    [T. Shannon](https://www.rotowire.com/basketball/player/terrence-shannon-6278 "Terrence Shannon") Ques
 *   G
     
     [D. DiVincenzo](https://www.rotowire.com/basketball/player/donte-divincenzo-4439 "Donte DiVincenzo") Out
 *   G
     
     [A. Edwards](https://www.rotowire.com/basketball/player/anthony-edwards-5110 "Anthony Edwards") Out
+*   F
+    
+    [T. Shannon](https://www.rotowire.com/basketball/player/terrence-shannon-6278 "Terrence Shannon") Out
 
 *   Expected Lineup
 *   PG
@@ -713,18 +708,18 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
 *   MAY NOT PLAY
 *   C
     
-    [C. Capela](https://www.rotowire.com/basketball/player/clint-capela-3587 "Clint Capela") Ques
+    [S. Adams](https://www.rotowire.com/basketball/player/steven-adams-3445 "Steven Adams") Out
 *   C
     
-    [S. Adams](https://www.rotowire.com/basketball/player/steven-adams-3445 "Steven Adams") Out
+    [C. Capela](https://www.rotowire.com/basketball/player/clint-capela-3587 "Clint Capela") Out
 
-**Referees:**  Not announced yet
+**Referees:**  [Tyler Ford](https://www.rotowire.com/basketball/ref.php?id=852194), [Justin Van Duyne](https://www.rotowire.com/basketball/ref.php?id=714438), [Gina Catanzariti](https://www.rotowire.com/basketball/ref.php?id=1619060)
 
-**LINE**  HOU -305 HOU -270 HOU -310 HOU -300 –
+**LINE**  HOU -280 HOU -270 HOU -278 HOU -285 –
 
-**SPREAD**  HOU -8.5 HOU -8.5 HOU -8.5 HOU -8.5 –
+**SPREAD**  HOU -7.5 HOU -7.5 HOU -7.5 HOU -7.5 –
 
-    **O/U**  220.5 Pts 220.5 Pts 220.5 Pts 220.5 Pts –
+    **O/U**  219.0 Pts 219.5 Pts 218.5 Pts 219.5 Pts –
 
 9:00 PM ET
 
@@ -797,13 +792,13 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
     
     [J. Strawther](https://www.rotowire.com/basketball/player/julian-strawther-5915 "Julian Strawther") Out
 
-**Referees:**  Not announced yet
+**Referees:**  [Karl Lane](https://www.rotowire.com/basketball/ref.php?id=525083), [Kevin Cutler](https://www.rotowire.com/basketball/ref.php?id=413140),
 
-**LINE**  DEN -194 DEN -194 DEN -192 DEN -200 –
+**LINE**  DEN -195 DEN -190 DEN -191 DEN -200 –
 
-**SPREAD**  DEN -4.5 DEN -5.5 DEN -4.5 DEN -4.5 –
+**SPREAD**  DEN -4.5 DEN -4.5 DEN -4.5 DEN -4.5 –
 
-    **O/U**  230.5 Pts 230.5 Pts 230.5 Pts 230.5 Pts –
+    **O/U**  231.5 Pts 230.5 Pts 231.5 Pts 231.5 Pts –
 
 9:00 PM ET
 
@@ -860,23 +855,23 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
 *   Projected Minutes
 *   On/Off Court Stats
 *   MAY NOT PLAY
-*   F
-    
-    [R. Fleming](https://www.rotowire.com/basketball/player/rasheer-fleming-6564 "Rasheer Fleming") Ques
 *   G
     
     [J. Goodwin](https://www.rotowire.com/basketball/player/jordan-goodwin-5460 "Jordan Goodwin") Ques
+*   F
+    
+    [R. Fleming](https://www.rotowire.com/basketball/player/rasheer-fleming-6564 "Rasheer Fleming") Out
 *   C
     
     [M. Williams](https://www.rotowire.com/basketball/player/mark-williams-5647 "Mark Williams") Out
 
-**Referees:**  Not announced yet
+**Referees:**  [Nick Buchert](https://www.rotowire.com/basketball/ref.php?id=526234), [Jacyn Goble](https://www.rotowire.com/basketball/ref.php?id=719466), [Robert Hussey](https://www.rotowire.com/basketball/ref.php?id=1262262)
 
-**LINE**  POR -151 POR -148 POR -155 POR -155 –
+**LINE**  POR -150 POR -146 POR -148 POR -155 –
 
-**SPREAD**  POR -3.0 POR -3.5 POR -3.5 POR -2.5 –
+**SPREAD**  POR -3.0 POR -3.5 POR -2.5 POR -3.5 –
 
-    **O/U**  228.0 Pts 227.5 Pts 227.5 Pts 228.5 Pts –
+    **O/U**  227.5 Pts 227.5 Pts 227.5 Pts 227.5 Pts –
 
 9:30 PM ET
 
@@ -909,7 +904,7 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
 *   MAY NOT PLAY
 *   F
     
-    [S. Aldama](https://www.rotowire.com/basketball/player/santi-aldama-5428 "Santi Aldama") Ques
+    [S. Aldama](https://www.rotowire.com/basketball/player/santi-aldama-5428 "Santi Aldama") Doubt
 *   F
     
     [T. Biberovic](https://www.rotowire.com/basketball/player/tarik-biberovic-6082 "Tarik Biberovic") Out
@@ -949,13 +944,13 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
     
     [J. Quaintance](https://www.rotowire.com/basketball/player/jayden-quaintance-6985 "Jayden Quaintance") Out
 
-**Referees:**  Not announced yet
+**Referees:**  [Curtis Blair](https://www.rotowire.com/basketball/ref.php?id=344876), [Brent Barnaky](https://www.rotowire.com/basketball/ref.php?id=534510), [Simone Jelks](https://www.rotowire.com/basketball/ref.php?id=1194480)
 
-**LINE**  SAS -550 SAS -500 SAS -545 SAS -550 –
+**LINE**  SAS -609 SAS -590 SAS -597 SAS -625 –
 
-**SPREAD**  SAS -11.5 SAS -11.5 SAS -11.5 SAS -11.5 –
+**SPREAD**  SAS -12.5 SAS -11.5 SAS -12.5 SAS -12.5 –
 
-    **O/U**  228.0 Pts 227.5 Pts 227.5 Pts 228.5 Pts –
+    **O/U**  227.0 Pts 227.5 Pts 226.5 Pts 226.5 Pts –
 
 10:00 PM ET
 
@@ -1002,7 +997,7 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
     [D. Hunter](https://www.rotowire.com/basketball/player/deandre-hunter-4776 "De'Andre Hunter")
 *   PF
     
-    [P. Achiuwa](https://www.rotowire.com/basketball/player/precious-achiuwa-5249 "Precious Achiuwa") Prob
+    [P. Achiuwa](https://www.rotowire.com/basketball/player/precious-achiuwa-5249 "Precious Achiuwa")
 *   C
     
     [D. Sabonis](https://www.rotowire.com/basketball/player/domantas-sabonis-3865 "Domantas Sabonis")
@@ -1014,21 +1009,21 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
     [B. Simmons](https://www.rotowire.com/basketball/player/ben-simmons-3849 "Ben Simmons") OFS
 *   F
     
-    [P. Achiuwa](https://www.rotowire.com/basketball/player/precious-achiuwa-5249 "Precious Achiuwa") Prob
+    [K. Murray](https://www.rotowire.com/basketball/player/keegan-murray-5699 "Keegan Murray") Out
 *   F
     
-    [K. Murray](https://www.rotowire.com/basketball/player/keegan-murray-5699 "Keegan Murray") Out
+    [D. Plowden](https://www.rotowire.com/basketball/player/daeqwon-plowden-5800 "Daeqwon Plowden") Out
 *   C
     
     [M. Raynaud](https://www.rotowire.com/basketball/player/maxime-raynaud-6552 "Maxime Raynaud") Out
 
-**Referees:**  Not announced yet
+**Referees:**  [Ed Malloy](https://www.rotowire.com/basketball/ref.php?id=178532), [Jason Goldenberg](https://www.rotowire.com/basketball/ref.php?id=896908), [Chelisa Painter](https://www.rotowire.com/basketball/ref.php?id=1326850)
 
-**LINE**  LAL -556 LAL -510 LAL -574 LAL -550 –
+**LINE**  LAL -634 LAL -620 LAL -620 LAL -625 –
 
-**SPREAD**  LAL -11.5 LAL -11.5 LAL -11.5 LAL -11.5 –
+**SPREAD**  LAL -12.0 LAL -12.5 LAL -11.5 LAL -12.5 –
 
-    **O/U**  235.0 Pts 234.5 Pts 234.5 Pts 235.5 Pts –
+    **O/U**  233.5 Pts 233.5 Pts 233.5 Pts 233.5 Pts –
 
 10:30 PM ET
 
@@ -1062,9 +1057,6 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
 *   F
     
     [G. Antetokounmpo](https://www.rotowire.com/basketball/player/giannis-antetokounmpo-3456 "Giannis Antetokounmpo") Prob
-*   F
-    
-    [M. Gardner](https://www.rotowire.com/basketball/player/myron-gardner-6067 "Myron Gardner") Ques
 
 *   Expected Lineup
 *   PG
@@ -1081,10 +1073,13 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
     [Derrick Jones](https://www.rotowire.com/basketball/player/derrick-jones-4083 "Derrick Jones")
 *   C
     
-    [I. Jackson](https://www.rotowire.com/basketball/player/isaiah-jackson-5403 "Isaiah Jackson")
+    [I. Jackson](https://www.rotowire.com/basketball/player/isaiah-jackson-5403 "Isaiah Jackson") Ques
 *   Projected Minutes
 *   On/Off Court Stats
 *   MAY NOT PLAY
+*   C
+    
+    [I. Jackson](https://www.rotowire.com/basketball/player/isaiah-jackson-5403 "Isaiah Jackson") Ques
 *   G
     
     [B. Beal](https://www.rotowire.com/basketball/player/bradley-beal-3303 "Bradley Beal") Out
@@ -1098,13 +1093,13 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
     
     [Y. Niederhauser](https://www.rotowire.com/basketball/player/yanic-konan-niederhauser-6616 "Yanic Konan Niederhauser") Out
 
-**Referees:**  Not announced yet
+**Referees:**  [Sean Wright](https://www.rotowire.com/basketball/ref.php?id=304736), , [Matt Kallio](https://www.rotowire.com/basketball/ref.php?id=1263110)
 
-**LINE**  MIA -203 MIA -198 MIA -205 MIA -210 –
+**LINE**  MIA -219 MIA -215 MIA -216 MIA -220 –
 
-**SPREAD**  MIA -5.0 MIA -4.5 MIA -5.5 MIA -5.5 –
+**SPREAD**  MIA -5.5 MIA -5.5 MIA -5.5 MIA -5.5 –
 
-    **O/U**  234.0 Pts 233.5 Pts 234.5 Pts 234.5 Pts –
+    **O/U**  233.5 Pts 233.5 Pts 233.5 Pts 233.5 Pts –
 
 You may also be interested in...
 
@@ -1139,6 +1134,87 @@ See stats based on who is on/off the court.
 [Advanced Lineups](https://www.rotowire.com/daily/nba/nba_adv_lineups.php)
 
 Lineups with advanced stats and insights.
+
+Estimated Chance To Play
+
+This is our best guess for players whose lineup status is in question. If a player doesn't have a color bar next to their position, that indicates that they're expected to play.
+
+Very Unlikely
+
+Unlikely
+
+Toss Up
+
+Likely
+
+Very Likely
+
+Beware the "late scratch"!
+
+Learn how we set lineups
+
+How We Set Our Daily NBA Lineups
+
+Our staff sets the expected daily lineups 24-30 hours before tip-off. The expected lineups are then tweaked throughout the day of the game.
+
+Lineups are only confirmed when an official NBA source provides that information.
+
+Unfortunately, the NBA does not require that starting lineups be submitted before tipoff, which is why we are sometimes limited to waiting until a game tips off to accurately pass on who is starting for some games. Also, sometimes players are "scratched" at the very last minute.
+
+If a player has a color bar next to his name, that reflects some level of uncertainty about whether he'll be active for the game. Most players have a color bar when dealing with an injury, but we will also add estimates if a player's status in doubt due to rest or other off-court issues.
+
+×
+
+Stay Ahead of the Game
+
+## Get updates faster, directly to your inbox
+
+ Send me the latest news
+
+?
+
+You're all set!
+
+We'll send you the latest news and updates.
+# Tomorrow's NBA Lineups
+
+[![RotoWire](https://assets.rotowire.com/images/assets/logo_icon_red.svg) Every start/sit, every waiver, every trade, plus NBA and NHL all winter. We make the call. Every start/sit, every waiver, every trade. We make the call. Win my league](https://www.rotowire.com/subscribe/payment/?plan=fantasy&billing=12)
+
+Date
+
+[Today](https://www.rotowire.com/basketball/nba-lineups.php) [Tomorrow](https://www.rotowire.com/basketball/nba-lineups.php?date=tomorrow)
+
+Display Preference
+
+Standard
+
+Compact
+
+Simple
+
+Hide Games That Started
+
+Yes
+
+No
+
+Sportsbook Odds
+
+Composite
+
+DraftKings
+
+FanDuel
+
+BetMGM
+
+PointsBet
+
+Show Display Settings Add Lineup Alerts
+
+Tomorrow's schedule is reserved for RotoWire subscribers.
+
+Want to see the lineups? [Subscribe Now](https://www.rotowire.com/subscribe/).
 
 Estimated Chance To Play
 
