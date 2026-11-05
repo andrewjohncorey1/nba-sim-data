@@ -25,8 +25,12 @@ Y = int(sys.argv[1])
 T5 = json.load(open('validation/props5_tuned.json')); cfg = T5['cfg']; BETA = T5['choice']['pts']['beta']
 MD = json.load(open(f'validation/minutes_dist_for_{Y}.json')); MC = json.load(open(f'validation/minutes_distc_for_{Y}.json'))
 P = pd.read_pickle(f'validation/props2_pre_{Y}.pkl'); D = P['D']; nodes = P['nodes']
-meta = json.load(open(f'validation/rows_{Y}_base.bin.json')); N = meta['N']
-R = np.fromfile(f'validation/rows_{Y}_base.bin', dtype=np.int16).reshape(len(meta['game_ids']), N, 2).astype(int)
+import os
+RF = os.environ.get('ROWSFILE', f'validation/rows_{Y}_base.bin'); SUF = os.environ.get('SGP3_SUFFIX', '')
+SHIFT = float(os.environ.get('SHIFT', '0'))     # points added to each team's simulated score (rows made before a totals calibration)
+meta = json.load(open(RF + '.json')); N = meta['N']
+R = np.fromfile(RF, dtype=np.int16).reshape(len(meta['game_ids']), N, 2).astype(int)
+if SHIFT: R = np.round(R + SHIFT).astype(int)
 gidx = {g: i for i, g in enumerate(meta['game_ids'])}
 games = pd.read_parquet(f'data/derived/games_{Y}.parquet').set_index('game_id')
 
@@ -147,5 +151,6 @@ for k in ('A', 'B', 'F', 'D', 'E', 'G', 'leg'):
     e = {'n': int(len(d)), 'gain': round(float(d.mean()), 5), 'ci': [round(float(np.percentile(boot, 2.5)), 5), round(float(np.percentile(boot, 97.5)), 5)]}
     out['margin_vs_uncond'][k] = e
     L.append(f'  {k:4s} n {e["n"]:5d}  gain {e["gain"]:+.5f} [{e["ci"][0]:+.5f},{e["ci"][1]:+.5f}]')
-json.dump(out, open(f'validation/sgp3_{Y}.json', 'w'), indent=1)
-open(f'validation/sgp3_{Y}.log', 'w').write('\n'.join(L) + '\n'); print('\n'.join(L))
+dfs['margin'].to_parquet(f'validation/sgp3_rows_{Y}{SUF}.parquet', index=False)
+json.dump(out, open(f'validation/sgp3_{Y}{SUF}.json', 'w'), indent=1)
+open(f'validation/sgp3_{Y}{SUF}.log', 'w').write('\n'.join(L) + '\n'); print('\n'.join(L))

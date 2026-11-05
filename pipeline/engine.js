@@ -64,7 +64,11 @@ function simulateGame(T,G,N,seed,keepRows){
   const scF3=SC.f3.map(f=>lg(f)-base3);
   const ltF3=LT.f3.map(row=>row.map(f=>lg(f)-base3));
   const qd=k=>{const q=D[k];return q[Math.floor(r()*q.length)];};
+  // shared game environment (validation/shared_env.py, SGP step 4): one pace factor per simulated game for both
+  // teams, possessions x exp(env_sd x z). Off (no extra random numbers) when env_sd is 0 or missing.
+  const ENV=G.env_sd||0;let dmul=durMul;
   for(let g=0;g<N;g++){
+    if(ENV){const z=Math.sqrt(-2*Math.log(1-r()))*Math.cos(6.283185307179586*r());dmul=durMul*Math.exp(-ENV*z);}
     const sc=[0,0],seg=[[0,0],[0,0],[0,0],[0,0],[0,0]];   // Q1..Q4 and OT points per side
     let fgm=[0,0],f3m=[0,0],reb=[0,0],np=[0,0];
     const tip=r()<0.5?0:1;let dbg=null;
@@ -92,14 +96,14 @@ function simulateGame(T,G,N,seed,keepRows){
             used=Math.min(clock,24);end='miss';
           }else{
             res=playPoss(S,G,r,LT.shift[tb][mb]+ps,ltF3[tb][mb]);
-            used=Math.min(clock,qd(prev)*LT.dur[tb][mb]/G.base_dur*durMul);
+            used=Math.min(clock,qd(prev)*LT.dur[tb][mb]/G.base_dur*dmul);
             // tied or down 1-2 inside the last shot clock: the offense plays for the last shot
             if(clock<=24&&m<=0&&m>=-2&&r()<(G.hold??0.8))used=Math.max(0.5,clock-2.5*r());
           }
         }else{
           const b=bin(SC.edges,m);
           res=playPoss(S,G,r,SC.shift[b]+ps,scF3[b]);
-          used=Math.min(clock,qd(prev)*SC.dur[b]*durMul);
+          used=Math.min(clock,qd(prev)*SC.dur[b]*dmul);
         }
         if(res){pts=res[0];end=res[1];fgm[o]+=res[2];f3m[o]+=res[3];reb[o]+=res[5];if(end==='miss')reb[d]++;}
         sc[o]+=pts;seg[Math.min(per,5)-1][o]+=pts;np[o]++;

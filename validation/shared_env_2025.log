@@ -1,0 +1,7 @@
+shared game environment scan, season ending 2025: points x exp(sigma z), same z both teams
+sigma 0.00: totals LL fair 0.69216 alt avg 0.62477 (+-12: 0.5681/0.5591)  team totals 0.69323 alt 0.55708  spread 0.69268  ML 0.59673  sd total 16.11  cov h,a 16.4
+sigma 0.02: totals LL fair 0.69304 alt avg 0.62423 (+-12: 0.5670/0.5580)  team totals 0.69334 alt 0.55664  spread 0.69268  ML 0.59669  sd total 16.75  cov h,a 21.5
+sigma 0.03: totals LL fair 0.69317 alt avg 0.62399 (+-12: 0.5683/0.5556)  team totals 0.69306 alt 0.55627  spread 0.69287  ML 0.59668  sd total 17.51  cov h,a 28.0
+sigma 0.04: totals LL fair 0.69270 alt avg 0.62402 (+-12: 0.5703/0.5555)  team totals 0.69341 alt 0.55539  spread 0.69272  ML 0.59673  sd total 18.53  cov h,a 37.1
+sigma 0.05: totals LL fair 0.69254 alt avg 0.62475 (+-12: 0.5734/0.5557)  team totals 0.69347 alt 0.55568  spread 0.69252  ML 0.59669  sd total 19.76  cov h,a 48.7
+sigma 0.06: totals LL fair 0.69240 alt avg 0.62537 (+-12: 0.5767/0.5549)  team totals 0.69277 alt 0.55554  spread 0.69264  ML 0.59669  sd total 21.17  cov h,a 63.0

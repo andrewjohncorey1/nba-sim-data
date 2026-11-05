@@ -34,8 +34,9 @@ Same layout and conventions as `nhl-sim-data` and `tennis-sim-data`.
    overtimes. Before anything else, both offenses' make rates are shifted so the simulation's mean margin and total
    equal the ratings' own closed-form expectation (`selfAnchor`): the ratings already contain how teams play ahead and
    behind, and the score effects would otherwise count that twice. Three calibration constants were set on the
-   2023-24 held-out simulation (`pipeline/calib.json`): possession-length scale 1.058, total offset 2.15 points,
-   first/second-half split 0.038.
+   2023-24 held-out simulation (`pipeline/calib.json`): possession-length scale 1.058, total offset 2.15 points
+   (recalibrated to 0.21 on 2024-25, Nov 2026: see SGP step 4), first/second-half split 0.038. One shared pace
+   factor per simulated game for both teams (possessions x exp(0.04 z); SGP step 4) gives totals their real width.
 5. **Markets** from the same simulations: moneyline, spread and alternate spreads, totals, team totals, each half and
    quarter (spread, total, win), winning-margin bands, player props. Game lines include overtime; the 2nd half includes
    overtime, the 4th quarter does not.
@@ -274,6 +275,26 @@ simulation's team points. Compared with the same model using one minutes distrib
 - Live for points (`props.choice.pts.margin`, `pipeline/minutes_distc.json` fit on 2022-23 to 2025-26; the engine
   keeps each side's simulated points by margin bucket, `H.mb`, no extra random numbers). Matches the Python test code
   to 15 digits. Rebounds and threes keep one minutes distribution until tested the same way.
+
+### SGP step 4: shared game environment (Nov 5, 2026; kept for totals width, live)
+`validation/shared_env.py` (quick scan), `validation/shared_env_test.py` (engine test; logs `shared_env_*`). The
+engine now draws one pace factor per simulated game for both teams (`G.env_sd`, possessions x exp(sd x z)). Held-out
+simulations were rerun with it (2024-25 for sd 0.03 / 0.04 / 0.05, 2025-26 for the chosen 0.04 only); both versions
+shifted by the same +1 point per team (see the totals offset below).
+- The simulated totals were too narrow: the real total landed inside the model's 80% range 72% of the time
+  (2024-25; 73% in 2025-26), inside the 50% range 46% (44%). Real home and away points move together more than the
+  simulation's (covariance 35-38 around the model's means vs 16).
+- Chosen on 2024-25 (80% range 0.760 / 0.790 / 0.829 for 0.03 / 0.04 / 0.05; alt-line totals and team totals best at
+  0.04). 2025-26 held out: totals 80% range 0.730 -> 0.790, 50% 0.443 -> 0.499; team totals 0.748 -> 0.788; margin
+  unchanged (0.789 -> 0.791); simulated total sd 16.1 -> 18.5 (real 18.8). Alt totals 8-12 points from the fair line
+  log loss +0.000 to +0.003 better (intervals span zero one line at a time); at the fair line and on sides changes
+  are within simulation noise (moneyline probabilities move with no lean toward favorites or underdogs).
+- Same-game combos: no significant change either way (2025-26: points + game over gap +7.5 -> +8.5, actual +8.9).
+  It does **not** fix opposing stars (+4.3 -> +4.9, actual +9.8): that correlation is not pace. Teammates unchanged.
+  Side + total controls stay near independent.
+- Found on the way: the model-only totals ran 1.9-2.0 points low in both held-out seasons (offset set on 2023-24).
+  Recalibrated on 2024-25 (2.15 -> 0.21); 2025-26 log loss over fixed totals 200.5-250.5: 0.48404 -> 0.48163.
+  Pinnacle-anchored games are unaffected (they take the market total).
 
 ## Layout
 - `pipeline/fetch_data.sh`: play-by-play, box scores and schedules from the sportsdataverse-data GitHub releases

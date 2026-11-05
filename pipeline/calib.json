@@ -1,6 +1,9 @@
 {
  "durK": 1.058,
- "tot_off": 2.15,
+ "tot_off": 0.21,
  "calibrated_on": "2023-24 held-out simulation: durK 1.058 (possessions per team 98.5 vs 98.8 actual), tot_off 2.15 (mean total 2.15 above actual before the offset), h1s 0.038 (first-half share of points 0.4945 vs 0.5004 actual; 0.064 gave 0.5043)",
- "h1s": 0.038
+ "h1s": 0.038,
+ "env_sd": 0.04,
+ "env_sd_note": "shared game environment: one pace factor per simulated game, possessions x exp(0.04 z), both teams (validation/shared_env.py, shared_env_test.py). Chosen on 2024-25 (0.03/0.04/0.05: real totals inside the simulated 80% range 0.760/0.790/0.829, was 0.721); 2025-26 held out: 0.730 -> 0.790, team totals 0.748 -> 0.788.",
+ "tot_off_note": "Recalibrated Nov 5, 2026 on 2024-25: the held-out simulations sat 1.94 points under real totals with 2.15 (2023-24 figure), so 2.15 - 1.94 = 0.21. 2025-26 held out (bias 1.97 before): log loss over fixed totals 200.5-250.5 0.48404 -> 0.48163. Matters for model-only totals; Pinnacle-anchored games take the market total."
 }

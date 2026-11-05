@@ -1,0 +1,33 @@
+SGP step 3 (players inside each simulated game), season ending 2025; points book lines, minutes model, scoring plays, beta 1.15
+uncond A all    n 25381  joint LL 0.52351 vs legs 0.52414  gain +0.00063 [+0.00024,+0.00103]  gap pred +4.0 act +4.8  hit 0.251 joint 0.250 legs 0.236  legA 0.472/0.474
+uncond A 15plus n  6233  joint LL 0.56214 vs legs 0.56342  gain +0.00128 [+0.00019,+0.00237]  gap pred +7.3 act +5.9  hit 0.284 joint 0.287 legs 0.267  legA 0.517/0.515
+uncond B all    n 25381  joint LL 0.55863 vs legs 0.56062  gain +0.00199 [+0.00021,+0.00377]  gap pred +8.9 act +8.8  hit 0.258 joint 0.253 legs 0.231  legA 0.472/0.474
+uncond B 15plus n  6233  joint LL 0.59604 vs legs 0.60064  gain +0.00459 [+0.00141,+0.00772]  gap pred +13.2 act +13.0  hit 0.293 joint 0.286 legs 0.253  legA 0.517/0.515
+uncond F all    n 25381  joint LL 0.37723 vs legs 0.37928  gain +0.00205 [+0.00068,+0.00332]  gap pred +8.5 act +9.0  hit 0.136 joint 0.133 legs 0.116  legA 0.472/0.474
+uncond F 15plus n  6233  joint LL 0.42235 vs legs 0.42646  gain +0.00411 [+0.00164,+0.00670]  gap pred +13.2 act +11.7  hit 0.159 joint 0.157 legs 0.131  legA 0.517/0.515
+uncond D all    n  2492  joint LL 0.54596 vs legs 0.54522  gain -0.00074 [-0.00175,+0.00033]  gap pred +10.2 act +1.6  hit 0.269 joint 0.292 legs 0.281  legA 0.516/0.509
+uncond D 15plus n  2206  joint LL 0.54331 vs legs 0.54273  gain -0.00058 [-0.00170,+0.00053]  gap pred +10.6 act +1.0  hit 0.270 joint 0.288 legs 0.277  legA 0.511/0.511
+uncond E all    n  1243  joint LL 0.57647 vs legs 0.57682  gain +0.00035 [-0.00017,+0.00088]  gap pred +3.3 act +5.2  hit 0.273 joint 0.274 legs 0.270  legA 0.522/0.504
+uncond E 15plus n  1214  joint LL 0.57453 vs legs 0.57488  gain +0.00035 [-0.00016,+0.00095]  gap pred +3.6 act +4.9  hit 0.272 joint 0.272 legs 0.268  legA 0.521/0.503
+uncond G all    n  2492  joint LL 0.39201 vs legs 0.39166  gain -0.00035 [-0.00331,+0.00251]  gap pred +10.9 act +3.0  hit 0.145 joint 0.165 legs 0.139  legA 0.516/0.509
+uncond G 15plus n  2206  joint LL 0.40141 vs legs 0.40179  gain +0.00038 [-0.00271,+0.00340]  gap pred +11.5 act +3.4  hit 0.152 joint 0.168 legs 0.141  legA 0.511/0.511
+margin A all    n 25381  joint LL 0.52310 vs legs 0.52387  gain +0.00076 [+0.00031,+0.00120]  gap pred +4.0 act +4.8  hit 0.251 joint 0.250 legs 0.237  legA 0.473/0.474
+margin A 15plus n  6233  joint LL 0.56215 vs legs 0.56316  gain +0.00101 [-0.00023,+0.00242]  gap pred +6.8 act +5.9  hit 0.284 joint 0.285 legs 0.266  legA 0.516/0.515
+margin B all    n 25381  joint LL 0.55829 vs legs 0.56026  gain +0.00197 [+0.00013,+0.00364]  gap pred +8.9 act +8.8  hit 0.258 joint 0.253 legs 0.232  legA 0.473/0.474
+margin B 15plus n  6233  joint LL 0.59612 vs legs 0.60067  gain +0.00455 [+0.00134,+0.00776]  gap pred +13.2 act +13.0  hit 0.293 joint 0.285 legs 0.253  legA 0.516/0.515
+margin F all    n 25381  joint LL 0.37697 vs legs 0.37908  gain +0.00212 [+0.00076,+0.00346]  gap pred +8.5 act +9.0  hit 0.136 joint 0.133 legs 0.116  legA 0.473/0.474
+margin F 15plus n  6233  joint LL 0.42252 vs legs 0.42649  gain +0.00398 [+0.00144,+0.00637]  gap pred +12.9 act +11.7  hit 0.159 joint 0.156 legs 0.130  legA 0.516/0.515
+margin D all    n  2492  joint LL 0.54507 vs legs 0.54371  gain -0.00136 [-0.00270,-0.00001]  gap pred +11.6 act +1.6  hit 0.269 joint 0.295 legs 0.281  legA 0.515/0.509
+margin D 15plus n  2206  joint LL 0.54250 vs legs 0.54140  gain -0.00110 [-0.00267,+0.00043]  gap pred +12.0 act +1.0  hit 0.270 joint 0.291 legs 0.277  legA 0.511/0.511
+margin E all    n  1243  joint LL 0.57447 vs legs 0.57499  gain +0.00052 [-0.00073,+0.00187]  gap pred +5.6 act +5.2  hit 0.273 joint 0.278 legs 0.269  legA 0.521/0.504
+margin E 15plus n  1214  joint LL 0.57215 vs legs 0.57270  gain +0.00055 [-0.00072,+0.00183]  gap pred +6.0 act +4.9  hit 0.272 joint 0.277 legs 0.268  legA 0.520/0.503
+margin G all    n  2492  joint LL 0.39194 vs legs 0.39108  gain -0.00085 [-0.00388,+0.00240]  gap pred +10.7 act +3.0  hit 0.145 joint 0.164 legs 0.139  legA 0.515/0.509
+margin G 15plus n  2206  joint LL 0.40116 vs legs 0.40117  gain +0.00001 [-0.00313,+0.00317]  gap pred +11.2 act +3.4  hit 0.152 joint 0.167 legs 0.141  legA 0.511/0.511
+margin vs uncond (joint log loss, positive = margin-linked minutes better; 95% interval by game); single leg = points over alone
+  A    n 25381  gain +0.00041 [+0.00017,+0.00065]
+  B    n 25381  gain +0.00034 [+0.00015,+0.00055]
+  F    n 25381  gain +0.00026 [+0.00009,+0.00043]
+  D    n  2492  gain +0.00089 [-0.00025,+0.00199]
+  E    n  1243  gain +0.00200 [+0.00026,+0.00368]
+  G    n  2492  gain +0.00007 [-0.00108,+0.00123]
+  leg  n 25381  gain +0.00046 [+0.00021,+0.00072]

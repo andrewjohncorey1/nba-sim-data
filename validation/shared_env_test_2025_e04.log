@@ -1,0 +1,39 @@
+shared game environment test (e04), season ending 2025: log loss without -> with (positive gain = with is better; 95% by game)
+  sd of simulated total 16.11 -> 18.42 (real, around the simulated mean: 18.33); home/away covariance 16.3 -> 36.1 (real 34.8)
+  total      without: real result inside the simulated 80% range 0.721 (should be 0.80), 50% range 0.456; below 10th 0.148, above 90th 0.131
+  team total without: real result inside the simulated 80% range 0.757 (should be 0.80), 50% range 0.462; below 10th 0.125, above 90th 0.119
+  margin     without: real result inside the simulated 80% range 0.802 (should be 0.80), 50% range 0.519; below 10th 0.108, above 90th 0.089
+  total      with   : real result inside the simulated 80% range 0.790 (should be 0.80), 50% range 0.501; below 10th 0.107, above 90th 0.104
+  team total with   : real result inside the simulated 80% range 0.799 (should be 0.80), 50% range 0.500; below 10th 0.104, above 90th 0.096
+  margin     with   : real result inside the simulated 80% range 0.800 (should be 0.80), 50% range 0.524; below 10th 0.110, above 90th 0.089
+  total +0                           0.69216 -> 0.69234  gain -0.00017 [-0.00151,+0.00120]
+  total -4                           0.67885 -> 0.67874  gain +0.00011 [-0.00186,+0.00218]
+  total +4                           0.67720 -> 0.67670  gain +0.00050 [-0.00132,+0.00233]
+  total -8                           0.63505 -> 0.63420  gain +0.00085 [-0.00233,+0.00428]
+  total +8                           0.63037 -> 0.62902  gain +0.00135 [-0.00155,+0.00429]
+  total -12                          0.56808 -> 0.56592  gain +0.00217 [-0.00214,+0.00627]
+  total +12                          0.55909 -> 0.55673  gain +0.00236 [-0.00153,+0.00641]
+  team total +0                      0.69323 -> 0.69354  gain -0.00031 [-0.00134,+0.00074]
+  team total -4                      0.65782 -> 0.65777  gain +0.00004 [-0.00148,+0.00157]
+  team total +4                      0.65428 -> 0.65350  gain +0.00078 [-0.00061,+0.00207]
+  team total -8                      0.55880 -> 0.55790  gain +0.00090 [-0.00122,+0.00316]
+  team total +8                      0.55536 -> 0.55414  gain +0.00122 [-0.00081,+0.00329]
+  spread +0                          0.69268 -> 0.69301  gain -0.00032 [-0.00212,+0.00138]
+  spread -6                          0.63600 -> 0.63490  gain +0.00110 [-0.00050,+0.00274]
+  spread +6                          0.61710 -> 0.61781  gain -0.00070 [-0.00241,+0.00101]
+  moneyline                          0.59673 -> 0.59770  gain -0.00097 [-0.00263,+0.00069]
+  C home covers + over               0.56515 -> 0.56548  gain -0.00033 [-0.00176,+0.00115]
+  C home covers + over (legs multiplied) 0.56504 -> 0.56575  gain -0.00071 [-0.00201,+0.00070]
+  C2 home wins + over                0.54633 -> 0.54709  gain -0.00076 [-0.00221,+0.00061]
+  C2 home wins + over (legs multiplied) 0.54622 -> 0.54704  gain -0.00082 [-0.00214,+0.00043]
+  C home covers + over without: joint 0.56515 vs legs multiplied 0.56504
+  C home covers + over with: joint 0.56548 vs legs multiplied 0.56575
+  C2 home wins + over without: joint 0.54633 vs legs multiplied 0.54622
+  C2 home wins + over with: joint 0.54709 vs legs multiplied 0.54704
+  same-game combos (points over, minutes tied to margin; validation/sgp3.py on each rows file): joint log loss without -> with
+  A: gain -0.00033 [-0.00095,+0.00030]  gap +4.0 -> +4.0 (actual +4.8)  first leg alone +0.00003
+  B: gain +0.00076 [-0.00159,+0.00327]  gap +7.6 -> +8.6 (actual +9.0)  first leg alone +0.00003
+  F: gain +0.00103 [-0.00070,+0.00301]  gap +7.6 -> +8.3 (actual +9.0)  first leg alone +0.00003
+  D: gain -0.00015 [-0.00048,+0.00016]  gap +10.8 -> +11.3 (actual +1.6)  first leg alone -0.00018
+  E: gain -0.00003 [-0.00040,+0.00037]  gap +4.8 -> +5.4 (actual +5.2)  first leg alone -0.00004
+  G: gain -0.00052 [-0.00114,+0.00009]  gap +10.2 -> +10.5 (actual +3.0)  first leg alone -0.00018
