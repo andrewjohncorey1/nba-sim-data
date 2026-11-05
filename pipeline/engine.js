@@ -51,8 +51,11 @@ function playPoss(S,G,r,shift,d3){
   return [pts,'miss',fgm,f3m,miss,orb];
 }
 
-function simulateGame(T,G,N,seed){
+function simulateGame(T,G,N,seed,keepRows){
   const r=mulberry32(seed),H=newHist();
+  // keepRows: also save every simulated final score as H.rows = [home, away, home, away, ...] (for joint prices such
+  // as same-game parlays). Draws no extra random numbers, so every other price is unchanged.
+  if(keepRows)H.rows=new Int16Array(2*N);
   const side=[prepSide(T.h,G),prepSide(T.a,G)];
   const durMul=(G.durK||1)*(2880/(2*T.pace))/G.base_dur;      // scale measured lengths to this matchup's pace (durK: calibration)
   const D=G.dur,SC=G.score,LT=G.late,HV=G.heave,base3=lg(G.base_f3);
@@ -110,6 +113,7 @@ function simulateGame(T,G,N,seed){
     }
     H.n++;
     if(per>=5){H.ot++;if(per>=6)H.ot2++;}
+    if(H.rows){H.rows[2*g]=sc[0];H.rows[2*g+1]=sc[1];}
     inc(H.m,sc[0]-sc[1]);inc(H.t,sc[0]+sc[1]);inc(H.h,sc[0]);inc(H.a,sc[1]);
     const segs=[[seg[0][0],seg[0][1]],[seg[1][0],seg[1][1]],[seg[2][0],seg[2][1]],[seg[3][0],seg[3][1]],
       [seg[0][0]+seg[1][0],seg[0][1]+seg[1][1]],[seg[2][0]+seg[3][0]+seg[4][0],seg[2][1]+seg[3][1]+seg[4][1]]];

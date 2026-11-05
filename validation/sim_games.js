@@ -9,7 +9,9 @@ const X=JSON.parse(fs.readFileSync(inp,'utf8'));
 const cdf=(h,lo,hi)=>{let n=0;for(const k in h)n+=h[k];const o=[];for(let L=lo;L<=hi;L++){let g=0;for(const k in h)if(+k>L)g+=h[k];o.push(+(g/n).toFixed(4));}return o;};
 const pmf=(h,lo,hi)=>{let n=0;for(const k in h)n+=h[k];const o=[];for(let L=lo;L<=hi;L++)o.push(+(((h[L]||0)+(L===lo?Object.keys(h).filter(k=>+k<lo).reduce((a,k)=>a+h[k],0):0)+(L===hi?Object.keys(h).filter(k=>+k>hi).reduce((a,k)=>a+h[k],0):0))/n).toFixed(5));return o;};
 const props=process.env.PROPS==='1';
-const out=X.map((x,i)=>{let xx=x;if(G.self!==0){const a=E.selfAnchor(x,G,500+i);xx=E.shifted(x,a.s,a.d);}const H=E.simulateGame(xx,G,N,1000+i);
+// ROWS=<path>: also write every simulated final score (Int16 home, away per sim, games in input order) for joint tests
+const ROWS=process.env.ROWS||'',rows=ROWS?new Int16Array(X.length*2*N):null;
+const out=X.map((x,i)=>{let xx=x;if(G.self!==0){const a=E.selfAnchor(x,G,500+i);xx=E.shifted(x,a.s,a.d);}const H=E.simulateGame(xx,G,N,1000+i,!!ROWS);if(ROWS)rows.set(H.rows,i*2*N);
   const sg=s=>({m:+E.hmean(H.seg[s].m).toFixed(3),t:+E.hmean(H.seg[s].t).toFixed(3)});
   return {game_id:x.game_id,pm:+E.mlHome(H).toFixed(4),mm:+E.hmean(H.m).toFixed(3),mt:+E.hmean(H.t).toFixed(3),
    mh:+E.hmean(H.h).toFixed(3),ma:+E.hmean(H.a).toFixed(3),ot:+(H.ot/H.n).toFixed(4),
@@ -19,4 +21,5 @@ const out=X.map((x,i)=>{let xx=x;if(G.self!==0){const a=E.selfAnchor(x,G,500+i);
    ...(props?{ph:pmf(H.h,60,170),pa:pmf(H.a,60,170),fgh:pmf(H.stat.h.fgm,20,65),fga:pmf(H.stat.a.fgm,20,65),
      f3h:pmf(H.stat.h.fg3m,0,32),f3a:pmf(H.stat.a.fg3m,0,32),rbh:pmf(H.stat.h.reb,20,80),rba:pmf(H.stat.a.reb,20,80)}:{})};});
 fs.writeFileSync(outp,JSON.stringify(out));
+if(ROWS){fs.writeFileSync(ROWS,Buffer.from(rows.buffer));fs.writeFileSync(ROWS+'.json',JSON.stringify({N,game_ids:X.map(x=>x.game_id)}));}
 console.log('simulated',out.length,'games x',N);

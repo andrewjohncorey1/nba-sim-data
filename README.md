@@ -131,6 +131,37 @@ so they stay off until that scaling is fixed and retested. Points run slightly l
 On book-style lines alone the edge over the baselines is small for points (0.6915 vs 0.6927), which is what a real
 book line would look like; the model has not been tested against actual sportsbook prop lines, which are not collected.
 
+## Same-game parlays: joint-calibration test (not in the app)
+`validation/sgp.py`, results in `validation/sgp_2025.log` / `sgp_2026.log` (and `.json`). Same held-out rules as the
+prop test, same simulations (the engine can now keep every simulated final score: `simulateGame(..., keepRows)`, which
+draws no extra random numbers). Joint model: in each simulated game the player's points are negative binomial around
+his share x that game's team points. Baseline: the same two single-leg prices multiplied. "Gap" = chance of leg A when
+leg B hit minus when it missed, predicted vs actual (the correlation itself, mostly free of single-leg bias).
+
+| 2025-26 (2024-25 in brackets) | Log loss gain vs legs multiplied (95% interval) | Gap predicted | Gap actual |
+|---|---|---|---|
+| A: player points over + own team wins | +0.0013 (+0.0009 to +0.0018) [+0.0015] | +2.9 [+4.1] | +3.2 [+4.8] |
+| A, projected 15+ points | +0.0088 [+0.0084] | +4.8 [+6.4] | +7.5 [+6.4] |
+| B: player points over + game over | +0.0036 (+0.0021 to +0.0052) [+0.0051] | +7.4 [+7.5] | +8.7 [+8.8] |
+| B, projected 15+ points | +0.0124 [+0.0160] | +8.2 [+8.5] | +13.7 [+12.8] |
+| C (control): home covers + game over | -0.0000 (-0.0009 to +0.0009) | -0.3 [-0.0] | +4.5 [-1.2] |
+| C2 (control): home wins + game over | +0.0001 (-0.0005 to +0.0007) | -1.9 [+0.6] | +0.3 [+0.0] |
+| D (info): top two teammates both over | +0.0045 (not trusted, see below) | +5.5 [+5.5] | +1.8 [+0.1] |
+| E (info): both teams' top scorers over | +0.0010 | +1.7 [+1.0] | +8.2 [+2.8] |
+
+- A and B pass the rule (beat legs multiplied on 2025-26, intervals above zero, same in 2024-25), and the correlation
+  matches reality for players overall. For stars it is understated, most for points + game over (+8 vs +13).
+- Side + total really is close to independent (C, C2): the engine's "no correlation" is right within noise.
+- Teammates: the engine says +5.5, reality +0.1 to +1.8. Teammates' overs are nearly independent, not negative; the
+  engine overstates it. Opposing stars: the engine says +1 to +2, reality +3 to +8 (shared game pace and environment).
+- **Blocker found by this test:** single-leg points props are compressed toward the middle. On book-style lines the
+  model's over chance averages 36% for players projected 15+ points but they go over 49%; bench players run the other
+  way. By season average, 25+ scorers: projected 23.0, actual 26.8 (2025-26). The log-loss gains for stars and for
+  D/E above are mostly this bias, not correlation. `validation/props_diag.py` (2024-25, 20-25 point scorers): per-minute
+  rates are right before shrinkage; shrinkage toward the position average costs 1.0 point, the minutes projection
+  (pulled toward a 14-minute prior) costs 1.4, rescaling to team points 0.3. The same bias is in the live app's points
+  props. Fix and retest single legs before building SGP pricing.
+
 ## Layout
 - `pipeline/fetch_data.sh`: play-by-play, box scores and schedules from the sportsdataverse-data GitHub releases
   (refreshed daily around 5 AM ET). Raw files are not committed.

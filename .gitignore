@@ -8,3 +8,5 @@ validation/props_*.parquet
 __pycache__/
 *.pyc
 data/apify/
+validation/rows_*
+validation/sgp_rows_*
