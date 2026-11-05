@@ -1,0 +1,4 @@
+2025-26, book-style lines, players with 18+ projected minutes (the app display minimum)
+pts   n 17785: pred over 0.491 actual 0.491; by fifths [season avg, mean, actual, pred over, actual over]: [6.01, 8.06, 8.04, 0.589, 0.586] | [9.2, 10.21, 9.92, 0.509, 0.497] | [12.13, 12.57, 12.33, 0.48, 0.476] | [15.88, 15.63, 15.63, 0.45, 0.455] | [23.39, 22.32, 22.41, 0.426, 0.439]
+fg3m  n 17785: pred over 0.399 actual 0.404; by fifths [season avg, mean, actual, pred over, actual over]: [0.28, 0.39, 0.41, 0.269, 0.268] | [1.0, 1.14, 1.16, 0.454, 0.457] | [1.45, 1.51, 1.51, 0.424, 0.426] | [1.97, 1.93, 1.93, 0.436, 0.446] | [2.85, 2.69, 2.7, 0.411, 0.424]
+ast   n 17785: pred over 0.460 actual 0.470; by fifths [season avg, mean, actual, pred over, actual over]: [1.07, 1.35, 1.44, 0.496, 0.516] | [1.75, 1.91, 1.92, 0.496, 0.496] | [2.52, 2.62, 2.67, 0.456, 0.46] | [3.65, 3.63, 3.66, 0.435, 0.438] | [6.26, 5.93, 6.1, 0.415, 0.441]

@@ -221,6 +221,27 @@ Joint test on the retuned props (`validation/sgp_2025_v2.log`, `sgp_2026_v2.log`
   (0.3473 -> 0.3517). Next: a per-player minutes distribution (stable role plus occasional short nights; bench
   minutes swing far more), which also matters for SGPs (blowouts change star minutes).
 
+### Props step 4: minutes model (Nov 5, 2026; live for points and threes)
+`validation/minutes_dist.py`, `validation/props_minutes.py` (logs `props4_*`, `props5_*`). Each player's minutes on a
+night = projected minutes x a ratio drawn from his role's distribution (projected-minutes band), learned from earlier
+seasons only (2022-23 onward). Starters: median 1.03x, 5% of nights below 0.79x (early exits, foul trouble,
+blowouts); bench far wider. Blowouts (20+ margin): starters 0.89-0.92x, close games 1.06-1.08x (not yet tied to the
+simulated margin; that is step 3 of the plan).
+- Tuned on 2024-25 (objective: all-lines + book-line log loss): projection half-life 4 games, prior 0.5 games toward
+  the player's own season average minutes (was toward 14; tied with it on log loss within 0.0001 and better for stars),
+  leftover minutes shared in proportion to minutes (was mostly to the bench; the biggest single gain, book-line log
+  loss 0.6614 -> 0.6555), rotation players (24+) get their band's mean ratio, team points x1.015.
+- Points: scoring plays (free throws, twos, threes in his own mix, Poisson) given the night, scoring falling slightly
+  faster than minutes (power 1.15); threes and assists: Poisson given the night; PRA and rebounds: negative binomial.
+- 2025-26 (untouched): points all-lines 0.3460 -> 0.3450, book 0.6590 -> 0.6512; assists 0.3782 -> 0.3776; threes
+  unchanged (0.4370); PRA all-lines 0.3836 -> 0.3840 (worse), book 0.6496 -> 0.6430; rebounds worse.
+- Calibration, book-style line, players projected 18+ minutes (the app's minimum), by fifth of scorers, predicted vs
+  actual over: points 58.9/58.6, 50.9/49.7, 48.0/47.6, 45.0/45.5, 42.6/43.9; threes 26.9/26.8, 45.4/45.7, 42.4/42.6,
+  43.6/44.6, 41.1/42.4; assists top fifth 41.5/44.1. (`validation/props5_display_2026.log`)
+- Live: points and threes (every fifth within 1.3 points). Off: assists (stars 2.6 under), PRA (middle tiers 2-3 high,
+  from rebounds), rebounds (4-6 high; team-rebound fix next).
+- The engine prices the same way (`propOverPlays`, `propOverMix`), checked against the Python test code to 5 decimals.
+
 ## Layout
 - `pipeline/fetch_data.sh`: play-by-play, box scores and schedules from the sportsdataverse-data GitHub releases
   (refreshed daily, usually between 5 and 7:30 AM ET). Raw files are not committed.

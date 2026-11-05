@@ -1,0 +1,16 @@
+2024-25 points: step 3 (no minutes model) all 0.34828 book 0.66617, top tier over 0.436 vs 0.471
+minutes model + scoring plays, beta 1.0: all 0.34732 book 0.66069  tiers pred/actual over 0.494/0.464 | 0.490/0.477 | 0.477/0.481 | 0.465/0.478 | 0.446/0.471  [15s]
+minutes model + scoring plays, beta 1.15: all 0.34765 book 0.65995  tiers pred/actual over 0.480/0.464 | 0.483/0.477 | 0.474/0.481 | 0.464/0.478 | 0.447/0.471  [14s]
+minutes model + scoring plays, beta 1.3: all 0.34835 book 0.65964  tiers pred/actual over 0.465/0.464 | 0.475/0.477 | 0.471/0.481 | 0.462/0.478 | 0.448/0.471  [15s]
+minutes model + scoring plays, beta 1.5: all 0.34981 book 0.65991  tiers pred/actual over 0.445/0.464 | 0.465/0.477 | 0.466/0.481 | 0.460/0.478 | 0.448/0.471  [15s]
+minutes model + NB beta 1.15 phi10/g (30, 1.0): all 0.35008 book 0.66371 tiers 0.497/0.464 | 0.498/0.477 | 0.486/0.481 | 0.471/0.478 | 0.449/0.471
+minutes model + NB beta 1.15 phi10/g (45, 1.0): all 0.35104 book 0.66449 tiers 0.5/0.464 | 0.501/0.477 | 0.489/0.481 | 0.474/0.478 | 0.45/0.471
+minutes model + NB beta 1.15 phi10/g (80, 1.0): all 0.35210 book 0.66532 tiers 0.503/0.464 | 0.503/0.477 | 0.492/0.481 | 0.476/0.478 | 0.451/0.471
+minutes model + NB beta 1.15 phi10/g (45, 1.5): all 0.35114 book 0.66386 tiers 0.499/0.464 | 0.503/0.477 | 0.491/0.481 | 0.476/0.478 | 0.452/0.471
+minutes model + NB beta 1.15 phi10/g (80, 1.5): all 0.35216 book 0.66477 tiers 0.503/0.464 | 0.505/0.477 | 0.493/0.481 | 0.477/0.478 | 0.452/0.471
+minutes model + NB beta 1.15 phi10/g (200, 1.0): all 0.35309 book 0.66605 tiers 0.506/0.464 | 0.505/0.477 | 0.493/0.481 | 0.477/0.478 | 0.452/0.471
+
+variant: minutes model for shape only (means as step 3); tiers = mean model/actual, over pred/actual
+  beta 1.15: all 0.34745 book 0.66152  3.95/3.89 0.457/0.464 | 7.04/6.77 0.486/0.477 | 9.69/9.53 0.483/0.481 | 13.01/13.04 0.471/0.478 | 21.09/21.39 0.449/0.471
+  beta 1.3: all 0.34815 book 0.66156  3.95/3.89 0.444/0.464 | 7.04/6.77 0.479/0.477 | 9.69/9.53 0.480/0.481 | 13.01/13.04 0.469/0.478 | 21.09/21.39 0.450/0.471
+  beta 1.5: all 0.34965 book 0.66218  3.95/3.89 0.426/0.464 | 7.04/6.77 0.469/0.477 | 9.69/9.53 0.474/0.481 | 13.01/13.04 0.466/0.478 | 21.09/21.39 0.451/0.471

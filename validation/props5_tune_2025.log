@@ -1,0 +1,29 @@
+  points  leftover-minutes spread 3 prior 0.25 toward 14     E[r] rotation: all 0.34753 book 0.66304  top tier mean 21.32/21.39 over 0.461/0.471  all tiers over 0.443/0.464 | 0.478/0.477 | 0.481/0.481 | 0.474/0.478 | 0.461/0.471
+  points  leftover-minutes spread 3 prior 0.25 toward season E[r] rotation: all 0.34779 book 0.66484  top tier mean 21.48/21.39 over 0.468/0.471  all tiers over 0.431/0.464 | 0.472/0.477 | 0.48/0.481 | 0.477/0.478 | 0.468/0.471
+  points  leftover-minutes spread 3 prior 0.5 toward 14     E[r] rotation: all 0.34734 book 0.66141  top tier mean 21.17/21.39 over 0.454/0.471  all tiers over 0.455/0.464 | 0.483/0.477 | 0.482/0.481 | 0.472/0.478 | 0.454/0.471
+  points  leftover-minutes spread 3 prior 0.5 toward season E[r] rotation: all 0.34772 book 0.66460  top tier mean 21.48/21.39 over 0.468/0.471  all tiers over 0.431/0.464 | 0.472/0.477 | 0.48/0.481 | 0.477/0.478 | 0.468/0.471
+  points  leftover-minutes spread 3 prior 1.0 toward 14     E[r] rotation: all 0.34756 book 0.66019  top tier mean 20.89/21.39 over 0.44/0.471  all tiers over 0.476/0.464 | 0.493/0.477 | 0.483/0.481 | 0.466/0.478 | 0.44/0.471
+  points  leftover-minutes spread 3 prior 1.0 toward season E[r] rotation: all 0.34764 book 0.66424  top tier mean 21.48/21.39 over 0.468/0.471  all tiers over 0.431/0.464 | 0.472/0.477 | 0.48/0.481 | 0.477/0.478 | 0.468/0.471
+  points  leftover-minutes spread 1 prior 0.25 toward 14     E[r] rotation: all 0.34630 book 0.65556  top tier mean 21.29/21.39 over 0.458/0.471  all tiers over 0.447/0.464 | 0.48/0.477 | 0.482/0.481 | 0.474/0.478 | 0.458/0.471
+  points  leftover-minutes spread 1 prior 0.25 toward season E[r] rotation: all 0.34632 book 0.65580  top tier mean 21.39/21.39 over 0.463/0.471  all tiers over 0.439/0.464 | 0.477/0.477 | 0.482/0.481 | 0.476/0.478 | 0.463/0.471
+  points  leftover-minutes spread 1 prior 0.5 toward 14     E[r] rotation: all 0.34636 book 0.65543  top tier mean 21.18/21.39 over 0.454/0.471  all tiers over 0.455/0.464 | 0.484/0.477 | 0.483/0.481 | 0.473/0.478 | 0.454/0.471
+  points  leftover-minutes spread 1 prior 0.5 toward season E[r] rotation: all 0.34630 book 0.65573  top tier mean 21.4/21.39 over 0.463/0.471  all tiers over 0.439/0.464 | 0.477/0.477 | 0.482/0.481 | 0.476/0.478 | 0.463/0.471
+  points  leftover-minutes spread 1 prior 1.0 toward 14     E[r] rotation: all 0.34642 book 0.65547  top tier mean 20.99/21.39 over 0.445/0.471  all tiers over 0.469/0.464 | 0.49/0.477 | 0.484/0.481 | 0.47/0.478 | 0.445/0.471
+  points  leftover-minutes spread 1 prior 1.0 toward season E[r] rotation: all 0.34624 book 0.65562  top tier mean 21.4/21.39 over 0.464/0.471  all tiers over 0.439/0.464 | 0.477/0.477 | 0.482/0.481 | 0.476/0.478 | 0.464/0.471
+  points  leftover-minutes spread 0 prior 0.25 toward 14     E[r] rotation: all 0.34727 book 0.65677  top tier mean 21.25/21.39 over 0.456/0.471  all tiers over 0.446/0.464 | 0.482/0.477 | 0.483/0.481 | 0.474/0.478 | 0.456/0.471
+  points  leftover-minutes spread 0 prior 0.25 toward season E[r] rotation: all 0.34727 book 0.65698  top tier mean 21.32/21.39 over 0.459/0.471  all tiers over 0.44/0.464 | 0.48/0.477 | 0.484/0.481 | 0.476/0.478 | 0.459/0.471
+  points  leftover-minutes spread 0 prior 0.5 toward 14     E[r] rotation: all 0.34722 book 0.65652  top tier mean 21.19/21.39 over 0.453/0.471  all tiers over 0.453/0.464 | 0.484/0.477 | 0.483/0.481 | 0.473/0.478 | 0.453/0.471
+  points  leftover-minutes spread 0 prior 0.5 toward season E[r] rotation: all 0.34722 book 0.65689  top tier mean 21.33/21.39 over 0.459/0.471  all tiers over 0.44/0.464 | 0.48/0.477 | 0.484/0.481 | 0.476/0.478 | 0.459/0.471
+  points  leftover-minutes spread 0 prior 1.0 toward 14     E[r] rotation: all 0.34727 book 0.65640  top tier mean 21.06/21.39 over 0.447/0.471  all tiers over 0.464/0.464 | 0.488/0.477 | 0.483/0.481 | 0.471/0.478 | 0.447/0.471
+  points  leftover-minutes spread 0 prior 1.0 toward season E[r] rotation: all 0.34716 book 0.65681  top tier mean 21.33/21.39 over 0.459/0.471  all tiers over 0.439/0.464 | 0.48/0.477 | 0.484/0.481 | 0.476/0.478 | 0.459/0.471
+  points  leftover-minutes spread 3 prior 0 toward 14     E[r] rotation: all 0.34782 book 0.66508  top tier mean 21.48/21.39 over 0.468/0.471  all tiers over 0.431/0.464 | 0.472/0.477 | 0.48/0.481 | 0.477/0.478 | 0.468/0.471
+  points  leftover-minutes spread 1 prior 0 toward 14     E[r] rotation: all 0.34632 book 0.65585  top tier mean 21.39/21.39 over 0.463/0.471  all tiers over 0.439/0.464 | 0.477/0.477 | 0.482/0.481 | 0.476/0.478 | 0.463/0.471
+  points  leftover-minutes spread 0 prior 0 toward 14     E[r] rotation: all 0.34730 book 0.65708  top tier mean 21.32/21.39 over 0.459/0.471  all tiers over 0.44/0.464 | 0.48/0.477 | 0.483/0.481 | 0.476/0.478 | 0.459/0.471
+  points  check E[r] none beta 1.15: all 0.34644 book 0.65550
+  points  check E[r] rotation beta 1.3: all 0.34711 book 0.65577
+  points  check E[r] none beta 1.3: all 0.34722 book 0.65580
+  ast   beta 1.0 phi10/g (80, 0.5): all 0.37673 book 0.65108  tiers over 0.445/0.469 | 0.393/0.399 | 0.457/0.463 | 0.443/0.454 | 0.434/0.458
+  fg3m  beta 1.0 phi10/g (80, 0.5): all 0.43824 book 0.58568  tiers over 0.126/0.132 | 0.436/0.458 | 0.381/0.408 | 0.455/0.477 | 0.384/0.4
+  pra   beta 1.0 phi10/g (14, 0.5): all 0.38377 book 0.64502  tiers over 0.496/0.487 | 0.526/0.499 | 0.512/0.482 | 0.506/0.493 | 0.479/0.486
+  reb   beta 1.0 phi10/g (9, 0.5): all 0.42394 book 0.65825  tiers over 0.463/0.474 | 0.502/0.482 | 0.5/0.443 | 0.5/0.445 | 0.512/0.438
+chosen {"minutes": {"aexp": 1, "pw": 0.5, "target": "14", "er": "rotation"}, "pts": {"shape": "scoring plays", "beta": 1.15}, "ast": {"shape": "nb", "beta": 1.0, "f": [80, 0.5]}, "fg3m": {"shape": "nb", "beta": 1.0, "f": [80, 0.5]}, "pra": {"shape": "nb", "beta": 1.0, "f": [14, 0.5]}, "reb": {"shape": "nb", "beta": 1.0, "f": [9, 0.5]}}

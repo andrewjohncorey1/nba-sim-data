@@ -140,7 +140,7 @@ def team_shares(PL, team, asof, half_life):
     return s * 5 / s.sum()
 
 
-def projected_minutes(PL, asof, hl_games=8, prior_games=3, prior_min=14.0):
+def projected_minutes(PL, asof, hl_games=8, prior_games=3, prior_min=14.0, prior_target=None):
     """Each player's projected minutes when he plays: weighted average of his recent games (half-life in games),
     shrunk toward prior_min with prior_games of weight. Uses only games before asof."""
     x = PL[(PL.date < pd.Timestamp(asof)) & (PL['min'] > 0)].sort_values('date')
@@ -149,18 +149,21 @@ def projected_minutes(PL, asof, hl_games=8, prior_games=3, prior_min=14.0):
     w = 0.5 ** (k / hl_games)
     x = x.assign(w=w, wm=w * x['min'])
     g = x.groupby('pid').agg(wm=('wm', 'sum'), w=('w', 'sum'), last=('date', 'max'), team=('team', 'last'))
-    g['proj'] = (g.wm + prior_min * prior_games * 0.5) / (g.w + prior_games * 0.5)
+    # prior_target (Series by pid, e.g. each player's own season average minutes) replaces the flat prior_min
+    tgt = prior_target.reindex(g.index).fillna(prior_min) if prior_target is not None else prior_min
+    g['proj'] = (g.wm + tgt * prior_games * 0.5) / (g.w + prior_games * 0.5)
     return g
 
 
-def allocate(m, total=240.0, cap=48.0):
-    """Fit expected minutes to the team total: the gap is spread in proportion to m * (1 - m/48)^3, so rotation
-    regulars move little and the bench absorbs most of it (engine.js allocate is the same)."""
+def allocate(m, total=240.0, cap=48.0, expo=3):
+    """Fit expected minutes to the team total: the gap is spread in proportion to m * (1 - m/48)^expo, so with the
+    default 3 rotation regulars move little and the bench absorbs most of it; 0 spreads it in proportion to minutes
+    (engine.js allocate is the same)."""
     m = np.asarray(m, float).copy()
     for _ in range(6):
         gap = total - m.sum()
         if abs(gap) < 0.01: break
-        w = m * np.clip(1 - m / cap, 0.05, None) ** 3
+        w = m * np.clip(1 - m / cap, 0.05, None) ** expo
         m = np.clip(m + gap * w / w.sum(), 0, cap)
     return m
 

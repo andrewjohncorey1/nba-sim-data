@@ -330,7 +330,10 @@
  "props": {
   "half_life": 180,
   "prior_min": 300,
-  "markets": [],
+  "markets": [
+   "pts",
+   "fg3m"
+  ],
   "phi": {
    "pts": 5,
    "ast": 12,
@@ -345,14 +348,95 @@
    "fg3m": "Threes made",
    "pra": "Pts+Reb+Ast"
   },
-  "note": "Dispersions chosen on 2024-25; markets kept only if they beat both baselines on 2025-26. Rebounds beat them on log loss but ran 5 points high on overs and had a worse average error than the season average, so they are off.",
+  "note": "Minutes model (Nov 5, 2026): tuned on 2024-25, tested on 2025-26 (validation/props5_test_2026.log). Live: points (scoring plays given the night) and threes; players with 18+ projected minutes. Off: assists (stars 2.6 points under above 18 minutes), points+rebounds+assists and rebounds (rebounds run high).",
   "markets_tested": [
    "pts",
    "ast",
    "fg3m",
    "pra"
   ],
-  "paused": "Player props are paused (Nov 5, 2026). A held-out check found them compressed toward the middle: on players projected for 15+ points the model's over chance averaged 36% but those overs hit 49% (bench players ran the other way), and assists and threes had the same problem. They come back once the minutes and per-minute-rate fixes pass the held-out test."
+  "v2": {
+   "rate": {
+    "pts": {
+     "hl": 90,
+     "K": 50,
+     "target": "own"
+    },
+    "reb": {
+     "hl": 90,
+     "K": 150,
+     "target": "own"
+    },
+    "ast": {
+     "hl": 90,
+     "K": 50,
+     "target": "own"
+    },
+    "fg3m": {
+     "hl": 90,
+     "K": 50,
+     "target": "own"
+    },
+    "fgm": {
+     "hl": 90,
+     "K": 50,
+     "target": "own"
+    }
+   },
+   "min": {
+    "hl": 4,
+    "pw": 1.0,
+    "target": "season",
+    "aexp": 1
+   }
+  },
+  "choice": {
+   "minutes": {
+    "aexp": 1,
+    "pw": 1.0,
+    "target": "season",
+    "er": "rotation",
+    "note": "chosen over the grid minimum (prior 0.5 toward 14, 0.00007 better) because log loss ties within noise and stars are calibrated better (2024-25 top tier 46.4% vs 45.4%, actual 47.1%)"
+   },
+   "pts": {
+    "shape": "scoring plays",
+    "beta": 1.15
+   },
+   "ast": {
+    "shape": "nb",
+    "beta": 1.0,
+    "f": [
+     1000,
+     0.5
+    ]
+   },
+   "fg3m": {
+    "shape": "nb",
+    "beta": 1.0,
+    "f": [
+     1000,
+     0.5
+    ]
+   },
+   "pra": {
+    "shape": "nb",
+    "beta": 1.0,
+    "f": [
+     14,
+     0.5
+    ]
+   },
+   "reb": {
+    "shape": "nb",
+    "beta": 1.0,
+    "f": [
+     9,
+     0.5
+    ]
+   }
+  },
+  "tmult": 1.015,
+  "min_minutes": 18
  },
  "rest_effects": {
   "note": "Back-to-back (margin only) improved 2024-25 (margin RMSE 14.024 -> 13.967, moneyline 0.5959 -> 0.5930) but not 2025-26 (14.263 -> 14.263, 0.5831 -> 0.5844), so it is off. Rest of 3+ days, travel and time zones were not significant on 2021-24 and are off."
@@ -480,61 +564,55 @@
    },
    {
     "title": "Before launch: player props",
-    "note": "2025-26, every player-game rated on earlier games only; players who played (props are void otherwise). Lines: book-style (season average rounded down + 0.5) plus fixed lines. Baselines price the same lines from the player's season-to-date or last-10 average. Log loss over all lines, lower is better.",
+    "note": "2025-26, every player-game rated on earlier games only; players who played. Lines: book-style (season average rounded down + 0.5) plus fixed lines. Baselines price the same lines from the season-to-date or last-10 average. Model = minutes model (Nov 5, 2026), tuned on 2024-25. Calibration column: book-line over %, players projected 18+ minutes, top fifth of scorers, predicted / actual.",
     "cols": [
      "Market",
-     "Lines",
-     "Model",
+     "All-lines log loss",
      "Season average",
      "Last 10 games",
-     "Predicted / actual over",
-     "Kept"
+     "Top fifth over",
+     "Live"
     ],
     "rows": [
      [
       "Points",
-      "154,308",
-      "0.3616",
+      "0.3450",
       "0.3809",
       "0.3773",
-      "23.5% / 25.5%",
-      "yes"
-     ],
-     [
-      "Assists",
-      "128,590",
-      "0.3891",
-      "0.4012",
-      "0.4025",
-      "28.4% / 28.8%",
+      "42.6% / 43.9%",
       "yes"
      ],
      [
       "Threes made",
-      "128,590",
-      "0.4482",
+      "0.4370",
       "0.4583",
       "0.4690",
-      "31.2% / 31.0%",
+      "41.1% / 42.4%",
       "yes"
+     ],
+     [
+      "Assists",
+      "0.3776",
+      "0.4012",
+      "0.4025",
+      "41.5% / 44.1%",
+      "no: stars 2.6 points under"
      ],
      [
       "Pts+Reb+Ast",
-      "154,308",
-      "0.4014",
+      "0.3840",
       "0.4337",
       "0.4241",
-      "31.4% / 32.1%",
-      "yes"
+      "\u2014",
+      "no: middle tiers 2-3 points high"
      ],
      [
       "Rebounds",
-      "128,590",
-      "0.4254",
+      "0.4246",
       "0.4381",
       "0.4378",
-      "34.3% / 29.1%",
-      "no: overs 5 points high"
+      "\u2014",
+      "no: 4-6 points high"
      ]
     ]
    }

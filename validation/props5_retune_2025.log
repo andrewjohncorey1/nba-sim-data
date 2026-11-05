@@ -1,0 +1,6 @@
+points: 0.34624 0.65562  tiers over 0.439/0.464 | 0.477/0.477 | 0.482/0.481 | 0.476/0.478 | 0.464/0.471
+ast   beta 1.0 phi10/g (1000, 0.5): all 0.37658 book 0.65079  tiers over 0.438/0.469 | 0.391/0.399 | 0.461/0.463 | 0.448/0.454 | 0.443/0.458
+fg3m  beta 1.0 phi10/g (1000, 0.5): all 0.43821 book 0.58562  tiers over 0.123/0.132 | 0.435/0.458 | 0.382/0.408 | 0.46/0.477 | 0.39/0.4
+pra   beta 1.0 phi10/g (14, 0.5): all 0.38362 book 0.64494  tiers over 0.476/0.487 | 0.518/0.499 | 0.512/0.482 | 0.512/0.493 | 0.491/0.486
+reb   beta 1.0 phi10/g (9, 0.5): all 0.42427 book 0.65933  tiers over 0.45/0.474 | 0.498/0.482 | 0.501/0.443 | 0.502/0.445 | 0.518/0.438
+final choice {"minutes": {"aexp": 1, "pw": 1.0, "target": "season", "er": "rotation", "note": "chosen over the grid minimum (prior 0.5 toward 14, 0.00007 better) because log loss ties within noise and stars are calibrated better (2024-25 top tier 46.4% vs 45.4%, actual 47.1%)"}, "pts": {"shape": "scoring plays", "beta": 1.15}, "ast": {"shape": "nb", "beta": 1.0, "f": [1000, 0.5]}, "fg3m": {"shape": "nb", "beta": 1.0, "f": [1000, 0.5]}, "pra": {"shape": "nb", "beta": 1.0, "f": [14, 0.5]}, "reb": {"shape": "nb", "beta": 1.0, "f": [9, 0.5]}}

@@ -11,3 +11,4 @@ data/apify/
 validation/rows_*
 validation/sgp_rows_*
 validation/props2_pre_*
+validation/minutes_rows_*

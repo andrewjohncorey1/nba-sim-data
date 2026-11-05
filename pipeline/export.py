@@ -54,7 +54,11 @@ if PV2:
             Ah = AH[rc['hl']]
             out[s] = (Ah.at[pid, f'w_{s}'] + rc['K'] * tgt) / (Ah.at[pid, 'wmin'] + rc['K']) if pid in Ah.index else tgt
         rates[pid] = out
-    pmp = PS.projected_minutes(PL, now, hl_games=PV2['min']['hl'], prior_games=PV2['min']['pw'], prior_min=14.0)
+    tgt = None
+    if PV2['min'].get('target') == 'season':     # prior toward the player's own season average minutes (else last season's)
+        played = PL[(PL['min'] > 0) & (PL.date < now)]
+        tgt = played[played.season == Y].groupby('pid')['min'].mean().combine_first(played[played.season == Y - 1].groupby('pid')['min'].mean())
+    pmp = PS.projected_minutes(PL, now, hl_games=PV2['min']['hl'], prior_games=PV2['min']['pw'], prior_min=14.0, prior_target=tgt)
 else:
     for pid, r in A.iterrows():
         pa = posavg.get(pos.get(pid, 'F'), posavg['F'])
@@ -95,6 +99,11 @@ pool = {int(pid): dict(name=names.get(pid, ''), team=last_team.get(pid, prev.get
                        pm=round(float(pm.proj.get(pid, 12.0)), 1), pmp=round(float(pmp.proj.get(pid, 12.0)), 1), pp=round(float(pplay.get(pid, 0.5)), 3), pos=posn.get(pid) or '',
                        r={k: round(float(v), 4) for k, v in rates.get(pid, posavg['F']).items()})
         for pid in PR.index if (PR.wmin.get(pid, 0) > 0)}
+# minutes distribution by role for the props (validation/minutes_dist.py; 11 of the 21 stored quantiles)
+mdist = None
+if os.path.exists('pipeline/minutes_dist.json'):
+    _m = json.load(open('pipeline/minutes_dist.json'))
+    mdist = {'edges': _m['edges'], 'q': [q[0::2] for q in _m['q']], 'fit_on': _m['fit_on']}
 cal = json.load(open('pipeline/calib.json')) if os.path.exists('pipeline/calib.json') else {}
 out = dict(asOf=str(last_game.date()), generated=pd.Timestamp.now('UTC').strftime('%Y-%m-%dT%H:%M:%SZ'), season=Y,
            teams=RT.TEAMS, names={t: S['team_names'][t][0] for t in RT.TEAMS},
@@ -102,7 +111,7 @@ out = dict(asOf=str(last_game.date()), generated=pd.Timestamp.now('UTC').strftim
                  for k in RT.COMPS},
            pace={'mu': R['pace']['mu'], 'P': [round(v, 5) for v in R['pace']['P']]},
            engine={**E, **cal}, avail=dict(alpha=P['ratings']['alpha'], repl=repl, ppp0=E['base_ppp'], sens=E['ppp_sens']),
-           rest=S.get('rest_effects', {}), props=dict(**S.get('props', {}), posavg=posavg),
+           rest=S.get('rest_effects', {}), props=dict(**S.get('props', {}), posavg=posavg, mdist=mdist),
            rosters=teams, pool=pool, tests=S.get('tests', {}), notes=S.get('notes', {}))
 json.dump(out, open('build/ratings.json', 'w'), separators=(',', ':'))
 nr = {t['abbr']: t for t in teams}

@@ -108,7 +108,7 @@ def project_minutes(P, cfg):
     proj[sw == 0] = 12.0                                # no history: 12 minutes, as before
     alloc = np.empty(len(D))
     for _, ix in D.groupby(['game_id', 'team']).indices.items():
-        alloc[ix] = PS.allocate(proj[ix])
+        alloc[ix] = PS.allocate(proj[ix], expo=cfg.get('aexp', 3))
     return alloc
 
 

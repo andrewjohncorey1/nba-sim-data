@@ -166,9 +166,9 @@ function matchupInputs(D,G,home,away,neutral,shH,shA){
 // the team's 240 minutes by allocate(). The team's change in offense/defense is the
 // sum over players of (tonight's share - the share behind the team rating) x his impact.
 // Fit expected minutes to 240: the gap is spread in proportion to m x (1 - m/48)^3 (players.py allocate).
-function allocate(m,total,cap){total=total||240;cap=cap||48;m=m.slice();
+function allocate(m,total,cap,expo){total=total||240;cap=cap||48;m=m.slice();
   for(let k=0;k<6;k++){const gap=total-m.reduce((a,b)=>a+b,0);if(Math.abs(gap)<0.01)break;
-    const w=m.map(v=>v*Math.pow(Math.max(0.05,1-v/cap),3)),sw=w.reduce((a,b)=>a+b,0)||1;m=m.map((v,i)=>Math.min(cap,Math.max(0,v+gap*w[i]/sw)));}
+    const w=m.map(v=>v*Math.pow(Math.max(0.05,1-v/cap),expo??3)),sw=w.reduce((a,b)=>a+b,0)||1;m=m.map((v,i)=>Math.min(cap,Math.max(0,v+gap*w[i]/sw)));}
   return m;}
 function teamAvail(D,team,outIds,extraIds){
   const R=D.rosters.find(t=>t.abbr===team),out=new Set(outIds||[]),rep=D.avail.repl;
@@ -252,6 +252,25 @@ function propOver(teamHist,share,phi,line){
 function propMean(teamHist,share){return share*hmean(teamHist);}
 
 
+/* ---------- props over the player's minutes distribution (validation/props_minutes.py) ---------- */
+// fac: relative night factors (mean 1) from his role's minutes-ratio quantiles, already raised to the market's power
+// Points as scoring plays: free throws, twos and threes, each Poisson, in the player's own mix (r: per-minute rates)
+function mixOf(r){const p3=3*(r.fg3m||0),p2=2*Math.max((r.fgm||0)-(r.fg3m||0),0),p1=Math.max((r.pts||0)-p2-p3,0),s=p1+p2+p3+1e-9;return [p1/s,p2/s,p3/s];}
+function playsCdf(mean,fr,K){        // P(points <= K), Panjer recursion for 1s, 2s, 3s
+  const l1=mean*fr[0],l2=mean*fr[1]/2,l3=mean*fr[2]/3,p=new Float64Array(K+1);p[0]=Math.exp(-(l1+l2+l3));let c=p[0];
+  for(let x=1;x<=K;x++){let a=l1*p[x-1];if(x>=2)a+=2*l2*p[x-2];if(x>=3)a+=3*l3*p[x-3];p[x]=a/x;c+=p[x];}return c;}
+function propOverPlays(teamHist,share,fac,fr,line){
+  const K=Math.floor(line);let n=0,o=0;
+  for(const k in teamHist){const w=teamHist[k];n+=w;let s=0;for(const f of fac)s+=1-playsCdf(Math.max(1e-6,share*(+k)*f),fr,K);o+=w*s/fac.length;}
+  return n?o/n:0;}
+// Other markets: negative binomial given the night, dispersion phi = f[0] x (mean/10)^f[1]
+function propOverMix(teamHist,share,fac,f,line){
+  const K=Math.floor(line);let n=0,o=0;
+  for(const k in teamHist){const w=teamHist[k];n+=w;let s=0;
+    for(const g of fac){const m=Math.max(1e-6,share*(+k)*g),ph=Math.max(0.3,f[0]*Math.pow(m/10,f[1]));const pm=nbPmf(m,ph,K);let c=0;for(const v of pm)c+=v;s+=1-c;}
+    o+=w*s/fac.length;}
+  return n?o/n:0;}
+
 // Props for the available players of one team. players: teamAvail(...).players (share = expected share of the 5
 // floor spots incl. the chance he gets in; pp = that chance). hist: the team's simulated {pts, fgm, fg3m, reb}.
 // A player's mean, given he plays = per-minute rate x minutes when he plays x (simulated team quantity / the team's
@@ -266,18 +285,28 @@ function playerProps(D,players,hist,minMin){
   const tm=P.tmult||1;      // calibration of the simulated team points for the points-based props
   const R={pts:0,fgm:0,fg3m:0,ast:0,reb:0};
   // prop minutes: the props' own projection (pmp, tuned separately) when present, fitted to 240 like the team's
-  const ems=players.some(p=>p.pmp!=null)?allocate(players.map(p=>(p.pmp??p.pm)*(p.pp??1))):players.map(p=>p.share*48);
-  players.forEach((p,i)=>{for(const k in R)R[k]+=(p.r?p.r[k]:0)*ems[i];});
+  const CH=P.choice||null,MD=P.mdist||null,aexp=CH&&CH.minutes?CH.minutes.aexp:3;
+  const ems=players.some(p=>p.pmp!=null)?allocate(players.map(p=>(p.pmp??p.pm)*(p.pp??1)),240,48,aexp):players.map(p=>p.share*48);
+  // minutes model (validation/props_minutes.py): role band of the minutes when he plays -> ratio quantiles; rotation
+  // players' expected minutes get the band's mean ratio
+  const bandOf=cm=>{if(!MD)return -1;let b=0;while(b<MD.edges.length-2&&cm>=MD.edges[b+1])b++;return b;};
+  const er=(cm)=>{const b=bandOf(cm);if(b<0)return 1;const q=MD.q[b];return q.reduce((a,c)=>a+c,0)/q.length;};
+  const mult=players.map((p,i)=>{const cm=Math.min(48,ems[i]/Math.max(0.05,p.pp??1));return CH&&CH.minutes&&CH.minutes.er==='rotation'&&cm>=24?er(cm):1;});
+  players.forEach((p,i)=>{for(const k in R)R[k]+=(p.r?p.r[k]:0)*ems[i]*mult[i];});
   for(const [i,p] of players.entries()){
-    const em=ems[i],cm=Math.min(48,em/Math.max(0.05,p.pp??1));
-    if(cm<(minMin??8)||!p.r)continue;
+    const em=ems[i],cm0=Math.min(48,em/Math.max(0.05,p.pp??1)),cm=cm0*mult[i];
+    if(cm0<(minMin??P.min_minutes??8)||!p.r)continue;
     const sh={pts:tm*p.r.pts*cm/R.pts,fg3m:p.r.fg3m*cm/R.fg3m,ast:p.r.ast*cm/R.fgm,reb:p.r.reb*cm/(P.reb_ref||R.reb)};
     const H={pts:hist.pts,fg3m:hist.fg3m,ast:hist.fgm,reb:hist.reb};
     const m={},line={},pr={};
     for(const k of mk){
       if(k==='pra'){const mt=hmean(hist.pts),mm=sh.pts*mt+sh.reb*hmean(hist.reb)+sh.ast*hmean(hist.fgm);
         m.pra=mm;line.pra=Math.floor(mm)+0.5;pr.pra=propOver(hist.pts,mm/mt,phiOf('pra',mm),line.pra);continue;}
-      m[k]=sh[k]*hmean(H[k]);line[k]=Math.max(0.5,Math.floor(m[k])+0.5);pr[k]=propOver(H[k],sh[k],phiOf(k,m[k]),line[k]);
+      m[k]=sh[k]*hmean(H[k]);line[k]=Math.max(0.5,Math.floor(m[k])+0.5);
+      if(CH&&CH[k]&&MD){const b=bandOf(cm0),q=MD.q[b],qm=q.reduce((a,c)=>a+c,0)/q.length,c=CH[k];
+        let fac=q.map(v=>Math.pow(v/qm,c.beta));const fm=fac.reduce((a,v)=>a+v,0)/fac.length;fac=fac.map(v=>v/fm);
+        pr[k]=c.shape==='scoring plays'?propOverPlays(H[k],sh[k],fac,mixOf(p.r),line[k]):propOverMix(H[k],sh[k],fac,c.f,line[k]);}
+      else pr[k]=propOver(H[k],sh[k],phiOf(k,m[k]),line[k]);
     }
     out.push({pid:p.pid,name:p.name,pos:p.pos,min:cm,pp:p.pp??1,sh,m,line,p:pr});
   }
@@ -285,4 +314,4 @@ function playerProps(D,players,hist,minMin){
 }
 
 if (typeof module !== 'undefined') module.exports = { mulberry32, simulateGame, playPoss, mlHome, coverHome, pushHome, overP, expTotal,
-  hmean, pGT, pEQ, compsFor, paceFor, expPPP, availShift, matchupInputs, teamAvail, gameShifts, shifted, closedForm, selfAnchor, anchorToMarket, coverNoPush, overNoPush, nbPmf, propOver, propMean, playerProps, SEG };
+  hmean, pGT, pEQ, compsFor, paceFor, expPPP, availShift, matchupInputs, teamAvail, gameShifts, shifted, closedForm, selfAnchor, anchorToMarket, coverNoPush, overNoPush, nbPmf, propOver, propMean, playerProps, mixOf, playsCdf, propOverPlays, propOverMix, SEG };
