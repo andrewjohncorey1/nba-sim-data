@@ -104,6 +104,10 @@ mdist = None
 if os.path.exists('pipeline/minutes_dist.json'):
     _m = json.load(open('pipeline/minutes_dist.json'))
     mdist = {'edges': _m['edges'], 'q': [q[0::2] for q in _m['q']], 'fit_on': _m['fit_on']}
+mdistc = None          # the same by final-margin bucket (validation/minutes_dist.py fitc; validation/sgp3.py)
+if os.path.exists('pipeline/minutes_distc.json'):
+    _m = json.load(open('pipeline/minutes_distc.json'))
+    mdistc = {'edges': _m['edges'], 'medges': _m['medges'], 'share': _m['share'], 'q': [[q[0::2] for q in row] for row in _m['q']], 'fit_on': _m['fit_on']}
 cal = json.load(open('pipeline/calib.json')) if os.path.exists('pipeline/calib.json') else {}
 out = dict(asOf=str(last_game.date()), generated=pd.Timestamp.now('UTC').strftime('%Y-%m-%dT%H:%M:%SZ'), season=Y,
            teams=RT.TEAMS, names={t: S['team_names'][t][0] for t in RT.TEAMS},
@@ -111,7 +115,7 @@ out = dict(asOf=str(last_game.date()), generated=pd.Timestamp.now('UTC').strftim
                  for k in RT.COMPS},
            pace={'mu': R['pace']['mu'], 'P': [round(v, 5) for v in R['pace']['P']]},
            engine={**E, **cal}, avail=dict(alpha=P['ratings']['alpha'], repl=repl, ppp0=E['base_ppp'], sens=E['ppp_sens']),
-           rest=S.get('rest_effects', {}), props=dict(**S.get('props', {}), posavg=posavg, mdist=mdist),
+           rest=S.get('rest_effects', {}), props=dict(**S.get('props', {}), posavg=posavg, mdist=mdist, mdistc=mdistc),
            rosters=teams, pool=pool, tests=S.get('tests', {}), notes=S.get('notes', {}))
 json.dump(out, open('build/ratings.json', 'w'), separators=(',', ':'))
 nr = {t['abbr']: t for t in teams}

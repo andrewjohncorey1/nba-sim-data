@@ -54,5 +54,31 @@ def fit(target):
                                           f'{out["q"][b][1]}/{out["q"][b][10]}/{out["q"][b][19]}' for b in range(len(EDGES) - 1)))
 
 
+MEDGES = [0, 10, 20, 200]      # |final margin| buckets: 0-9, 10-19, 20+
+
+
+def fitc(target):
+    """Minutes ratio quantiles by role band AND final-margin bucket (blowouts), seasons 2023..target-1."""
+    R = pd.concat([pd.read_parquet(f'validation/minutes_rows_{y}.parquet') for y in range(2023, target)], ignore_index=True)
+    G = pd.concat([pd.read_parquet(f'data/derived/games_{y}.parquet')[['game_id', 'home_pts', 'away_pts']] for y in range(2023, target)])
+    R = R[R.nhist >= 5].merge(G, on='game_id')
+    R['r'] = (R['min'] / R.alloc).clip(0, None); R['am'] = (R.home_pts - R.away_pts).abs()
+    R['band'] = pd.cut(R.alloc, EDGES, labels=False, include_lowest=True)
+    R['mb'] = pd.cut(R.am, MEDGES, labels=False, right=False)
+    q = (np.arange(NQ) + 0.5) / NQ
+    out = {'fit_on': f'2023..{target - 1}', 'edges': EDGES, 'medges': MEDGES, 'q': [], 'n': [], 'share': []}
+    for b in range(len(EDGES) - 1):
+        top = 48 / max(EDGES[b], 6); row, nn = [], []
+        for m in range(len(MEDGES) - 1):
+            x = R[(R.band == b) & (R.mb == m)]
+            row.append([round(float(v), 4) for v in np.clip(np.quantile(x.r, q), 0.02, top)]); nn.append(int(len(x)))
+        out['q'].append(row); out['n'].append(nn)
+    out['share'] = [round(float((R.mb == m).mean()), 4) for m in range(len(MEDGES) - 1)]
+    json.dump(out, open(f'validation/minutes_distc_for_{target}.json', 'w'), indent=1)
+    for b in range(len(EDGES) - 1):
+        print(f'band {EDGES[b]}-{EDGES[b + 1]}: median ratio by margin 0-9 / 10-19 / 20+: ' +
+              ' / '.join(f'{out["q"][b][m][10]:.3f}' for m in range(3)) + '   5%: ' + ' / '.join(f'{out["q"][b][m][1]:.3f}' for m in range(3)))
+
+
 if __name__ == '__main__':
-    {'rows': rows, 'fit': fit}[sys.argv[1]](int(sys.argv[2]))
+    {'rows': rows, 'fit': fit, 'fitc': fitc}[sys.argv[1]](int(sys.argv[2]))

@@ -401,7 +401,8 @@
    },
    "pts": {
     "shape": "scoring plays",
-    "beta": 1.15
+    "beta": 1.15,
+    "margin": true
    },
    "ast": {
     "shape": "nb",

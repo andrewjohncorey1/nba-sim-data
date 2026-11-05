@@ -250,6 +250,31 @@ Player rebound shares are now scaled by rmult, tuned on 2024-25: 0.87 (`validati
   by fifth, predicted/actual over 54.8/54.7, 49.2/48.1, 48.5/47.4, 45.4/46.7, 44.9/46.0. Live.
 - PRA 0.3840 -> 0.3830, but the top fifth is 42.7/45.0 (stars' points and assists each slightly under): stays off.
 
+### SGP step 3: minutes tied to the simulated margin (Nov 5, 2026; kept, live for points)
+`validation/sgp3.py`, `validation/minutes_dist.py fitc` (logs `sgp3_2025.*`, `sgp3_2026.*`). Players are priced inside
+each simulated game: a player's minutes come from his role's minutes-ratio distribution for that simulation's final
+margin (0-9, 10-19, 20+; learned on earlier seasons only: stars 1.06x in close games, 0.89x in 20+ blowouts, bench
+the other way), normalized so his average night is unchanged; points are scoring plays given those minutes and that
+simulation's team points. Compared with the same model using one minutes distribution for every simulation.
+
+| Joint log loss, margin-linked vs not (95% interval by game) | 2025-26 | 2024-25 |
+|---|---|---|
+| A: points over + own team wins | +0.00063 (+0.00042 to +0.00084) | +0.00040 |
+| B: points over + game over | +0.00029 (+0.00012 to +0.00047) | +0.00041 |
+| F (3 legs): A + game over | +0.00045 (+0.00029 to +0.00061) | +0.00030 |
+| D: top two teammates both over | +0.00017 (-0.00097 to +0.00137) | +0.00106 |
+| E: both teams' top scorers over | +0.00242 (+0.00057 to +0.00434) | +0.00220 |
+| G (3 legs): D + team wins | +0.00042 (-0.00069 to +0.00161) | +0.00003 |
+| Single leg (points over alone) | +0.00065 (+0.00042 to +0.00090) | +0.00045 |
+
+- Better in every combo in both seasons, interval above zero for A, B, F, E and the single leg: kept. The single-leg
+  gain is lopsided games (the simulation knows a mismatch is likely to be a blowout, so stars' overs go down there).
+- Opposing stars' gap 2025-26: +2.3 -> +4.3 (actual +9.8); 2024-25 +2.4 -> +4.8 (actual +5.2). The rest of that gap
+  is the shared game environment (step 4). Teammates still overstated (+10.0 vs +2.9 actual; step 5).
+- Live for points (`props.choice.pts.margin`, `pipeline/minutes_distc.json` fit on 2022-23 to 2025-26; the engine
+  keeps each side's simulated points by margin bucket, `H.mb`, no extra random numbers). Matches the Python test code
+  to 15 digits. Rebounds and threes keep one minutes distribution until tested the same way.
+
 ## Layout
 - `pipeline/fetch_data.sh`: play-by-play, box scores and schedules from the sportsdataverse-data GitHub releases
   (refreshed daily, usually between 5 and 7:30 AM ET). Raw files are not committed.

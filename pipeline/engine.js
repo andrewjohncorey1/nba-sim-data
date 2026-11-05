@@ -56,6 +56,8 @@ function simulateGame(T,G,N,seed,keepRows){
   // keepRows: also save every simulated final score as H.rows = [home, away, home, away, ...] (for joint prices such
   // as same-game parlays). Draws no extra random numbers, so every other price is unchanged.
   if(keepRows)H.rows=new Int16Array(2*N);
+  // each side's points by the simulation's final margin (0-9, 10-19, 20+): props minutes tied to blowouts (validation/sgp3.py)
+  H.mb={h:[{},{},{}],a:[{},{},{}]};
   const side=[prepSide(T.h,G),prepSide(T.a,G)];
   const durMul=(G.durK||1)*(2880/(2*T.pace))/G.base_dur;      // scale measured lengths to this matchup's pace (durK: calibration)
   const D=G.dur,SC=G.score,LT=G.late,HV=G.heave,base3=lg(G.base_f3);
@@ -115,6 +117,7 @@ function simulateGame(T,G,N,seed,keepRows){
     if(per>=5){H.ot++;if(per>=6)H.ot2++;}
     if(H.rows){H.rows[2*g]=sc[0];H.rows[2*g+1]=sc[1];}
     inc(H.m,sc[0]-sc[1]);inc(H.t,sc[0]+sc[1]);inc(H.h,sc[0]);inc(H.a,sc[1]);
+    {const am=Math.abs(sc[0]-sc[1]),b=am>=20?2:am>=10?1:0;inc(H.mb.h[b],sc[0]);inc(H.mb.a[b],sc[1]);}
     const segs=[[seg[0][0],seg[0][1]],[seg[1][0],seg[1][1]],[seg[2][0],seg[2][1]],[seg[3][0],seg[3][1]],
       [seg[0][0]+seg[1][0],seg[0][1]+seg[1][1]],[seg[2][0]+seg[3][0]+seg[4][0],seg[2][1]+seg[3][1]+seg[4][1]]];
     for(let i=0;i<6;i++){const s=H.seg[SEG[i]],[x,y]=segs[i];inc(s.m,x-y);inc(s.t,x+y);inc(s.h,x);inc(s.a,y);}
@@ -285,7 +288,7 @@ function playerProps(D,players,hist,minMin){
   const tm=P.tmult||1;      // calibration of the simulated team points for the points-based props
   const R={pts:0,fgm:0,fg3m:0,ast:0,reb:0};
   // prop minutes: the props' own projection (pmp, tuned separately) when present, fitted to 240 like the team's
-  const CH=P.choice||null,MD=P.mdist||null,aexp=CH&&CH.minutes?CH.minutes.aexp:3;
+  const CH=P.choice||null,MD=P.mdist||null,MC=P.mdistc||null,aexp=CH&&CH.minutes?CH.minutes.aexp:3;
   const ems=players.some(p=>p.pmp!=null)?allocate(players.map(p=>(p.pmp??p.pm)*(p.pp??1)),240,48,aexp):players.map(p=>p.share*48);
   // minutes model (validation/props_minutes.py): role band of the minutes when he plays -> ratio quantiles; rotation
   // players' expected minutes get the band's mean ratio
@@ -305,7 +308,15 @@ function playerProps(D,players,hist,minMin){
       m[k]=sh[k]*hmean(H[k]);line[k]=Math.max(0.5,Math.floor(m[k])+0.5);
       if(CH&&CH[k]&&MD){const b=bandOf(cm0),q=MD.q[b],qm=q.reduce((a,c)=>a+c,0)/q.length,c=CH[k];
         let fac=q.map(v=>Math.pow(v/qm,c.beta));const fm=fac.reduce((a,v)=>a+v,0)/fac.length;fac=fac.map(v=>v/fm);
-        pr[k]=c.shape==='scoring plays'?propOverPlays(H[k],sh[k],fac,mixOf(p.r),line[k]):propOverMix(H[k],sh[k],fac,c.f,line[k]);}
+        if(c.shape==='scoring plays'&&c.margin&&MC&&hist.mb){
+          // minutes tied to the simulated margin: his role's minutes ratios for each margin bucket, normalized so his
+          // average night over real margins is unchanged; priced on that bucket's simulated team points
+          const fb=MC.q[b].map(qq=>qq.map(v=>Math.pow(v/qm,c.beta)));
+          const nm=fb.reduce((a,qq,j)=>a+MC.share[j]*qq.reduce((x,y)=>x+y,0)/qq.length,0);
+          let o=0,n=0;for(let j=0;j<3;j++){const hb=hist.mb[j];let w=0;for(const t in hb)w+=hb[t];if(!w)continue;
+            o+=w*propOverPlays(hb,sh[k],fb[j].map(v=>v/nm),mixOf(p.r),line[k]);n+=w;}
+          pr[k]=n?o/n:0;}
+        else pr[k]=c.shape==='scoring plays'?propOverPlays(H[k],sh[k],fac,mixOf(p.r),line[k]):propOverMix(H[k],sh[k],fac,c.f,line[k]);}
       else pr[k]=propOver(H[k],sh[k],phiOf(k,m[k]),line[k]);
     }
     out.push({pid:p.pid,name:p.name,pos:p.pos,min:cm,pp:p.pp??1,sh,m,line,p:pr});

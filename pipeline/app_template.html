@@ -235,8 +235,8 @@ function renderDetail(el,g,c){
   </div>
   <section class="panel"><h2>Halves and quarters</h2><p class="sub">Each period on its own. Win % counts a tied period as not won; fair spread is the half-point line nearest the expected margin.</p><div class="tblwrap"><table>${segTable(H,home,away)}</table></div></section>
   <section class="panel"><h2>Player props</h2><p class="sub">Chance of going over the line shown, then the fair price; lines are each player's simulated average rounded down to the half point. Props assume the player plays (they are void if he doesn't). Shown for players projected for 18+ minutes, and only for markets that passed the held-out test (points, rebounds and threes; assists and points+rebounds+assists are still off). Each price mixes over the player's own minutes distribution: a stable role with occasional short nights.</p>
-    ${(DATA.props.markets||[]).length?propsHtml(DATA,c.sh.a.players,{pts:H.a,fgm:H.stat.a.fgm,fg3m:H.stat.a.fg3m,reb:H.stat.a.reb},{t:away,c:'--b'})+
-      propsHtml(DATA,c.sh.h.players,{pts:H.h,fgm:H.stat.h.fgm,fg3m:H.stat.h.fg3m,reb:H.stat.h.reb},{t:home,c:'--a'}):`<p class="warn">${DATA.props.paused||'Player props are paused.'}</p>`}</section>
+    ${(DATA.props.markets||[]).length?propsHtml(DATA,c.sh.a.players,{pts:H.a,fgm:H.stat.a.fgm,fg3m:H.stat.a.fg3m,reb:H.stat.a.reb,mb:H.mb.a},{t:away,c:'--b'})+
+      propsHtml(DATA,c.sh.h.players,{pts:H.h,fgm:H.stat.h.fgm,fg3m:H.stat.h.fg3m,reb:H.stat.h.reb,mb:H.mb.h},{t:home,c:'--a'}):`<p class="warn">${DATA.props.paused||'Player props are paused.'}</p>`}</section>
   <section class="panel how"><h2>How this number was built</h2>${howHtml(g,c,H)}</section>`;}
 function howHtml(g,c,H){
   const od=g.odds||{},sh=c.sh,p=[];
