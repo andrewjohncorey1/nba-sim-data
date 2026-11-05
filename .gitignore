@@ -10,3 +10,4 @@ __pycache__/
 data/apify/
 validation/rows_*
 validation/sgp_rows_*
+validation/props2_pre_*

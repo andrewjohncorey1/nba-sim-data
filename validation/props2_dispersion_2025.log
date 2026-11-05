@@ -1,0 +1,6 @@
+2024-25, tuned means: dispersion fixed vs proportional to mean
+pts   fixed 0.35626 (phi 5) book 0.67514 top tier over pred 0.407 | prop 0.34928 (c 0.4) book 0.66580 top tier over pred 0.415 | actual 0.471
+reb   fixed 0.42293 (phi 8) book 0.66844 top tier over pred 0.518 | prop 0.42362 (c 1.4) book 0.66662 top tier over pred 0.534 | actual 0.438
+ast   fixed 0.37885 (phi 12) book 0.65594 top tier over pred 0.422 | prop 0.37809 (c 3.0) book 0.65597 top tier over pred 0.426 | actual 0.458
+fg3m  fixed 0.43906 (phi 20) book 0.58645 top tier over pred 0.381 | prop 0.43951 (c 3.0) book 0.58818 top tier over pred 0.375 | actual 0.4
+pra   fixed 0.39258 (phi 8) book 0.66672 top tier over pred 0.443 | prop 0.38486 (c 0.4) book 0.65384 top tier over pred 0.452 | actual 0.486

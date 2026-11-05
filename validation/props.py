@@ -17,6 +17,8 @@ Y, var = int(sys.argv[1]), sys.argv[2]
 phis = [float(x) for x in (sys.argv[3] if len(sys.argv) > 3 else '10,10,10,10,10').split(',')]
 PHI = dict(zip(['pts', 'reb', 'ast', 'fg3m', 'pra'], phis))
 HL = float(sys.argv[4]) if len(sys.argv) > 4 else 180; PRIOR = float(sys.argv[5]) if len(sys.argv) > 5 else 300
+V2 = os.environ.get('PROPS_V2')            # path to validation/props2_tuned.json: tuned minutes, rates and dispersion
+CFG = json.load(open(V2)) if V2 else None
 sims = {s['game_id']: s for s in json.load(open(f'validation/sim_{Y}_{var}.json'))}
 PL = PS.load(range(Y - 2, Y + 1))
 PL['posg'] = PL.pos.fillna('F').str[0].map({'G': 'G', 'F': 'F', 'C': 'C'}).fillna('F')
@@ -49,7 +51,23 @@ for d, gd in cur.groupby('date'):
     A = x.assign(wm=x.w * x['min'], **{f'w_{s}': x.w * x[s] for s in stats}).groupby('pid')[['wm'] + [f'w_{s}' for s in stats]].sum()
     pa = {k: {s: float((v.w * v[s]).sum() / (v.w * v['min']).sum()) for s in stats} for k, v in x.groupby('posg')}
     pos = x.sort_values('date').groupby('pid').posg.last()
-    pm = PS.projected_minutes(PL, d)
+    if CFG:
+        mc = CFG['cfg']['min']
+        pm = PS.projected_minutes(PL, d, hl_games=mc['hl'], prior_games=mc['pw'], prior_min=14.0)
+        AH = {}
+        def agg_h(h):
+            if h not in AH:
+                xh = hist[hist['min'] > 0]; wh = PS.weights(xh.date, d, h); xh = xh.assign(w=wh)[wh > 1e-3]
+                AH[h] = xh.assign(wm=xh.w * xh['min'], **{f'w_{s}': xh.w * xh[s] for s in stats}).groupby('pid')[['wm'] + [f'w_{s}' for s in stats]].sum()
+            return AH[h]
+        A720 = agg_h(720)
+        def rate_v2(p, s):
+            rc = CFG['cfg']['rate'][s]; pav = pa.get(pos.get(p, 'F'), pa['F'])[s]; Ah = agg_h(rc['hl'])
+            tgt = (A720.at[p, f'w_{s}'] + 300 * pav) / (A720.at[p, 'wm'] + 300) if (rc['target'] == 'own' and p in A720.index) else pav
+            if p not in Ah.index: return tgt if p in A720.index else pav
+            return (Ah.at[p, f'w_{s}'] + rc['K'] * tgt) / (Ah.at[p, 'wm'] + rc['K'])
+    else:
+        pm = PS.projected_minutes(PL, d)
     season_hist = hist[(hist.season == Y) & (hist['min'] > 0)]
     sb = season_hist.groupby('pid')[['pts', 'reb', 'ast', 'fg3m', 'pra']].agg(['mean', 'count'])
     l10 = season_hist.sort_values('date').groupby('pid').tail(10).groupby('pid')[['pts', 'reb', 'ast', 'fg3m', 'pra']].mean()
@@ -58,8 +76,11 @@ for d, gd in cur.groupby('date'):
         S = sims[gid]
         mins = pm.proj.reindex(tp.pid).fillna(12.0).values
         mins = PS.allocate(mins)
-        rt = np.array([[ (A.loc[p, f'w_{s}'] + PRIOR * pa.get(pos.get(p, 'F'), pa['F'])[s]) / (A.loc[p, 'wm'] + PRIOR) if p in A.index
-                         else pa.get(pos.get(p, 'F'), pa['F'])[s] for s in stats] for p in tp.pid])
+        if CFG:
+            rt = np.array([[rate_v2(p, s) for s in stats] for p in tp.pid])
+        else:
+            rt = np.array([[ (A.loc[p, f'w_{s}'] + PRIOR * pa.get(pos.get(p, 'F'), pa['F'])[s]) / (A.loc[p, 'wm'] + PRIOR) if p in A.index
+                             else pa.get(pos.get(p, 'F'), pa['F'])[s] for s in stats] for p in tp.pid])
         raw = rt * mins[:, None]
         R = raw.sum(axis=0)
         pmfs = {'pts': (S['p' + side], 60), 'fgm': (S['fg' + side], 20), 'fg3m': (S['f3' + side], 0), 'reb': (S['rb' + side], 20)}
@@ -77,11 +98,17 @@ for d, gd in cur.groupby('date'):
                 lines = [('book', L)] + [('fixed', x) for x in FIXED[k]]
                 for kind, LL in lines:
                     r = dict(date=d, game_id=gid, pid=p, stat=k, kind=kind, line=LL, actual=getattr(act, k), mean=means[k], base=b)
+                    if CFG:
+                        dc = CFG['dispersion'][k]
+                        r['mnew'] = mix_over(v, lo, scale, max(dc['c'] * means[k], 0.3) if dc['mode'] == 'prop' else dc['phi'], LL)
                     for f in GRID:
-                        r[f'm{f}'] = mix_over(v, lo, scale, f, LL); r[f's{f}'] = float(nb_over(b, f, LL)); r[f'r{f}'] = float(nb_over(l10.loc[p, k], f, LL))
+                        if not CFG: r[f'm{f}'] = mix_over(v, lo, scale, f, LL)
+                        r[f's{f}'] = float(nb_over(b, f, LL)); r[f'r{f}'] = float(nb_over(l10.loc[p, k], f, LL))
                     rows.append(r)
 df = pd.DataFrame(rows)
 df['y'] = (df.actual > df.line).astype(int)
+if CFG:      # the tuned model has its own dispersion: every grid column is the same tuned price (keeps the scoring code below)
+    for f in GRID: df[f'm{f}'] = df['mnew']
 
 
 def ll(y, p):
@@ -102,4 +129,4 @@ for (k, kind), x in df.groupby(['stat', 'kind']):
                           'phi': ph, 'pred_over': round(float(x[f"m{ph['model']}"].mean()), 3), 'act_over': round(float(x.y.mean()), 3),
                           'mae_model': round(float(np.mean(np.abs(x.actual - x['mean']))), 3), 'mae_season': round(float(np.mean(np.abs(x.actual - x.base))), 3)}
 print(json.dumps({'season': Y, 'phi_fixed': PHI if len(sys.argv) > 3 else None, 'half_life': HL, 'prior_min': PRIOR, 'results': res}, indent=0))
-df.to_parquet(f'validation/props_{Y}_{var}.parquet', index=False)
+df.to_parquet(f'validation/props_{Y}_{var}{"_v2" if CFG else ""}.parquet', index=False)

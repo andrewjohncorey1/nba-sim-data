@@ -40,9 +40,26 @@ posavg = {}
 for g, xx in x.groupby('posg'):
     posavg[g] = {s: float((xx.w * xx[s]).sum() / (xx.w * xx['min']).sum()) for s in stats}
 rates = {}
-for pid, r in A.iterrows():
-    pa = posavg.get(pos.get(pid, 'F'), posavg['F'])
-    rates[pid] = {s: (r[f'w_{s}'] + pp['prior_min'] * pa[s]) / (r.wmin + pp['prior_min']) for s in stats}
+PV2 = pp.get('v2')          # tuned settings (validation/tune_props2.py): own long-run rate as the shrinkage target
+if PV2:
+    def wsum(h):
+        xx = PL[(PL['min'] > 0) & (PL.date < now)]; w = PS.weights(xx.date, now, h); xx = xx.assign(w=w)[w > 1e-3]
+        return xx.assign(wmin=xx.w * xx['min'], **{f'w_{s}': xx.w * xx[s] for s in stats}).groupby('pid')[['wmin'] + [f'w_{s}' for s in stats]].sum()
+    AH = {h: wsum(h) for h in {PV2['rate'][s]['hl'] for s in stats} | {720}}
+    for pid in AH[720].index:
+        pa = posavg.get(pos.get(pid, 'F'), posavg['F']); out = {}
+        for s in stats:
+            rc = PV2['rate'][s]; L = AH[720].loc[pid]
+            tgt = (L[f'w_{s}'] + 300 * pa[s]) / (L.wmin + 300) if rc['target'] == 'own' else pa[s]
+            Ah = AH[rc['hl']]
+            out[s] = (Ah.at[pid, f'w_{s}'] + rc['K'] * tgt) / (Ah.at[pid, 'wmin'] + rc['K']) if pid in Ah.index else tgt
+        rates[pid] = out
+    pmp = PS.projected_minutes(PL, now, hl_games=PV2['min']['hl'], prior_games=PV2['min']['pw'], prior_min=14.0)
+else:
+    for pid, r in A.iterrows():
+        pa = posavg.get(pos.get(pid, 'F'), posavg['F'])
+        rates[pid] = {s: (r[f'w_{s}'] + pp['prior_min'] * pa[s]) / (r.wmin + pp['prior_min']) for s in stats}
+    pmp = pm
 
 # ---------- rosters: players who appeared for the team this season (most recent team), else last season ----------
 cur = PL[PL.season == Y].sort_values('date')
@@ -64,7 +81,7 @@ for t in RT.TEAMS:
         rr = rates.get(pid, posavg['F'])
         roster.append(dict(pid=int(pid), name=names.get(pid, str(pid)), pos=posn.get(pid) or '',
                            O=round(float(PR.O.get(pid, repl[0])), 3), D=round(float(PR.D.get(pid, repl[1])), 3),
-                           pm=round(float(pm.proj.get(pid, 12.0)), 1), pp=round(float(pplay.get(pid, 0.5)), 3),
+                           pm=round(float(pm.proj.get(pid, 12.0)), 1), pmp=round(float(pmp.proj.get(pid, 12.0)), 1), pp=round(float(pplay.get(pid, 0.5)), 3),
                            last=str(pm['last'].get(pid).date()) if pid in pm.index else None,
                            r={k: round(float(v), 4) for k, v in rr.items()}))
     roster.sort(key=lambda p: -p['pm'])
@@ -75,7 +92,7 @@ for t in RT.TEAMS:
 # previous-season roster lookup (names -> pid) for injury-list matching of players with no games yet this season
 pool = {int(pid): dict(name=names.get(pid, ''), team=last_team.get(pid, prev.get(pid)),
                        O=round(float(PR.O.get(pid, repl[0])), 3), D=round(float(PR.D.get(pid, repl[1])), 3),
-                       pm=round(float(pm.proj.get(pid, 12.0)), 1), pp=round(float(pplay.get(pid, 0.5)), 3), pos=posn.get(pid) or '',
+                       pm=round(float(pm.proj.get(pid, 12.0)), 1), pmp=round(float(pmp.proj.get(pid, 12.0)), 1), pp=round(float(pplay.get(pid, 0.5)), 3), pos=posn.get(pid) or '',
                        r={k: round(float(v), 4) for k, v in rates.get(pid, posavg['F']).items()})
         for pid in PR.index if (PR.wmin.get(pid, 0) > 0)}
 cal = json.load(open('pipeline/calib.json')) if os.path.exists('pipeline/calib.json') else {}

@@ -162,6 +162,41 @@ leg B hit minus when it missed, predicted vs actual (the correlation itself, mos
   (pulled toward a 14-minute prior) costs 1.4, rescaling to team points 0.3. The same bias is in the live app's points
   props. Fix and retest single legs before building SGP pricing.
 
+### Props retuned (Nov 5, 2026; not live yet) and the joint test rerun
+`validation/tune_props2.py` (fast harness, reproduces `validation/props.py` within 0.003 log loss), tuned on 2024-25
+only, then the official `validation/props.py` with `PROPS_V2=validation/props2_tuned.json` on both seasons:
+- Minutes: half-life 4 games (was 8), prior weight a sixth of before. Rates: shrink toward the player's own long-run
+  rate (half-life 720 days) with 50 minutes of prior (rebounds 150), half-life 90 days; was 300 minutes toward the
+  position average, half-life 180. Points and PRA: dispersion proportional to the player's mean (phi = 0.4 x mean);
+  rebounds, assists and threes keep one dispersion (proportional lost on 2024-25).
+- 2025-26, log loss over all lines, old -> new (season-average baseline): points 0.3616 -> 0.3473 (0.3809),
+  assists 0.3891 -> 0.3786 (0.4012), threes 0.4482 -> 0.4373 (0.4583), PRA 0.4014 -> 0.3843 (0.4337),
+  rebounds 0.4254 -> 0.4215 (0.4381; overs still 5 points high, stays off). `validation/props_test_2026_v2.log`.
+- Bench players fixed (points, season average 0-5: over predicted 46% vs 48% actual; was 65%). Stars improved but
+  still low: 20+ point scorers, book-line over 38% predicted vs 44% actual (was 31-33%). About half is the mean
+  (3% low: minutes 0.6 short, team points 1 low) and half the shape (model spread 8.9 points vs 7.8 actual).
+  Props stay paused in the app until this is fixed. The code is in place behind `props.v2` / `props.disp` in
+  settings (`pipeline/export.py` rates and prop minutes `pmp`, `playerProps` dispersion), off by default.
+
+Joint test on the retuned props (`validation/sgp_2025_v2.log`, `sgp_2026_v2.log`), 2025-26 [2024-25], gap in points:
+
+| Combo | Log loss gain vs legs (95%) | Gap model | Gap actual |
+|---|---|---|---|
+| A: points over + own team wins | +0.0019 (+0.0014 to +0.0023) [+0.0021] | +2.5 [+3.7] | +3.2 [+4.8] |
+| A, projected 15+ | +0.0051 | +5.4 [+7.4] | +7.8 [+6.7] |
+| B: points over + game over | +0.0041 (+0.0027 to +0.0057) [+0.0057] | +7.2 [+7.3] | +8.7 [+8.8] |
+| B, projected 15+ | +0.0079 | +10.1 [+10.1] | +13.5 [+13.5] |
+| F (3 legs): points over + team wins + game over | +0.0037 (+0.0024 to +0.0049) [+0.0046] | +5.6 [+7.1] | +7.4 [+8.7] |
+| G (3 legs): top two teammates over + team wins | +0.0098 | +7.1 [+8.9] | +5.0 [+3.1] |
+| D: top two teammates both over | +0.0024 | +7.3 [+7.4] | +3.5 [+1.8] |
+| E: both teams' top scorers over | +0.0007 | +2.1 [+0.6] | +9.4 [+4.9] |
+| C, C2 controls (side + total) | about 0, intervals span 0 | about 0 | about 0 (noise) |
+
+- Player + team legs (A, B, F) pass in both seasons; the engine captures roughly 70-85% of the real correlation, a
+  little less for stars. Teammates are overstated about 2-4x; opposing stars understated about 4x. Both point to the
+  same two gaps: no shared game-level swing (pace or shooting environment hitting both teams) and no competition
+  for shots between teammates (each player is drawn independently given his team's points).
+
 ## Layout
 - `pipeline/fetch_data.sh`: play-by-play, box scores and schedules from the sportsdataverse-data GitHub releases
   (refreshed daily around 5 AM ET). Raw files are not committed.

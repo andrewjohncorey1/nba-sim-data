@@ -1,0 +1,85 @@
+SGP joint-calibration test, season ending 2025 (4000 sims per game, props v2 retuned, points dispersion {'mode': 'prop', 'c': 0.4})
+single-leg check: per-sim points-over price vs the prop model, mean abs diff 6e-05
+
+A Player points over + own team wins [all] n=25381 games=1249
+   log loss joint 0.53134 vs legs 0.53339  improvement +0.00205 (95% +0.00163 to +0.00247)
+   hit 0.251  pred joint 0.235  legs 0.222  lift pred 1.059 actual 1.130
+   P(A | B hit)  pred 0.463 act 0.498 (n 12808);  P(A | B missed) pred 0.426 act 0.450 (n 12573)
+   bins [joint range, n, pred joint, legs, actual]: (0.0, 0.1] 2713 0.07/0.062/0.071; (0.1, 0.2] 8010 0.152/0.139/0.174; (0.2, 0.3] 7964 0.248/0.233/0.264; (0.3, 0.4] 4514 0.343/0.329/0.367; (0.4, 0.5] 1568 0.44/0.429/0.442; (0.5, 0.7] 556 0.559/0.551/0.54; (0.7, 1.0] 56 0.78/0.777/0.732
+A Player points over + own team wins [main_scorers_15plus] n=5922 games=1247
+   log loss joint 0.56613 vs legs 0.57085  improvement +0.00472 (95% +0.00357 to +0.00584)
+   hit 0.285  pred joint 0.253  legs 0.234  lift pred 1.082 actual 1.219
+   P(A | B hit)  pred 0.486 act 0.540 (n 3129);  P(A | B missed) pred 0.412 act 0.473 (n 2793)
+A Player points over + own team wins [team_favoured] n=12906 games=1244
+   log loss joint 0.62665 vs legs 0.62907  improvement +0.00243 (95% +0.00142 to +0.00339)
+   hit 0.333  pred joint 0.304  legs 0.291  lift pred 1.044 actual 1.142
+   P(A | B hit)  pred 0.454 act 0.490 (n 8757);  P(A | B missed) pred 0.407 act 0.416 (n 4149)
+A Player points over + own team wins [team_underdog] n=12475 games=1247
+   log loss joint 0.43273 vs legs 0.43440  improvement +0.00167 (95% +0.00027 to +0.00329)
+   hit 0.167  pred joint 0.164  legs 0.151  lift pred 1.089 actual 1.106
+   P(A | B hit)  pred 0.483 act 0.513 (n 4051);  P(A | B missed) pred 0.435 act 0.467 (n 8424)
+   PASS: True
+
+B Player points over + game over [all] n=25381 games=1249
+   log loss joint 0.58688 vs legs 0.59260  improvement +0.00571 (95% +0.00419 to +0.00707)
+   hit 0.279  pred joint 0.236  legs 0.219  lift pred 1.078 actual 1.272
+   P(A | B hit)  pred 0.481 act 0.514 (n 13737);  P(A | B missed) pred 0.408 act 0.426 (n 11644)
+   bins [joint range, n, pred joint, legs, actual]: (0.0, 0.1] 1016 0.066/0.061/0.137; (0.1, 0.2] 6499 0.165/0.15/0.207; (0.2, 0.3] 13407 0.245/0.225/0.288; (0.3, 0.4] 3781 0.337/0.321/0.376; (0.4, 0.5] 678 0.432/0.423/0.45
+B Player points over + game over [main_scorers_15plus] n=5922 games=1247
+   log loss joint 0.62353 vs legs 0.63492  improvement +0.01138 (95% +0.00858 to +0.01413)
+   hit 0.313  pred joint 0.247  legs 0.222  lift pred 1.113 actual 1.410
+   P(A | B hit)  pred 0.502 act 0.569 (n 3254);  P(A | B missed) pred 0.401 act 0.434 (n 2668)
+   PASS: True
+
+C Control: home covers fair spread + game over [all] n=1249 games=1249
+   log loss joint 0.58394 vs legs 0.58352  improvement -0.00041 (95% -0.00124 to +0.00037)
+   hit 0.270  pred joint 0.245  legs 0.246  lift pred 0.998 actual 1.098
+   P(A | B hit)  pred 0.499 act 0.496 (n 680);  P(A | B missed) pred 0.499 act 0.508 (n 569)
+   bins [joint range, n, pred joint, legs, actual]: (0.2, 0.3] 1249 0.245/0.246/0.27
+
+C2 Control: home wins + game over [all] n=1249 games=1249
+   log loss joint 0.57325 vs legs 0.57298  improvement -0.00027 (95% -0.00084 to +0.00030)
+   hit 0.299  pred joint 0.272  legs 0.272  lift pred 1.000 actual 1.097
+   P(A | B hit)  pred 0.556 act 0.548 (n 680);  P(A | B missed) pred 0.550 act 0.548 (n 569)
+   bins [joint range, n, pred joint, legs, actual]: (0.0, 0.1] 39 0.081/0.08/0.051; (0.1, 0.2] 269 0.159/0.158/0.164; (0.2, 0.3] 436 0.255/0.255/0.271; (0.3, 0.4] 411 0.348/0.349/0.394; (0.4, 0.5] 94 0.427/0.428/0.5
+
+D Info: top two teammates both over [all] n=2492 games=1249
+   log loss joint 0.55517 vs legs 0.55744  improvement +0.00226 (95% +0.00144 to +0.00309)
+   hit 0.271  pred joint 0.226  legs 0.219  lift pred 1.033 actual 1.235
+   P(A | B hit)  pred 0.489 act 0.518 (n 1300);  P(A | B missed) pred 0.415 act 0.501 (n 1192)
+   bins [joint range, n, pred joint, legs, actual]: (0.0, 0.1] 92 0.085/0.079/0.109; (0.1, 0.2] 1201 0.157/0.149/0.185; (0.2, 0.3] 784 0.241/0.233/0.302; (0.3, 0.4] 232 0.339/0.333/0.418; (0.4, 0.5] 80 0.438/0.432/0.613; (0.5, 0.7] 78 0.584/0.581/0.526; (0.7, 1.0] 25 0.781/0.78/0.72
+D Info: top two teammates both over [main_scorers_15plus] n=2139 games=1219
+   log loss joint 0.54953 vs legs 0.55199  improvement +0.00246 (95% +0.00156 to +0.00340)
+   hit 0.265  pred joint 0.216  legs 0.209  lift pred 1.035 actual 1.268
+   P(A | B hit)  pred 0.481 act 0.515 (n 1101);  P(A | B missed) pred 0.408 act 0.509 (n 1038)
+
+E Info: both teams' top scorers over [all] n=1243 games=1243
+   log loss joint 0.59148 vs legs 0.59204  improvement +0.00057 (95% +0.00038 to +0.00076)
+   hit 0.273  pred joint 0.208  legs 0.207  lift pred 1.005 actual 1.316
+   P(A | B hit)  pred 0.457 act 0.538 (n 630);  P(A | B missed) pred 0.451 act 0.489 (n 613)
+   bins [joint range, n, pred joint, legs, actual]: (0.0, 0.1] 28 0.087/0.086/0.179; (0.1, 0.2] 666 0.157/0.156/0.239; (0.2, 0.3] 413 0.238/0.236/0.276; (0.3, 0.4] 93 0.334/0.334/0.452; (0.4, 0.5] 22 0.44/0.44/0.409; (0.5, 0.7] 17 0.576/0.576/0.412; (0.7, 1.0] 4 0.785/0.785/0.75
+E Info: both teams' top scorers over [main_scorers_15plus] n=1202 games=1202
+   log loss joint 0.59317 vs legs 0.59376  improvement +0.00059 (95% +0.00040 to +0.00079)
+   hit 0.274  pred joint 0.205  legs 0.204  lift pred 1.006 actual 1.339
+   P(A | B hit)  pred 0.454 act 0.540 (n 609);  P(A | B missed) pred 0.447 act 0.489 (n 593)
+
+F 3 legs: player points over + own team wins + game over [all] n=25381 games=1249
+   log loss joint 0.40056 vs legs 0.40519  improvement +0.00463 (95% +0.00343 to +0.00581)
+   hit 0.146  pred joint 0.124  legs 0.109  lift pred 1.134 actual 1.336
+   P(A | B hit)  pred 0.498 act 0.537 (n 6912);  P(A | B missed) pred 0.427 act 0.450 (n 18469)
+   bins [joint range, n, pred joint, legs, actual]: (0.0, 0.1] 9723 0.067/0.056/0.078; (0.1, 0.2] 12952 0.143/0.126/0.171; (0.2, 0.3] 2517 0.231/0.214/0.272; (0.3, 0.4] 174 0.332/0.322/0.31; (0.4, 0.5] 15 0.417/0.413/0.067
+F 3 legs: player points over + own team wins + game over [main_scorers_15plus] n=5922 games=1247
+   log loss joint 0.44733 vs legs 0.45690  improvement +0.00957 (95% +0.00732 to +0.01204)
+   hit 0.172  pred joint 0.137  legs 0.115  lift pred 1.190 actual 1.493
+   P(A | B hit)  pred 0.533 act 0.595 (n 1712);  P(A | B missed) pred 0.423 act 0.473 (n 4210)
+
+G 3 legs: top two teammates both over + team wins [all] n=2492 games=1249
+   log loss joint 0.39598 vs legs 0.40264  improvement +0.00666 (95% +0.00379 to +0.00942)
+   hit 0.145  pred joint 0.129  legs 0.108  lift pred 1.192 actual 1.339
+   P(A | B hit)  pred 0.518 act 0.532 (n 680);  P(A | B missed) pred 0.429 act 0.502 (n 1812)
+   bins [joint range, n, pred joint, legs, actual]: (0.0, 0.1] 980 0.069/0.051/0.086; (0.1, 0.2] 1203 0.141/0.118/0.155; (0.2, 0.3] 239 0.241/0.217/0.272; (0.3, 0.4] 47 0.339/0.316/0.319; (0.4, 0.5] 12 0.444/0.422/0.417; (0.5, 0.7] 9 0.573/0.56/0.444; (0.7, 1.0] 2 0.724/0.716/1.0
+G 3 legs: top two teammates both over + team wins [main_scorers_15plus] n=2139 games=1219
+   log loss joint 0.40440 vs legs 0.41203  improvement +0.00764 (95% +0.00441 to +0.01073)
+   hit 0.151  pred joint 0.129  legs 0.108  lift pred 1.194 actual 1.401
+   P(A | B hit)  pred 0.513 act 0.533 (n 608);  P(A | B missed) pred 0.419 act 0.504 (n 1531)
+

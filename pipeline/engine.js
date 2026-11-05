@@ -258,19 +258,23 @@ function propMean(teamHist,share){return share*hmean(teamHist);}
 // sum of player expectations). Assists scale with the team's made field goals; rebounds with the team's simulated
 // rebounds relative to the league reference. Lines: the mean rounded down + 0.5, plus any requested lines.
 function playerProps(D,players,hist,minMin){
-  const P=D.props||{},mk=P.markets||['pts'],phi=P.phi||{},out=[];
+  const P=D.props||{},mk=P.markets||['pts'],phi=P.phi||{},disp=P.disp||{},out=[];
+  // dispersion per market: one value for everyone, or proportional to the player's mean ('prop': phi = c x mean)
+  const phiOf=(k,m)=>{const d=disp[k];return d?(d.mode==='prop'?Math.max(0.3,d.c*m):d.phi):(phi[k]||10);};
   const R={pts:0,fgm:0,fg3m:0,ast:0,reb:0};
-  for(const p of players){const em=p.share*48;for(const k in R)R[k]+=(p.r?p.r[k]:0)*em;}
-  for(const p of players){
-    const em=p.share*48,cm=Math.min(48,em/Math.max(0.05,p.pp??1));
+  // prop minutes: the props' own projection (pmp, tuned separately) when present, fitted to 240 like the team's
+  const ems=players.some(p=>p.pmp!=null)?allocate(players.map(p=>(p.pmp??p.pm)*(p.pp??1))):players.map(p=>p.share*48);
+  players.forEach((p,i)=>{for(const k in R)R[k]+=(p.r?p.r[k]:0)*ems[i];});
+  for(const [i,p] of players.entries()){
+    const em=ems[i],cm=Math.min(48,em/Math.max(0.05,p.pp??1));
     if(cm<(minMin??8)||!p.r)continue;
     const sh={pts:p.r.pts*cm/R.pts,fg3m:p.r.fg3m*cm/R.fg3m,ast:p.r.ast*cm/R.fgm,reb:p.r.reb*cm/(P.reb_ref||R.reb)};
     const H={pts:hist.pts,fg3m:hist.fg3m,ast:hist.fgm,reb:hist.reb};
     const m={},line={},pr={};
     for(const k of mk){
       if(k==='pra'){const mt=hmean(hist.pts),mm=sh.pts*mt+sh.reb*hmean(hist.reb)+sh.ast*hmean(hist.fgm);
-        m.pra=mm;line.pra=Math.floor(mm)+0.5;pr.pra=propOver(hist.pts,mm/mt,phi.pra||10,line.pra);continue;}
-      m[k]=sh[k]*hmean(H[k]);line[k]=Math.max(0.5,Math.floor(m[k])+0.5);pr[k]=propOver(H[k],sh[k],phi[k]||10,line[k]);
+        m.pra=mm;line.pra=Math.floor(mm)+0.5;pr.pra=propOver(hist.pts,mm/mt,phiOf('pra',mm),line.pra);continue;}
+      m[k]=sh[k]*hmean(H[k]);line[k]=Math.max(0.5,Math.floor(m[k])+0.5);pr[k]=propOver(H[k],sh[k],phiOf(k,m[k]),line[k]);
     }
     out.push({pid:p.pid,name:p.name,pos:p.pos,min:cm,pp:p.pp??1,sh,m,line,p:pr});
   }
