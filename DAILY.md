@@ -1,7 +1,7 @@
 # Daily update runbook
 
-This file is the instruction set for the twice-daily update (about 6:23 AM and 5:23 PM ET). The morning run picks up
-last night's results once the GitHub data refresh has landed (usually by 5 AM ET) and scores them; the afternoon run
+This file is the instruction set for the twice-daily update (about 8:41 AM and 5:41 PM ET). The morning run picks up
+last night's results once the GitHub data refresh has landed (between about 5 and 7:30 AM ET) and scores them; the afternoon run
 picks up the evening injury news and Pinnacle's prices for tonight's games before tip-off. Every run starts from the
 repo, so it works the same in a fresh session or in the build conversation.
 

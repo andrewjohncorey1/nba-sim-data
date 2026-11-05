@@ -223,7 +223,7 @@ Joint test on the retuned props (`validation/sgp_2025_v2.log`, `sgp_2026_v2.log`
 
 ## Layout
 - `pipeline/fetch_data.sh`: play-by-play, box scores and schedules from the sportsdataverse-data GitHub releases
-  (refreshed daily around 5 AM ET). Raw files are not committed.
+  (refreshed daily, usually between 5 and 7:30 AM ET). Raw files are not committed.
 - `data/derived/`: per-season games, team-game counts, possessions and player box scores (`pipeline/prep.py`).
 - `data/injuries/`: what RotoWire listed each run. `data/odds/`: Pinnacle snapshots. `data/predictions/`: the model's
   pre-game numbers per run (games and player props), scored by `pipeline/score.py`. Never edit these logs.

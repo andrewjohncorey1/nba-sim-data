@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Download play-by-play, box scores and schedules from the sportsdataverse-data GitHub releases (hoopR; free; refreshed
-# daily, usually by ~5 AM ET).
+# daily, usually between 5 and 7:30 AM ET).
 # Usage (repo root): pipeline/fetch_data.sh <current_season_end_year> [also_previous=0]
 # Only the current season is re-downloaded on a normal run; earlier seasons' derived tables are committed in data/derived.
 set -euo pipefail
