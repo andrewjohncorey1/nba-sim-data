@@ -1,0 +1,24 @@
+SGP step 5, season ending 2025: copula between players in the same simulated game (single legs unchanged)
+D     rho +0.00  n  2492  joint LL 0.54515 (legs multiplied 0.54388)  vs legs -0.00127 [-0.00263,+0.00010]  gap pred +11.3 act +1.6  joint 0.2946 hit 0.2693
+D     rho -0.10  n  2492  joint LL 0.54403 (legs multiplied 0.54388)  vs rho 0 +0.00112 [-0.00013,+0.00237]  vs legs -0.00015 [-0.00064,+0.00039]  gap pred +6.2 act +1.6  joint 0.2817 hit 0.2693
+D     rho -0.20  n  2492  joint LL 0.54391 (legs multiplied 0.54388)  vs rho 0 +0.00124 [-0.00123,+0.00377]  vs legs -0.00003 [-0.00135,+0.00132]  gap pred +1.0 act +1.6  joint 0.2689 hit 0.2693
+D     rho -0.30  n  2492  joint LL 0.54490 (legs multiplied 0.54388)  vs rho 0 +0.00025 [-0.00355,+0.00401]  vs legs -0.00102 [-0.00362,+0.00159]  gap pred -4.1 act +1.6  joint 0.2561 hit 0.2693
+D     rho -0.40  n  2492  joint LL 0.54718 (legs multiplied 0.54388)  vs rho 0 -0.00203 [-0.00737,+0.00328]  vs legs -0.00330 [-0.00751,+0.00093]  gap pred -9.3 act +1.6  joint 0.2432 hit 0.2693
+D_all rho +0.00  n 25065  joint LL 0.54434 (legs multiplied 0.54341)  vs legs -0.00094 [-0.00135,-0.00051]  gap pred +8.8 act +1.3  joint 0.3000 hit 0.2750
+D_all rho -0.10  n 25065  joint LL 0.54314 (legs multiplied 0.54341)  vs rho 0 +0.00120 [+0.00058,+0.00179]  vs legs +0.00027 [-0.00004,+0.00055]  gap pred +3.5 act +1.3  joint 0.2869 hit 0.2750
+D_all rho -0.20  n 25065  joint LL 0.54298 (legs multiplied 0.54341)  vs rho 0 +0.00136 [+0.00006,+0.00272]  vs legs +0.00043 [-0.00051,+0.00135]  gap pred -1.8 act +1.3  joint 0.2738 hit 0.2750
+D_all rho -0.30  n 25065  joint LL 0.54398 (legs multiplied 0.54341)  vs rho 0 +0.00036 [-0.00150,+0.00230]  vs legs -0.00058 [-0.00225,+0.00098]  gap pred -7.1 act +1.3  joint 0.2606 hit 0.2750
+G     rho +0.00  n  2492  joint LL 0.39254 (legs multiplied 0.39186)  vs legs -0.00068 [-0.00382,+0.00240]  gap pred +10.5 act +3.0  joint 0.1643 hit 0.1453
+G     rho -0.10  n  2492  joint LL 0.39206 (legs multiplied 0.39186)  vs rho 0 +0.00048 [-0.00034,+0.00123]  vs legs -0.00021 [-0.00263,+0.00247]  gap pred +7.2 act +3.0  joint 0.1577 hit 0.1453
+G     rho -0.20  n  2492  joint LL 0.39203 (legs multiplied 0.39186)  vs rho 0 +0.00051 [-0.00110,+0.00199]  vs legs -0.00018 [-0.00235,+0.00207]  gap pred +3.8 act +3.0  joint 0.1511 hit 0.1453
+G     rho -0.30  n  2492  joint LL 0.39251 (legs multiplied 0.39186)  vs rho 0 +0.00003 [-0.00239,+0.00249]  vs legs -0.00065 [-0.00272,+0.00131]  gap pred +0.5 act +3.0  joint 0.1445 hit 0.1453
+G     rho -0.40  n  2492  joint LL 0.39360 (legs multiplied 0.39186)  vs rho 0 -0.00106 [-0.00453,+0.00230]  vs legs -0.00174 [-0.00410,+0.00063]  gap pred -2.9 act +3.0  joint 0.1378 hit 0.1453
+E     rho +0.00  n  1243  joint LL 0.57476 (legs multiplied 0.57525)  vs legs +0.00049 [-0.00071,+0.00167]  gap pred +5.4 act +5.2  joint 0.2781 hit 0.2727
+E     rho +0.05  n  1243  joint LL 0.57477 (legs multiplied 0.57525)  vs rho 0 -0.00001 [-0.00086,+0.00087]  vs legs +0.00048 [-0.00146,+0.00252]  gap pred +7.9 act +5.2  joint 0.2844 hit 0.2727
+E     rho +0.10  n  1243  joint LL 0.57501 (legs multiplied 0.57525)  vs rho 0 -0.00024 [-0.00194,+0.00142]  vs legs +0.00024 [-0.00257,+0.00312]  gap pred +10.5 act +5.2  joint 0.2908 hit 0.2727
+E     rho +0.15  n  1243  joint LL 0.57548 (legs multiplied 0.57525)  vs rho 0 -0.00071 [-0.00319,+0.00183]  vs legs -0.00022 [-0.00369,+0.00342]  gap pred +13.0 act +5.2  joint 0.2972 hit 0.2727
+E     rho +0.20  n  1243  joint LL 0.57617 (legs multiplied 0.57525)  vs rho 0 -0.00140 [-0.00470,+0.00201]  vs legs -0.00091 [-0.00520,+0.00350]  gap pred +15.6 act +5.2  joint 0.3036 hit 0.2727
+E_all rho +0.00  n  7809  joint LL 0.57156 (legs multiplied 0.57191)  vs legs +0.00035 [-0.00019,+0.00091]  gap pred +4.2 act +3.6  joint 0.2821 hit 0.2825
+E_all rho +0.05  n  7809  joint LL 0.57152 (legs multiplied 0.57191)  vs rho 0 +0.00005 [-0.00045,+0.00054]  vs legs +0.00039 [-0.00065,+0.00146]  gap pred +6.8 act +3.6  joint 0.2885 hit 0.2825
+E_all rho +0.10  n  7809  joint LL 0.57171 (legs multiplied 0.57191)  vs rho 0 -0.00014 [-0.00113,+0.00079]  vs legs +0.00021 [-0.00133,+0.00164]  gap pred +9.3 act +3.6  joint 0.2949 hit 0.2825
+E_all rho +0.15  n  7809  joint LL 0.57212 (legs multiplied 0.57191)  vs rho 0 -0.00056 [-0.00200,+0.00090]  vs legs -0.00021 [-0.00210,+0.00181]  gap pred +11.9 act +3.6  joint 0.3014 hit 0.2825

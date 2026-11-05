@@ -1,0 +1,16 @@
+SGP step 6, season ending 2026: joint price vs legs multiplied (positive = joint better; 95% interval by game)
+A star + team wins                         legs 2 n  2492  gain +0.00222 [+0.00016,+0.00432] PASS  avg joint 0.2660 legs mult 0.2454 actual 0.2652  thirds (joint/legs/actual) 0.150/0.126/0.144 | 0.256/0.232/0.268 | 0.393/0.378/0.384
+B star + game over                         legs 2 n  2492  gain +0.00108 [-0.00276,+0.00470]       avg joint 0.2753 legs mult 0.2428 actual 0.2632  thirds (joint/legs/actual) 0.206/0.173/0.224 | 0.268/0.232/0.251 | 0.352/0.323/0.315
+F star + team wins + game over             legs 3 n  2492  gain +0.00141 [-0.00173,+0.00466]       avg joint 0.1465 legs mult 0.1204 actual 0.1348  thirds (joint/legs/actual) 0.084/0.062/0.075 | 0.142/0.114/0.136 | 0.213/0.185/0.194
+D star + second                            legs 2 n  2492  gain -0.00088 [-0.00255,+0.00058]       avg joint 0.2471 legs mult 0.2603 actual 0.2480  thirds (joint/legs/actual) 0.118/0.132/0.136 | 0.207/0.222/0.239 | 0.416/0.428/0.369
+G star + second + team wins                legs 3 n  2492  gain +0.00180 [-0.00057,+0.00437]       avg joint 0.1378 legs mult 0.1273 actual 0.1400  thirds (joint/legs/actual) 0.064/0.053/0.078 | 0.118/0.108/0.130 | 0.232/0.221/0.212
+H star + second + game over                legs 3 n  2492  gain +0.00243 [-0.00065,+0.00561]       avg joint 0.1508 legs mult 0.1276 actual 0.1497  thirds (joint/legs/actual) 0.079/0.065/0.087 | 0.133/0.109/0.152 | 0.240/0.209/0.211
+J star + second + team wins + game over    legs 4 n  2492  gain +0.00451 [+0.00100,+0.00835] PASS  avg joint 0.0832 legs mult 0.0624 actual 0.0815  thirds (joint/legs/actual) 0.041/0.026/0.046 | 0.074/0.053/0.077 | 0.135/0.109/0.121
+E star + opp star                          legs 2 n  1242  gain +0.00104 [-0.00012,+0.00219]       avg joint 0.2577 legs mult 0.2504 actual 0.2681  thirds (joint/legs/actual) 0.151/0.144/0.198 | 0.234/0.225/0.244 | 0.388/0.381/0.362
+I star + opp star + game over              legs 3 n  1242  gain +0.00648 [+0.00027,+0.01295] PASS  avg joint 0.1586 legs mult 0.1228 actual 0.1570  thirds (joint/legs/actual) 0.100/0.071/0.123 | 0.148/0.111/0.142 | 0.227/0.187/0.205
+K star + opp star + team wins              legs 3 n  2484  gain +0.00064 [-0.00034,+0.00177]       avg joint 0.1289 legs mult 0.1252 actual 0.1341  thirds (joint/legs/actual) 0.060/0.054/0.079 | 0.110/0.106/0.114 | 0.217/0.215/0.210
+pooled by family (every combo of the family in a game counted, interval by game):
+  player + game legs   n   7476  gain +0.00157 [-0.00092,+0.00426]       avg joint 0.2293 legs mult 0.2029 actual 0.2211
+  teammates            n   9968  gain +0.00197 [+0.00010,+0.00377] PASS  avg joint 0.1547 legs mult 0.1444 actual 0.1548
+  opponents            n   4968  gain +0.00220 [+0.00011,+0.00418] PASS  avg joint 0.1685 legs mult 0.1559 actual 0.1733
+  all                  n  22412  gain +0.00189 [+0.00000,+0.00376] PASS  avg joint 0.1827 legs mult 0.1665 actual 0.1810

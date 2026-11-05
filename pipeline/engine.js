@@ -305,7 +305,7 @@ function playerProps(D,players,hist,minMin){
     if(cm0<(minMin??P.min_minutes??8)||!p.r)continue;
     const sh={pts:tm*p.r.pts*cm/R.pts,fg3m:p.r.fg3m*cm/R.fg3m,ast:p.r.ast*cm/R.fgm,reb:(P.rmult||1)*p.r.reb*cm/(P.reb_ref||R.reb)};   // rmult: share of simulated rebounds credited to players
     const H={pts:hist.pts,fg3m:hist.fg3m,ast:hist.fgm,reb:hist.reb};
-    const m={},line={},pr={};
+    const m={},line={},pr={};let sg=null;
     for(const k of mk){
       if(k==='pra'){const mt=hmean(hist.pts),mm=sh.pts*mt+sh.reb*hmean(hist.reb)+sh.ast*hmean(hist.fgm);
         m.pra=mm;line.pra=Math.floor(mm)+0.5;pr.pra=propOver(hist.pts,mm/mt,phiOf('pra',mm),line.pra);continue;}
@@ -319,14 +319,61 @@ function playerProps(D,players,hist,minMin){
           const nm=fb.reduce((a,qq,j)=>a+MC.share[j]*qq.reduce((x,y)=>x+y,0)/qq.length,0);
           let o=0,n=0;for(let j=0;j<3;j++){const hb=hist.mb[j];let w=0;for(const t in hb)w+=hb[t];if(!w)continue;
             o+=w*propOverPlays(hb,sh[k],fb[j].map(v=>v/nm),mixOf(p.r),line[k]);n+=w;}
-          pr[k]=n?o/n:0;}
-        else pr[k]=c.shape==='scoring plays'?propOverPlays(H[k],sh[k],fac,mixOf(p.r),line[k]):propOverMix(H[k],sh[k],fac,c.f,line[k]);}
+          pr[k]=n?o/n:0;if(k==='pts')sg={fr:mixOf(p.r),share:sh.pts,fb:fb.map(qq=>qq.map(v=>v/nm))};}
+        else{if(k==='pts'&&c.shape==='scoring plays')sg={fr:mixOf(p.r),share:sh.pts,fb:[fac,fac,fac]};pr[k]=c.shape==='scoring plays'?propOverPlays(H[k],sh[k],fac,mixOf(p.r),line[k]):propOverMix(H[k],sh[k],fac,c.f,line[k]);}}
       else pr[k]=propOver(H[k],sh[k],phiOf(k,m[k]),line[k]);
     }
-    out.push({pid:p.pid,name:p.name,pos:p.pos,min:cm,pp:p.pp??1,sh,m,line,p:pr});
+    out.push({pid:p.pid,name:p.name,pos:p.pos,min:cm,pp:p.pp??1,sh,m,line,p:pr,sg});
   }
   return out;
 }
 
+// ---------- same-game parlays (validation/sgp3.py, sgp5.py, sgp6.py) ----------
+// Every leg is priced inside each simulated game (H from simulateGame(..., keepRows=true)): team wins and game total
+// are 0/1 in that simulation; a player's P(points over | that simulated game) uses that simulation's team points and
+// final margin (his minutes depend on it). Two teammates in the same simulated game are joined by a Gaussian copula
+// (rho -0.2: they compete for shots and minutes; chosen on 2024-25, tested on 2025-26); players on opposite teams
+// are independent given the simulated game. Joint = average over simulations.
+const GLX=[-0.9951872199970213,-0.9747285559713095,-0.9382745520027328,-0.8864155270044011,-0.820001985973903,-0.7401241915785544,-0.6480936519369755,-0.5454214713888396,-0.4337935076260451,-0.3150426796961634,-0.1911188674736163,-0.06405689286260563,0.06405689286260563,0.1911188674736163,0.3150426796961634,0.4337935076260451,0.5454214713888396,0.6480936519369755,0.7401241915785544,0.820001985973903,0.8864155270044011,0.9382745520027328,0.9747285559713095,0.9951872199970213],GLW=[0.01234122979998869,0.02853138862893356,0.04427743881741941,0.05929858491543636,0.07334648141108016,0.0861901615319532,0.09761865210411393,0.10744427011596556,0.11550566805372552,0.1216704729278033,0.12583745634682825,0.12793819534675202,0.12793819534675202,0.12583745634682825,0.1216704729278033,0.11550566805372552,0.10744427011596556,0.09761865210411393,0.0861901615319532,0.07334648141108016,0.05929858491543636,0.04427743881741941,0.02853138862893356,0.01234122979998869];
+function nCdf(x){return x>=0?1-erfcHalf(x):erfcHalf(-x);}
+function erfcHalf(x){ // P(Z > x) for x >= 0 (Numerical Recipes erfc approximation, relative error < 1.2e-7)
+  const z=x/Math.SQRT2,t=1/(1+0.5*z);
+  const r=t*Math.exp(-z*z-1.26551223+t*(1.00002368+t*(0.37409196+t*(0.09678418+t*(-0.18628806+t*(0.27886807+t*(-1.13520398+t*(1.48851587+t*(-0.82215223+t*0.17087277)))))))));
+  return r/2;}
+function nInv(p){ // Acklam's inverse normal CDF (relative error < 1.2e-9) with one Newton step
+  const a=[-39.69683028665376,220.9460984245205,-275.9285104469687,138.3577518672690,-30.66479806614716,2.506628277459239],
+    b=[-54.47609879822406,161.5858368580409,-155.6989798598866,66.80131188771972,-13.28068155288572],
+    c=[-0.007784894002430293,-0.3223964580411365,-2.400758277161838,-2.549732539343734,4.374664141464968,2.938163982698783],
+    d=[0.007784695709041462,0.3224671290700398,2.445134137142996,3.754408661907416];
+  const pl=0.02425;let q,r,x;
+  if(p<pl){q=Math.sqrt(-2*Math.log(p));x=(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);}
+  else if(p<=1-pl){q=p-0.5;r=q*q;x=(((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/(((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);}
+  else{q=Math.sqrt(-2*Math.log(1-p));x=-(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);}
+  const e=nCdf(x)-p,u=e*Math.sqrt(2*Math.PI)*Math.exp(x*x/2);return x-u/(1+x*u/2);}
+function phi2(h,k,rho){ // P(X<h, Y<k), standard bivariate normal with correlation rho (Gauss-Legendre over the correlation)
+  let s=0;for(let i=0;i<GLX.length;i++){const r=0.5*rho*(GLX[i]+1),q=1-r*r;s+=0.5*rho*GLW[i]*Math.exp(-(h*h-2*r*h*k+k*k)/(2*q))/Math.sqrt(q);}
+  return nCdf(h)*nCdf(k)+s/(2*Math.PI);}
+function copulaBoth(pa,pb,rho){const c=v=>Math.min(1-1e-9,Math.max(1e-9,v));if(!rho)return pa*pb;return phi2(nInv(c(pa)),nInv(c(pb)),rho);}
+// P(points over line | each simulated game) for one player (an entry of playerProps(...) with .sg)
+function playerLegBySim(pl,H,side,line){
+  const N=H.n,rows=H.rows,out=new Float32Array(N),K=Math.floor(line),cache=new Map(),j=side==='h'?0:1;
+  for(let s=0;s<N;s++){const h=rows[2*s],a=rows[2*s+1],am=Math.abs(h-a),b=am>=20?2:am>=10?1:0,T=j?a:h,key=T*4+b;
+    let v=cache.get(key);if(v===undefined){const f=pl.sg.fb[b];let o=0;for(const x of f)o+=1-playsCdf(Math.max(1e-6,pl.sg.share*T*x),pl.sg.fr,K);v=o/f.length;cache.set(key,v);}
+    out[s]=v;}
+  return out;}
+// legs: [{t:'win',side}, {t:'over',line}, {t:'under',line}, {t:'pts',side,pl,line}]  (at most two players per team)
+function sgpPrice(H,legs,rho){
+  const N=H.n,rows=H.rows;rho=rho??-0.2;
+  const P={h:[],a:[]};for(const L of legs)if(L.t==='pts')P[L.side].push(L.v||(L.v=playerLegBySim(L.pl,H,L.side,L.line)));
+  let J=0;const marg=legs.map(()=>0);
+  for(let s=0;s<N;s++){const h=rows[2*s],a=rows[2*s+1];let w=1;
+    for(let i=0;i<legs.length;i++){const L=legs[i];let x;
+      if(L.t==='win')x=(L.side==='h'?h>a:a>h)?1:0;else if(L.t==='over')x=h+a>L.line?1:0;else if(L.t==='under')x=h+a<L.line?1:0;else x=L.v[s];
+      marg[i]+=x;if(L.t!=='pts')w*=x;}
+    if(w===0)continue;
+    for(const sd of ['h','a']){const v=P[sd];if(v.length===1)w*=v[0][s];else if(v.length===2)w*=copulaBoth(v[0][s],v[1][s],rho);}
+    J+=w;}
+  const pm=marg.map(m=>m/N);return {joint:J/N,legs:pm.reduce((x,y)=>x*y,1),each:pm};}
+
 if (typeof module !== 'undefined') module.exports = { mulberry32, simulateGame, playPoss, mlHome, coverHome, pushHome, overP, expTotal,
-  hmean, pGT, pEQ, compsFor, paceFor, expPPP, availShift, matchupInputs, teamAvail, gameShifts, shifted, closedForm, selfAnchor, anchorToMarket, coverNoPush, overNoPush, nbPmf, propOver, propMean, playerProps, mixOf, playsCdf, propOverPlays, propOverMix, SEG };
+  hmean, pGT, pEQ, compsFor, paceFor, expPPP, availShift, matchupInputs, teamAvail, gameShifts, shifted, closedForm, selfAnchor, anchorToMarket, coverNoPush, overNoPush, nbPmf, propOver, propMean, playerProps, mixOf, playsCdf, propOverPlays, propOverMix, SEG, playerLegBySim, sgpPrice, copulaBoth, phi2, nInv, nCdf };

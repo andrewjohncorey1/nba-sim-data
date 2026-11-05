@@ -23,6 +23,26 @@ const cols = ['snap_utc', 'model_ver', 'game_id', 'start', 'home', 'away', 'neut
   'pin_sp_line', 'pin_sp_home', 'model_sp_home', 'pin_tot_line', 'pin_over', 'model_over', 'pin_home',
   // anchored to Pinnacle (spread + total); moneyline from the anchored simulation is the independent check
   'anch_home', 'anch_exp_home', 'anch_exp_away', 'anch_h1_total', 'anch_q1_total', 'anch_miss', 'pin_snap'];
+const scols = ['snap_utc', 'game_id', 'start', 'anchored', 'combo', 'side', 'pids', 'lines', 'legs', 'joint', 'legs_mult'], srow = [];
+// fixed parlay shapes tested in validation/sgp6.py (A..K there)
+function sgpCombos(W, PR, totLine) {
+  const top = s => PR[s].filter(p => p.sg && p.line.pts != null).sort((x, y) => y.m.pts - x.m.pts);
+  const T = { h: top('h'), a: top('a') }, out = [];
+  const pl = (s, p) => ({ t: 'pts', side: s, pl: p, line: p.line.pts, pid: p.pid, name: p.name });
+  for (const s of ['h', 'a']) {
+    const o = s === 'h' ? 'a' : 'h', st = T[s][0], nd = T[s][1], op = T[o][0];
+    if (!st) continue;
+    const win = { t: 'win', side: s }, ov = { t: 'over', line: totLine };
+    const shapes = [['star + team wins', [pl(s, st), win]], ['star + game over', [pl(s, st), ov]], ['star + team wins + game over', [pl(s, st), win, ov]]];
+    if (nd) shapes.push(['star + teammate', [pl(s, st), pl(s, nd)]], ['star + teammate + team wins', [pl(s, st), pl(s, nd), win]],
+      ['star + teammate + game over', [pl(s, st), pl(s, nd), ov]], ['star + teammate + team wins + game over', [pl(s, st), pl(s, nd), win, ov]]);
+    if (op) { shapes.push(['star + opposing star + team wins', [pl(s, st), pl(o, op), win]]);
+      if (s === 'h') shapes.push(['both stars', [pl(s, st), pl(o, op)]], ['both stars + game over', [pl(s, st), pl(o, op), ov]]); }
+    for (const [k, legs] of shapes) { const r = E.sgpPrice(W, legs);
+      out.push({ k, side: s, legs: legs.map(l => ({ t: l.t, side: l.side, pid: l.pid, name: l.name, line: l.line })), joint: +r.joint.toFixed(4), lm: +r.legs.toFixed(4) }); }
+  }
+  return out;
+}
 const pcols = ['snap_utc', 'game_id', 'start', 'team', 'opp', 'pid', 'name', 'exp_min', 'anchored', 'stat', 'mean', 'line', 'p_over'];
 const rows = [], market = {}, prow = [];
 const P = D.props || {};
@@ -38,8 +58,8 @@ for (const g of SLATE.games) {
   if (od && (od.sp_home_line != null || od.tot_line != null)) {
     mk = E.anchorToMarket(T, G, od.sp_home_line ?? null, od.sp_home_fair ?? null, od.tot_line ?? null, od.over_fair ?? null, hashSeed(g.id) + 5, 6000);
   }
-  const H = E.simulateGame(T, G, N, seed);
-  const A = mk ? E.simulateGame(E.shifted(T, mk.s, mk.d), G, N, seed) : null;
+  const H = E.simulateGame(T, G, N, seed, true);          // keepRows: every simulated score, for same-game parlays (no extra random numbers)
+  const A = mk ? E.simulateGame(E.shifted(T, mk.s, mk.d), G, N, seed, true) : null;
   const fair = X => ({ sp: Math.round(-E.hmean(X.m) * 2) / 2, t: Math.round(E.expTotal(X) * 2) / 2 });
   market[g.id] = { fm: fair(H), pm: +E.mlHome(H).toFixed(4), ss: +sa.s.toFixed(5), sd: +sa.d.toFixed(5), shH: +sh.shH.toFixed(5), shA: +sh.shA.toFixed(5), ptsH: +sh.ptsH.toFixed(2), ptsA: +sh.ptsA.toFixed(2) };
   if (mk) Object.assign(market[g.id], { s: +mk.s.toFixed(5), d: +mk.d.toFixed(5), miss: mk.miss == null ? null : +mk.miss.toFixed(4),
@@ -47,13 +67,21 @@ for (const g of SLATE.games) {
   if (new Date(g.start).getTime() <= now) continue;          // only genuinely pre-game numbers are logged
   const W = A || H;
   // player props from the simulation the app shows
+  const PR = {};
   for (const [side, team, opp, av] of [['h', g.home, g.away, sh.h], ['a', g.away, g.home, sh.a]]) {
     const hist = { pts: W[side], fgm: W.stat[side].fgm, fg3m: W.stat[side].fg3m, reb: W.stat[side].reb, mb: W.mb[side] };
-    for (const pr of E.playerProps(D, av.players, hist)) {
+    PR[side] = E.playerProps(D, av.players, hist);
+    for (const pr of PR[side]) {
       for (const k of Object.keys(pr.m)) prow.push([new Date(now).toISOString(), g.id, g.start, team, opp, pr.pid, pr.name, f2(pr.min), A ? 1 : 0,
         k, f2(pr.m[k]), pr.line[k], f4(pr.p[k])]);
     }
   }
+  // same-game parlays at fixed shapes (Correlations tab; scored in the Track record): star = team's top projected
+  // scorer among the props players, second = next; total at Pinnacle's line when anchored, else the fair line
+  const SG = sgpCombos(W, PR, A && od && od.tot_line != null ? od.tot_line : Math.floor(E.expTotal(W)) + 0.5);
+  market[g.id].sgp = SG;
+  for (const c of SG) srow.push([new Date(now).toISOString(), g.id, g.start, A ? 1 : 0, c.k, c.side, c.legs.map(l => l.pid ?? '').join('|'),
+    c.legs.map(l => l.line ?? '').join('|'), c.legs.map(l => l.t).join('|'), f4(c.joint), f4(c.lm)]);
   const spl = half(-E.hmean(H.m)), ttl = half(E.expTotal(H));
   rows.push([new Date(now).toISOString(), ver, g.id, g.start, g.home, g.away, g.neutral, (ha.out || []).length, (aa.out || []).length,
     f2(sh.ptsH), f2(sh.ptsA), g.rest ? g.rest.b2b_h : '', g.rest ? g.rest.b2b_a : '',
@@ -68,6 +96,7 @@ for (const g of SLATE.games) {
     mk && mk.miss != null ? f4(mk.miss) : '', od ? od.snap : '']);
 }
 fs.mkdirSync('data/predictions', { recursive: true });
+if (srow.length) fs.writeFileSync(`data/predictions/sgp_${stamp}.csv`, [scols, ...srow].map(r => r.map(csv).join(',')).join('\n') + '\n');
 if (rows.length) fs.writeFileSync(`data/predictions/${stamp}.csv`, [cols, ...rows].map(r => r.map(csv).join(',')).join('\n') + '\n');
 if (prow.length) fs.writeFileSync(`data/predictions/players_${stamp}.csv`, [pcols, ...prow].map(r => r.map(csv).join(',')).join('\n') + '\n');
 fs.writeFileSync('build/market.json', JSON.stringify(market));

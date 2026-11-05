@@ -106,6 +106,19 @@ tr.mark td{background:var(--soft);font-weight:500}
 .plist label:hover{background:var(--soft)}
 .plist .m{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
 .plist label.isout span:nth-child(2){text-decoration:line-through;color:var(--muted)}
+/* same-game parlay builder */
+.sgpctl{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:end;margin:6px 0 10px}
+.sgpctl .field input,.sgpctl .field select{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink)}
+.sgpctl input.ln{width:5.2em;font-family:var(--mono)}
+.add{border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:4px;padding:6px 10px;cursor:pointer;font-weight:600}
+.add:disabled{opacity:.45;cursor:not-allowed}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px;min-height:1.8em}
+.chip{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:3px 4px 3px 10px;font-size:.86rem;background:var(--soft)}
+.chip button{border:0;background:none;cursor:pointer;color:var(--muted);font-size:1rem;line-height:1;padding:0 4px}
+.sgpout{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5em,1fr));gap:10px}
+.sgpout .k{font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.sgpout .v{font-family:var(--display);font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums}
+.sgpout .s{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
 @media (max-width:720px){.grid,.roster{grid-template-columns:1fr}.controls{grid-template-columns:1fr}
   .colhd,.grow{grid-template-columns:3.8em minmax(0,1fr) 4em 4.6em 1em}.colhd span:nth-child(5),.grow .c.tot{display:none}
   .board{grid-template-columns:minmax(0,1fr) auto auto auto}.board .hide-s{display:none}}
@@ -120,6 +133,7 @@ tr.mark td{background:var(--soft);font-weight:500}
   <nav class="tabs" role="tablist">
     <button type="button" role="tab" id="tabToday" aria-selected="true" aria-controls="todayView">Today's games</button>
     <button type="button" role="tab" id="tabSim" aria-selected="false" aria-controls="simView">Simulator</button>
+    <button type="button" role="tab" id="tabCor" aria-selected="false" aria-controls="corView">Correlations</button>
     <button type="button" role="tab" id="tabRec" aria-selected="false" aria-controls="recView">Track record</button>
   </nav>
 
@@ -150,6 +164,7 @@ tr.mark td{background:var(--soft);font-weight:500}
     <div id="simOut" class="view"></div>
   </section>
 
+  <section class="view" id="corView" role="tabpanel" aria-labelledby="tabCor" hidden></section>
   <section class="view" id="recView" role="tabpanel" aria-labelledby="tabRec" hidden></section>
   <p class="foot" id="foot"></p>
 </div>
@@ -213,7 +228,7 @@ function gameCalc(g,N,mode,outH,outA,neutral){
   const sa=(mk&&mk.ss!=null&&outH==null)?{s:mk.ss,d:mk.sd}:selfAnchor(T,G,hashSeed(g.id||(g.home+g.away))+7);
   T=shifted(T,sa.s,sa.d);
   if(anch)T=shifted(T,mk.s,mk.d);
-  const H=simulateGame(T,G,N,hashSeed(g.id||(g.home+g.away))+2);
+  const H=simulateGame(T,G,N,hashSeed(g.id||(g.home+g.away))+2,true);   // keepRows: every simulated score, for the parlay builder
   return {H,T,sh,anch};}
 function renderDetail(el,g,c){
   const H=c.H,home=g.home,away=g.away,od=g.odds||{},ph=mlHome(H);
@@ -237,7 +252,69 @@ function renderDetail(el,g,c){
   <section class="panel"><h2>Player props</h2><p class="sub">Chance of going over the line shown, then the fair price; lines are each player's simulated average rounded down to the half point. Props assume the player plays (they are void if he doesn't). Shown for players projected for 18+ minutes, and only for markets that passed the held-out test (points, rebounds and threes; assists and points+rebounds+assists are still off). Each price mixes over the player's own minutes distribution: a stable role with occasional short nights.</p>
     ${(DATA.props.markets||[]).length?propsHtml(DATA,c.sh.a.players,{pts:H.a,fgm:H.stat.a.fgm,fg3m:H.stat.a.fg3m,reb:H.stat.a.reb,mb:H.mb.a},{t:away,c:'--b'})+
       propsHtml(DATA,c.sh.h.players,{pts:H.h,fgm:H.stat.h.fgm,fg3m:H.stat.h.fg3m,reb:H.stat.h.reb,mb:H.mb.h},{t:home,c:'--a'}):`<p class="warn">${DATA.props.paused||'Player props are paused.'}</p>`}</section>
-  <section class="panel how"><h2>How this number was built</h2>${howHtml(g,c,H)}</section>`;}
+  <section class="panel" data-sgp="1"></section>
+  <section class="panel how"><h2>How this number was built</h2>${howHtml(g,c,H)}</section>`;
+  const sp=el.querySelector('[data-sgp]');if((DATA.props.markets||[]).includes('pts'))sgpBuilder(sp,g,c,pinT??tl);else sp.remove();}
+
+/* ---------- same-game parlay builder ---------- */
+// Every leg is priced inside each of the simulated games above (engine sgpPrice): team wins and the game total are
+// yes/no in each simulation; a player's chance of going over uses that simulation's team points and final margin
+// (his minutes depend on the margin); two teammates compete for shots (copula rho -0.2). Legs allowed are the ones
+// tested together on 2025-26 (validation/sgp6.py): player points overs (up to two per team), team wins, game total over.
+function sgpBuilder(el,g,c,tot0){
+  const H=c.H,home=g.home,away=g.away;
+  const mkh=s=>({pts:H[s],fgm:H.stat[s].fgm,fg3m:H.stat[s].fg3m,reb:H.stat[s].reb,mb:H.mb[s]});
+  const PL={h:playerProps(DATA,c.sh.h.players,mkh('h'),10).filter(p=>p.sg),a:playerProps(DATA,c.sh.a.players,mkh('a'),10).filter(p=>p.sg)};
+  for(const s of ['h','a'])PL[s].sort((x,y)=>y.m.pts-x.m.pts);
+  const legs=[];let price='';
+  const team=s=>s==='h'?home:away;
+  const lab=L=>L.t==='win'?`${NICK(team(L.side))} win`:L.t==='over'?`Game over ${L.line.toFixed(1)}`:`${L.pl.name} over ${L.line.toFixed(1)} pts`;
+  const opts=['a','h'].map(s=>`<optgroup label="${NAME(team(s))}">${PL[s].map((p,i)=>`<option value="${s}:${i}">${p.name} (${p.line.pts.toFixed(1)})</option>`).join('')}</optgroup>`).join('');
+  el.innerHTML=`<h2>Same-game parlay</h2><p class="sub">Fair odds for legs together, priced inside each of the ${H.n.toLocaleString()} simulated games: when a team wins or the game goes over, its scorers' chances move with it; two teammates compete for the same shots and minutes. Legs offered are the ones tested together on last season's games (2025-26, untouched while building the model): player points overs (up to two per team), team to win, game total over; up to four legs. Props legs assume the player plays. Type an offered price to see the expected return at that price.</p>
+    <div class="sgpctl">
+      <div class="field"><span class="lbl">Team wins</span><div class="seg"><button type="button" data-w="a">${NICK(away)}</button><button type="button" data-w="h">${NICK(home)}</button></div></div>
+      <div class="field"><label>Game total over</label><span><input class="ln" type="number" step="0.5" value="${tot0}" data-tl> <button type="button" class="add" data-addt>Add</button></span></div>
+      <div class="field"><label>Player points over</label><span><select data-ps>${opts}</select> <input class="ln" type="number" step="0.5" data-pl> <button type="button" class="add" data-addp>Add</button></span></div>
+    </div>
+    <div class="chips" data-chips></div><div data-res></div>`;
+  const $q=x=>el.querySelector(x),ps=$q('[data-ps]'),pl=$q('[data-pl]');
+  const cur=()=>{const [s,i]=ps.value.split(':');return {s,p:PL[s][+i]};};
+  const syncLine=()=>{if(ps.value)pl.value=cur().p.line.pts.toFixed(1);};ps.onchange=syncLine;syncLine();
+  const full=()=>legs.length>=4;
+  const draw=()=>{
+    $q('[data-chips]').innerHTML=legs.length?legs.map((L,i)=>`<span class="chip">${lab(L)}<button type="button" aria-label="Remove" data-rm="${i}">×</button></span>`).join(''):'<span class="sub">Add two or more legs.</span>';
+    el.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{legs.splice(+b.dataset.rm,1);draw();});
+    el.querySelectorAll('[data-w]').forEach(b=>{const on=legs.some(L=>L.t==='win'&&L.side===b.dataset.w);b.setAttribute('aria-pressed',String(on));});
+    $q('[data-addt]').disabled=full()||legs.some(L=>L.t==='over');
+    const ok=ps.value&&!full()&&legs.filter(L=>L.t==='pts'&&L.side===cur().s).length<2&&!legs.some(L=>L.t==='pts'&&L.pl===cur().p);
+    $q('[data-addp]').disabled=!ok;
+    const R=$q('[data-res]');if(legs.length<2){R.innerHTML='';return;}
+    const r=sgpPrice(H,legs.map(L=>({...L})));
+    const dec=price===''?null:(+price>0?1+price/100:+price<0?1+100/Math.abs(price):null);
+    const ev=dec?r.joint*dec-1:null;
+    R.innerHTML=`<div class="sgpout">
+      <div><div class="k">Chance all hit</div><div class="v">${pct(r.joint)}</div><div class="s">fair ${american(r.joint)}</div></div>
+      <div><div class="k">Legs multiplied</div><div class="v">${pct(r.legs)}</div><div class="s">fair ${american(r.legs)}</div></div>
+      <div><div class="k">Correlation</div><div class="v">×${(r.joint/r.legs).toFixed(2)}</div><div class="s">together vs separately</div></div>
+      <div><div class="k">Offered price</div><input class="ln" style="width:6.5em" type="text" inputmode="numeric" placeholder="+450" value="${price===''?'':(price>0?'+'+price:price)}" data-px><div class="s">${dec?`expected return ${ev>=0?'+':'−'}${Math.abs(100*ev).toFixed(1)}% · break-even ${pct(1/dec)}`:'American odds'}</div></div></div>
+      <p class="sub" style="margin:8px 0 0">Each leg alone: ${legs.map((L,i)=>`${lab(L)} ${pct(r.each[i])}`).join(' · ')}.</p>`;
+    const px=$q('[data-px]');px.onchange=()=>{const v=px.value.replace(/[^0-9+\-−]/g,'').replace('−','-');price=v===''||isNaN(+v)?'':+v;draw();};};
+  el.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{const s=b.dataset.w,i=legs.findIndex(L=>L.t==='win');
+    if(i>=0&&legs[i].side===s)legs.splice(i,1);else if(i>=0)legs[i]={t:'win',side:s};else if(!full())legs.push({t:'win',side:s});draw();});
+  $q('[data-addt]').onclick=()=>{const v=+$q('[data-tl]').value;if(v>0){legs.push({t:'over',line:v});draw();}};
+  $q('[data-addp]').onclick=()=>{const {s,p}=cur(),v=+pl.value;if(v>0){legs.push({t:'pts',side:s,pl:p,line:v});draw();}};
+  draw();}
+
+/* ---------- correlations tab ---------- */
+function renderCor(){
+  const el=$('corView');const G_=SLATE.games.filter(g=>g.mkt&&g.mkt.sgp&&g.mkt.sgp.length);
+  const head=`<section class="panel"><h2>Correlations</h2><p class="sub">Fair odds for common same-game parlays on today's slate, from the same simulations as the game pages (Pinnacle-anchored where Pinnacle prices the game). Star = the team's top projected scorer, teammate = the next one; player lines are the props lines (simulated average rounded down to the half point); game total at Pinnacle's line when anchored, otherwise the fair line. "Legs multiplied" is what the same legs cost if they were unrelated. These shapes are logged before tip-off and scored in the Track record. Build any other combination from a game's page.</p></section>`;
+  if(!G_.length){el.innerHTML=head+'<section class="panel"><p>No parlay prices on this slate yet.</p></section>';return;}
+  const legTxt=(L,g)=>L.t==='win'?`${NICK(L.side==='h'?g.home:g.away)} win`:L.t==='over'?`over ${(+L.line).toFixed(1)}`:`${L.name} o${(+L.line).toFixed(1)}`;
+  el.innerHTML=head+G_.map(g=>`<section class="panel"><h3>${NAME(g.away)} at ${NAME(g.home)} · ${tFmt.format(new Date(g.start))} ET</h3><div class="tblwrap"><table>
+    <tr><th>Parlay</th><th>Legs</th><th>Chance</th><th>Fair</th><th>Legs multiplied</th><th>Correlation</th></tr>
+    ${g.mkt.sgp.map(c=>`<tr><td>${c.k}</td><td>${c.legs.map(L=>legTxt(L,g)).join(' + ')}</td><td>${pct(c.joint)}</td><td>${american(c.joint)}</td><td>${american(c.lm)}</td><td>×${(c.joint/c.lm).toFixed(2)}</td></tr>`).join('')}
+    </table></div></section>`).join('');}
 function howHtml(g,c,H){
   const od=g.odds||{},sh=c.sh,p=[];
   p.push(`<p>Team strength comes from every possession of recent games (turnovers, shot mix at the rim, mid-range and three, make rates, free-throw trips, offensive rebounds and pace), weighted toward recent games, each side against the opponent's defense, with home court.</p>`);
@@ -314,9 +391,12 @@ function renderRecord(){
     ${R.ml_pin&&R.ml_pin.gap!=null?`<p class="sub" style="margin-top:8px">Anchored moneyline vs Pinnacle's own (not used in the fit): average gap ${(100*R.ml_pin.gap).toFixed(1)} points, log loss ${R.ml_pin.anch==null?'—':R.ml_pin.anch.toFixed(4)}.</p>`:''}`:'<p>No finished games yet. Results are scored on the morning update after each game.</p>'}</section>
     ${R.n_scored?`<div class="grid"><section class="panel"><h2>Calibration</h2><p class="sub">Model's home win probability, binned</p><div class="tblwrap"><table><tr><th>Home win %</th><th>Games</th><th>Predicted</th><th>Won</th></tr>${cal}</table></div></section>
     <section class="panel"><h2>Game shape</h2><div class="tblwrap"><table><tr><th>Measure</th><th>Predicted</th><th>Actual</th></tr>${shape}</table></div></section></div>
-    ${playersRec(R.players)}
-    <section class="panel"><h2>Recent games</h2><div class="tblwrap"><table><tr><th>Date</th><th>Game</th><th>Model home</th><th>Pinnacle home</th><th>Score</th><th>Total model / Pinnacle / actual</th></tr>${rows}</table></div></section>`:playersRec(R.players)}
+    ${playersRec(R.players)}${sgpRec(R.sgp)}
+    <section class="panel"><h2>Recent games</h2><div class="tblwrap"><table><tr><th>Date</th><th>Game</th><th>Model home</th><th>Pinnacle home</th><th>Score</th><th>Total model / Pinnacle / actual</th></tr>${rows}</table></div></section>`:playersRec(R.players)+sgpRec(R.sgp)}
     ${backtest()}`;}
+function sgpRec(S){if(!S||!S.rows)return '<section class="panel"><h2>Same-game parlays</h2><p class="sub">The fixed parlay shapes on the Correlations tab are logged before tip-off from Nov 5, 2026 and scored here once games finish.</p></section>';
+  return `<section class="panel"><h2>Same-game parlays</h2><p class="sub">${S.n} parlays scored (shapes on the Correlations tab, last pre-game price; a parlay with a player who did not play is void) · log loss of the model's joint chance vs the same legs multiplied, lower is better</p><div class="tblwrap"><table><tr><th>Shape</th><th>Parlays</th><th>Joint</th><th>Legs multiplied</th><th>Predicted joint / legs multiplied / actual</th></tr>
+  ${S.rows.map(m=>`<tr><td>${m.k}</td><td>${m.n}</td><td>${m.joint.toFixed(4)}</td><td>${m.legs.toFixed(4)}</td><td>${pct(m.pred)} / ${pct(m.pred_legs)} / ${pct(m.act)}</td></tr>`).join('')}</table></div></section>`;}
 function playersRec(P){if(!P||!P.markets||!P.markets.length)return '';
   return `<section class="panel"><h2>Player props</h2><p class="sub">${P.n} player lines scored · the model's own line · baseline: the player's season-to-date average priced the same way</p><div class="tblwrap"><table><tr><th>Market</th><th>Lines</th><th>Model</th><th>Baseline</th><th>Predicted / actual over</th></tr>
   ${P.markets.map(m=>`<tr><td>${m.k}</td><td>${m.n}</td><td>${m.model.toFixed(4)}</td><td>${m.base.toFixed(4)}</td><td>${pct(m.pred)} / ${pct(m.act)}</td></tr>`).join('')}</table></div></section>`;}
@@ -324,9 +404,9 @@ function backtest(){const B=DATA.tests;if(!B||!B.tables)return '';
   return B.tables.map(T=>`<section class="panel"><h2>${T.title}</h2><p class="sub">${T.note}</p><div class="tblwrap"><table><tr>${T.cols.map(c=>`<th>${c}</th>`).join('')}</tr>${T.rows.map(r=>`<tr>${r.map(x=>`<td>${x}</td>`).join('')}</tr>`).join('')}</table></div></section>`).join('');}
 
 /* ---------- wiring ---------- */
-function showTab(t){for(const [tab,view,name] of [['tabToday','todayView','today'],['tabSim','simView','sim'],['tabRec','recView','rec']]){$(tab).setAttribute('aria-selected',String(t===name));$(view).hidden=t!==name;}
+function showTab(t){for(const [tab,view,name] of [['tabToday','todayView','today'],['tabSim','simView','sim'],['tabCor','corView','cor'],['tabRec','recView','rec']]){$(tab).setAttribute('aria-selected',String(t===name));$(view).hidden=t!==name;}
   try{localStorage.setItem('nbaTab',t);}catch(e){}}
-$('tabToday').onclick=()=>showTab('today');$('tabSim').onclick=()=>showTab('sim');$('tabRec').onclick=()=>showTab('rec');
+$('tabToday').onclick=()=>showTab('today');$('tabSim').onclick=()=>showTab('sim');$('tabRec').onclick=()=>showTab('rec');$('tabCor').onclick=()=>{renderCor();showTab('cor');};
 $('slate').addEventListener('click',e=>{const b=e.target.closest('.grow');if(b)toggle(b);});
 $('modeSeg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;MODE=b.dataset.v;setSeg($('modeSeg'),MODE);renderSlate();});
 $('selHome').onchange=e=>{SIM.home=e.target.value;resetOut();};$('selAway').onchange=e=>{SIM.away=e.target.value;resetOut();};

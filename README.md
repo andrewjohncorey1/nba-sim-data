@@ -296,6 +296,60 @@ shifted by the same +1 point per team (see the totals offset below).
   Recalibrated on 2024-25 (2.15 -> 0.21); 2025-26 log loss over fixed totals 200.5-250.5: 0.48404 -> 0.48163.
   Pinnacle-anchored games are unaffected (they take the market total).
 
+### SGP step 5: teammates compete, opposing stars (Nov 5, 2026; teammate copula kept)
+`validation/sgp5.py` (logs `sgp5_scan_2025.*`, `sgp5_test_2026.*`). Within one simulated game the model treated two
+players as independent once the team's points and margin were set, so two teammates' overs were priced far too
+correlated (gap +10 vs +2 to +3 actual): if one scores more of a fixed team total, the other scores less. Two players
+in the same simulated game are now joined by a Gaussian copula (single legs stay exactly as they were).
+- Chosen on 2024-25 from 0 / -0.1 / -0.2 / -0.3 / -0.4 for teammates: -0.2 (every teammate pair projected 10+: joint
+  log loss 0.54434 -> 0.54298; predicted 30.0% -> 27.4%, actual 27.5%). Opposing stars: no copula (0 / 0.05 / 0.1 /
+  0.15 / 0.2 scanned; 0 best: their gap was already right once the margin-linked minutes were in, +5.4 vs +5.2).
+- 2025-26 held out, teammates at -0.2: every pair 0.52575 -> 0.52487 (+0.00088, -0.00035 to +0.00223), predicted
+  28.4% -> 25.8%, actual 26.2%; gap +9.5 -> -0.9 (actual +1.7). Top two only: price level 27.3% -> 24.7% (actual
+  24.8%), log loss unchanged. The uncorrected model was significantly worse than legs multiplied on teammate pairs
+  (-0.00086, -0.00124 to -0.00045); with the copula it ties legs multiplied (+0.00002). Kept.
+- Opposing stars 2025-26 with no copula: every cross pair of 15+ scorers gap +4.5 vs +4.0 actual (the top-two-only
+  +9.8 actual is one season's noise: 2024-25 +5.2). Nothing to fix.
+- Assists and PRA stay off: the copula does not touch single legs.
+
+### SGP step 6: full joint test, 2 to 4 legs (Nov 5, 2026)
+`validation/sgp6.py` (logs `sgp6_2025.*`, `sgp6_2026.*`): everything kept above together (shared pace factor,
+margin-linked minutes, scoring plays, teammate copula), each combo against its own legs multiplied.
+
+| 2025-26 (held out) | Legs | Joint vs legs multiplied (95% by game) | Avg joint / legs mult / actual |
+|---|---|---|---|
+| star + team wins | 2 | +0.00222 (+0.00016 to +0.00432) | 26.6% / 24.5% / 26.5% |
+| star + game over | 2 | +0.00108 (-0.00276 to +0.00470) | 27.5% / 24.3% / 26.3% |
+| star + team wins + game over | 3 | +0.00141 (-0.00173 to +0.00466) | 14.7% / 12.0% / 13.5% |
+| star + teammate | 2 | -0.00088 (-0.00255 to +0.00058) | 24.7% / 26.0% / 24.8% |
+| star + teammate + team wins | 3 | +0.00180 (-0.00057 to +0.00437) | 13.8% / 12.7% / 14.0% |
+| star + teammate + game over | 3 | +0.00243 (-0.00065 to +0.00561) | 15.1% / 12.8% / 15.0% |
+| star + teammate + team wins + game over | 4 | +0.00451 (+0.00100 to +0.00835) | 8.3% / 6.2% / 8.2% |
+| both stars | 2 | +0.00104 (-0.00012 to +0.00219) | 25.8% / 25.0% / 26.8% |
+| both stars + game over | 3 | +0.00648 (+0.00027 to +0.01295) | 15.9% / 12.3% / 15.7% |
+| star + opposing star + team wins | 3 | +0.00064 (-0.00034 to +0.00177) | 12.9% / 12.5% / 13.4% |
+| **All shapes pooled** | | **+0.00189 (+0.00000 to +0.00376)** | 18.3% / 16.7% / 18.1% |
+
+- 2024-25 pooled +0.00190 (+0.00003 to +0.00380). Better than legs multiplied in 9 of 10 shapes in 2025-26 and 8 of
+  10 in 2024-25; the only loss is star + teammate, where the right answer is close to independent anyway.
+- One combo at a time the intervals are wide (a season gives ~1,250 games). The clearer evidence is the price level:
+  legs multiplied underprices every positively linked parlay by 1 to 3.6 points (a 4-leg 6.2% vs 8.2% actual), the
+  joint is within about 1 point everywhere (star + game over 1.2 high, from the totals leg itself: model-only totals
+  went over 48% at their fair line in 2025-26).
+- Verdict: the per-simulation joint goes live for these leg types (player points overs, up to two per team; team
+  wins; game total over; 2 to 4 legs). Unders, spreads, rebounds/threes legs and 3+ players per team are not tested
+  yet and are not offered.
+
+### SGP step 7: parlay builder, Correlations tab, track record (Nov 5, 2026; live)
+- Engine `sgpPrice(H, legs)` / `playerLegBySim`: H from `simulateGame(..., keepRows=true)` (no extra random numbers);
+  matches the Python test code to 1e-9 on the same simulated scores.
+- Each game page: a same-game parlay builder (pick legs, see the chance all hit, fair odds, legs multiplied, the
+  correlation ratio, and the expected return at a price you type).
+- Correlations tab: the fixed shapes above for every game on the slate (fair odds and legs multiplied), from the same
+  simulations as the game pages.
+- `pipeline/predict.js` logs those shapes before tip-off (`data/predictions/sgp_<stamp>.csv`); `pipeline/score.py`
+  scores them (joint vs legs multiplied, a parlay with a player who did not play is void) into the Track record.
+
 ## Layout
 - `pipeline/fetch_data.sh`: play-by-play, box scores and schedules from the sportsdataverse-data GitHub releases
   (refreshed daily, usually between 5 and 7:30 AM ET). Raw files are not committed.

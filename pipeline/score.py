@@ -6,6 +6,8 @@ Score logged pre-game predictions against results -> build/scorecard.json
 - Model vs Pinnacle vs baseline: moneyline, spread at Pinnacle's line and total at Pinnacle's line (pushes dropped).
   Baselines: the home win rate of the previous three seasons; for spreads and totals, the share of games in those
   seasons that went over / covered that line. The anchored moneyline is an independent check against Pinnacle's.
+- Same-game parlays (fixed shapes, data/predictions/sgp_*.csv): the model's joint chance vs its own legs multiplied
+  together; a parlay with a player who did not play is void (dropped), as books void them.
 - Player props: the model's chance of going over its own line vs a baseline that prices the same line from the
   player's season-to-date average with the same negative-binomial spread.
 """
@@ -15,7 +17,7 @@ from scipy.stats import nbinom
 
 Y = int(sys.argv[1])
 S = json.load(open('pipeline/settings.json'))
-files = sorted(f for f in glob.glob('data/predictions/*.csv') if not os.path.basename(f).startswith('players_'))
+files = sorted(f for f in glob.glob('data/predictions/*.csv') if not os.path.basename(f).startswith(('players_', 'sgp_')))
 out = {'generated': pd.Timestamp.now('UTC').strftime('%Y-%m-%dT%H:%M:%SZ'), 'n_scored': 0, 'n_pending': 0}
 
 
@@ -98,9 +100,41 @@ if pf:
         res.append({'k': S['props'].get('labels', {}).get(k, k), 'n': int(len(x)), 'model': ll(y, x.p_over), 'base': ll(y, base),
                     'pred': float(x.p_over.mean()), 'act': float(y.mean())})
     out['players'] = {'n': int(sum(r['n'] for r in res)), 'n_logged': int(len(pp)), 'markets': res}
+# ---------- same-game parlays ----------
+sf = sorted(glob.glob('data/predictions/sgp_*.csv'))
+if sf:
+    sg = pd.concat([pd.read_csv(f, dtype={'game_id': str, 'pids': str, 'lines': str}) for f in sf], ignore_index=True)
+    sg['snap'] = pd.to_datetime(sg.snap_utc, utc=True, format='ISO8601'); sg['st'] = pd.to_datetime(sg.start, utc=True, format='ISO8601')
+    sg = sg[sg.snap < sg.st].sort_values('snap').drop_duplicates(['game_id', 'combo', 'side'], keep='last')
+    gm = games.set_index('game_id')
+    pa = pd.read_parquet(f'data/derived/players_{Y}.parquet'); pa = pa[pa['min'] > 0]
+    pts = {(str(g), int(p)): v for g, p, v in zip(pa.game_id, pa.pid, pa.pts)}
+    rows = []
+    for x in sg.itertuples():
+        if x.game_id not in gm.index or not bool(gm.loc[x.game_id, 'done']): continue
+        g = gm.loc[x.game_id]; hp, ap = g.home_pts, g.away_pts
+        legs, pids, lines = x.legs.split('|'), str(x.pids).split('|'), str(x.lines).split('|')
+        ok, hit = True, True
+        for t, pid, L in zip(legs, pids, lines):
+            if t == 'win': hit &= (hp > ap) if x.side == 'h' else (ap > hp)
+            elif t == 'over': hit &= (hp + ap) > float(L)
+            elif t == 'pts':
+                v = pts.get((x.game_id, int(float(pid))))
+                if v is None: ok = False; break
+                hit &= v > float(L)
+        if ok: rows.append((x.combo, len(legs), int(hit), x.joint, x.legs_mult))
+    if rows:
+        R_ = pd.DataFrame(rows, columns=['combo', 'n_legs', 'y', 'joint', 'lm'])
+        res = [{'k': 'All shapes', 'n': int(len(R_)), 'joint': ll(R_.y, R_.joint), 'legs': ll(R_.y, R_.lm), 'pred': float(R_.joint.mean()),
+                'pred_legs': float(R_.lm.mean()), 'act': float(R_.y.mean())}]
+        for k, x in R_.groupby('combo', sort=False):
+            res.append({'k': k, 'n': int(len(x)), 'joint': ll(x.y, x.joint), 'legs': ll(x.y, x.lm), 'pred': float(x.joint.mean()),
+                        'pred_legs': float(x.lm.mean()), 'act': float(x.y.mean())})
+        out['sgp'] = {'n': int(len(R_)), 'rows': res}
 json.dump(out, open('build/scorecard.json', 'w'))
 msg = f'SCORE {out["n_scored"]} scored, {out["n_pending"]} pending'
 if out.get('ml'): msg += f'; moneyline log loss model {out["ml"]["model"]:.4f} vs baseline {out["ml"]["base"]:.4f}'
 if out.get('ml_pin'): msg += f' (Pinnacle-priced: model {out["ml_pin"]["model"]:.4f}, Pinnacle {out["ml_pin"]["pin"]:.4f})'
 if out.get('players'): msg += f'; {out["players"]["n"]} player lines scored'
+if out.get('sgp'): msg += f'; {out["sgp"]["n"]} parlays scored'
 print(msg)

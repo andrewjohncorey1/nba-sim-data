@@ -1,0 +1,11 @@
+SGP step 5, season ending 2026: copula between players in the same simulated game (single legs unchanged)
+D     rho +0.00  n  2492  joint LL 0.53420 (legs multiplied 0.53337)  vs legs -0.00083 [-0.00210,+0.00045]  gap pred +10.5 act +2.9  joint 0.2726 hit 0.2480
+D     rho -0.20  n  2492  joint LL 0.53424 (legs multiplied 0.53337)  vs rho 0 -0.00004 [-0.00266,+0.00249]  vs legs -0.00088 [-0.00242,+0.00072]  gap pred +0.2 act +2.9  joint 0.2471 hit 0.2480
+D_all rho +0.00  n 26624  joint LL 0.52575 (legs multiplied 0.52489)  vs legs -0.00086 [-0.00124,-0.00045]  gap pred +9.5 act +1.7  joint 0.2839 hit 0.2618
+D_all rho -0.20  n 26624  joint LL 0.52487 (legs multiplied 0.52489)  vs rho 0 +0.00088 [-0.00035,+0.00223]  vs legs +0.00002 [-0.00088,+0.00091]  gap pred -0.9 act +1.7  joint 0.2579 hit 0.2618
+G     rho +0.00  n  2492  joint LL 0.39183 (legs multiplied 0.39476)  vs legs +0.00293 [-0.00021,+0.00623]  gap pred +8.7 act +4.1  joint 0.1510 hit 0.1400
+G     rho -0.20  n  2492  joint LL 0.39296 (legs multiplied 0.39476)  vs rho 0 -0.00112 [-0.00290,+0.00061]  vs legs +0.00180 [-0.00057,+0.00426]  gap pred +1.7 act +4.1  joint 0.1378 hit 0.1400
+E     rho +0.00  n  1242  joint LL 0.57274 (legs multiplied 0.57378)  vs legs +0.00104 [-0.00002,+0.00219]  gap pred +4.9 act +9.8  joint 0.2577 hit 0.2681
+E     rho +0.00  n  1242  joint LL 0.57274 (legs multiplied 0.57378)  vs legs +0.00104 [-0.00014,+0.00217]  gap pred +4.9 act +9.8  joint 0.2577 hit 0.2681
+E_all rho +0.00  n  7770  joint LL 0.54662 (legs multiplied 0.54682)  vs legs +0.00020 [-0.00029,+0.00070]  gap pred +4.5 act +4.0  joint 0.2661 hit 0.2578
+E_all rho +0.00  n  7770  joint LL 0.54662 (legs multiplied 0.54682)  vs legs +0.00020 [-0.00029,+0.00068]  gap pred +4.5 act +4.0  joint 0.2661 hit 0.2578
