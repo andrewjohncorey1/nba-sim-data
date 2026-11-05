@@ -88,7 +88,7 @@ for d, gd in cur.groupby('date'):
         for i, (p, act) in enumerate(zip(tp.pid, tp.itertuples())):
             if p not in sb.index or sb.loc[p, ('pts', 'count')] < 5: continue
             sh = {'pts': raw[i, 0] / R[0], 'reb': raw[i, 1] / R[1], 'ast': raw[i, 2] / R[4], 'fg3m': raw[i, 3] / R[3]}
-            means = {'pts': sh['pts'] * ET['pts'], 'reb': sh['reb'] * ET['reb'], 'ast': sh['ast'] * ET['fgm'], 'fg3m': sh['fg3m'] * ET['fg3m']}
+            means = {'pts': sh['pts'] * ET['pts'] * (CFG['cfg'].get('tmult', 1.0) if CFG else 1.0), 'reb': sh['reb'] * ET['reb'], 'ast': sh['ast'] * ET['fgm'], 'fg3m': sh['fg3m'] * ET['fg3m']}
             means['pra'] = means['pts'] + means['reb'] + means['ast']
             for k in ('pts', 'reb', 'ast', 'fg3m', 'pra'):
                 b = sb.loc[p, (k, 'mean')]; L = np.floor(b) + 0.5
@@ -100,7 +100,9 @@ for d, gd in cur.groupby('date'):
                     r = dict(date=d, game_id=gid, pid=p, stat=k, kind=kind, line=LL, actual=getattr(act, k), mean=means[k], base=b)
                     if CFG:
                         dc = CFG['dispersion'][k]
-                        r['mnew'] = mix_over(v, lo, scale, max(dc['c'] * means[k], 0.3) if dc['mode'] == 'prop' else dc['phi'], LL)
+                        f_ = (max(dc['c'] * means[k], 0.3) if dc['mode'] == 'prop' else
+                              max(dc['f'][0] * (max(means[k], 1e-3) / 10) ** dc['f'][1], 0.3) if dc['mode'] == 'pow' else dc['phi'])
+                        r['mnew'] = mix_over(v, lo, scale, f_, LL)
                     for f in GRID:
                         if not CFG: r[f'm{f}'] = mix_over(v, lo, scale, f, LL)
                         r[f's{f}'] = float(nb_over(b, f, LL)); r[f'r{f}'] = float(nb_over(l10.loc[p, k], f, LL))
@@ -129,4 +131,4 @@ for (k, kind), x in df.groupby(['stat', 'kind']):
                           'phi': ph, 'pred_over': round(float(x[f"m{ph['model']}"].mean()), 3), 'act_over': round(float(x.y.mean()), 3),
                           'mae_model': round(float(np.mean(np.abs(x.actual - x['mean']))), 3), 'mae_season': round(float(np.mean(np.abs(x.actual - x.base))), 3)}
 print(json.dumps({'season': Y, 'phi_fixed': PHI if len(sys.argv) > 3 else None, 'half_life': HL, 'prior_min': PRIOR, 'results': res}, indent=0))
-df.to_parquet(f'validation/props_{Y}_{var}{"_v2" if CFG else ""}.parquet', index=False)
+df.to_parquet(f'validation/props_{Y}_{var}{os.environ.get("PROPS_SUFFIX", "_v2") if CFG else ""}.parquet', index=False)

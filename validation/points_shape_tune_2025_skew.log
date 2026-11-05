@@ -1,0 +1,20 @@
+2025 negative binomial (current, step 3): all lines 0.34828 book 0.66617
+   tiers [season avg, model mean, actual mean, pred over, actual over]: [2.99, 3.95, 3.89, 0.477, 0.464] | [6.16, 7.04, 6.77, 0.49, 0.477] | [9.11, 9.69, 9.53, 0.477, 0.481] | [12.81, 13.01, 13.04, 0.459, 0.478] | [21.56, 21.09, 21.39, 0.436, 0.471]
+   scoring plays, skewed night factor sd=0.15 shape=0.0: all 0.35060 book 0.66768 top tier over 0.444
+   scoring plays, skewed night factor sd=0.15 shape=-2.0: all 0.35062 book 0.66765 top tier over 0.445
+   scoring plays, skewed night factor sd=0.15 shape=-4.0: all 0.35062 book 0.66762 top tier over 0.446
+   scoring plays, skewed night factor sd=0.15 shape=-8.0: all 0.35062 book 0.66760 top tier over 0.446
+   scoring plays, skewed night factor sd=0.22 shape=0.0: all 0.34991 book 0.66652 top tier over 0.442
+   scoring plays, skewed night factor sd=0.22 shape=-2.0: all 0.34993 book 0.66644 top tier over 0.446
+   scoring plays, skewed night factor sd=0.22 shape=-4.0: all 0.34994 book 0.66637 top tier over 0.448
+   scoring plays, skewed night factor sd=0.22 shape=-8.0: all 0.34995 book 0.66633 top tier over 0.449
+   scoring plays, skewed night factor sd=0.3 shape=0.0: all 0.35011 book 0.66524 top tier over 0.443
+   scoring plays, skewed night factor sd=0.3 shape=-2.0: all 0.35012 book 0.66506 top tier over 0.449
+   scoring plays, skewed night factor sd=0.3 shape=-4.0: all 0.35017 book 0.66495 top tier over 0.454
+   scoring plays, skewed night factor sd=0.3 shape=-8.0: all 0.35021 book 0.66490 top tier over 0.457
+   scoring plays, skewed night factor sd=0.38 shape=0.0: all 0.35171 book 0.66424 top tier over 0.445
+   scoring plays, skewed night factor sd=0.38 shape=-2.0: all 0.35162 book 0.66400 top tier over 0.455
+   scoring plays, skewed night factor sd=0.38 shape=-4.0: all 0.35164 book 0.66390 top tier over 0.463
+   scoring plays, skewed night factor sd=0.38 shape=-8.0: all 0.35169 book 0.66388 top tier over 0.467
+2025 scoring plays (k10=8, g=1.5, skew=False): all lines 0.34733 book 0.66240
+   tiers [season avg, model mean, actual mean, pred over, actual over]: [2.99, 3.95, 3.89, 0.457, 0.464] | [6.16, 7.04, 6.77, 0.481, 0.477] | [9.11, 9.69, 9.53, 0.472, 0.481] | [12.81, 13.01, 13.04, 0.46, 0.478] | [21.56, 21.09, 21.39, 0.44, 0.471]

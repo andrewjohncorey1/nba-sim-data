@@ -260,7 +260,10 @@ function propMean(teamHist,share){return share*hmean(teamHist);}
 function playerProps(D,players,hist,minMin){
   const P=D.props||{},mk=P.markets||['pts'],phi=P.phi||{},disp=P.disp||{},out=[];
   // dispersion per market: one value for everyone, or proportional to the player's mean ('prop': phi = c x mean)
-  const phiOf=(k,m)=>{const d=disp[k];return d?(d.mode==='prop'?Math.max(0.3,d.c*m):d.phi):(phi[k]||10);};
+  // or 'pow': phi = f[0] x (mean/10)^f[1] (validation/tune_props2.py tune3)
+  const phiOf=(k,m)=>{const d=disp[k];if(!d)return phi[k]||10;
+    return d.mode==='prop'?Math.max(0.3,d.c*m):d.mode==='pow'?Math.max(0.3,d.f[0]*Math.pow(Math.max(m,1e-3)/10,d.f[1])):d.phi;};
+  const tm=P.tmult||1;      // calibration of the simulated team points for the points-based props
   const R={pts:0,fgm:0,fg3m:0,ast:0,reb:0};
   // prop minutes: the props' own projection (pmp, tuned separately) when present, fitted to 240 like the team's
   const ems=players.some(p=>p.pmp!=null)?allocate(players.map(p=>(p.pmp??p.pm)*(p.pp??1))):players.map(p=>p.share*48);
@@ -268,7 +271,7 @@ function playerProps(D,players,hist,minMin){
   for(const [i,p] of players.entries()){
     const em=ems[i],cm=Math.min(48,em/Math.max(0.05,p.pp??1));
     if(cm<(minMin??8)||!p.r)continue;
-    const sh={pts:p.r.pts*cm/R.pts,fg3m:p.r.fg3m*cm/R.fg3m,ast:p.r.ast*cm/R.fgm,reb:p.r.reb*cm/(P.reb_ref||R.reb)};
+    const sh={pts:tm*p.r.pts*cm/R.pts,fg3m:p.r.fg3m*cm/R.fg3m,ast:p.r.ast*cm/R.fgm,reb:p.r.reb*cm/(P.reb_ref||R.reb)};
     const H={pts:hist.pts,fg3m:hist.fg3m,ast:hist.fgm,reb:hist.reb};
     const m={},line={},pr={};
     for(const k of mk){

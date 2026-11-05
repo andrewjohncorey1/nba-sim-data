@@ -197,6 +197,30 @@ Joint test on the retuned props (`validation/sgp_2025_v2.log`, `sgp_2026_v2.log`
   same two gaps: no shared game-level swing (pace or shooting environment hitting both teams) and no competition
   for shots between teammates (each player is drawn independently given his team's points).
 
+### Props step 3 (Nov 5, 2026; not live): star calibration
+`validation/tune_props2.py tune3/test3`, `validation/points_shape.py` (logs `props3_*`, `points_shape_*`). Tuned on
+2024-25, tested on 2025-26. Book-style line over % for the top fifth of scorers (season average 16+), predicted vs actual:
+
+| 2025-26 top fifth | Step 2 | Step 3 | Actual |
+|---|---|---|---|
+| Points | 38.6% | 40.1% | 44.2% |
+| Assists | 40.4% | 40.6% | 43.7% |
+| Threes | 37.9% | 37.6% | 39.6% |
+| Points + rebounds + assists | 42.3% | 43.6% | 44.9% |
+
+- Step 3 = two-parameter dispersion (phi = phi10 x (mean/10)^g; won in every market on 2024-25) and a 1.5% team-points
+  calibration for points-based props. Minutes: a finer search kept step 2. All-lines log loss 2025-26: points
+  0.3473 -> 0.3460, assists 0.3786 -> 0.3782, threes 0.4374 -> 0.4370, PRA 0.3842 -> 0.3836.
+- Fitting the spread on book-style lines only does not move stars (2024-25: 43.6% -> 43.4%).
+- Points as scoring plays (free throws, twos, threes in the player's own mix, compound Poisson, gamma night factor):
+  2024-25 all lines 0.3483 -> 0.3473, book lines 0.6662 -> 0.6624, stars 43.6% -> 44.0% (actual 47.1%). Better, kept as
+  a candidate.
+- Why stars stay low: their actual mean sits slightly below the line yet they go over 47%, so their distribution has a
+  short-game tail on the left (early exits, foul trouble, sitting out blowouts); every shape tried leans right. A
+  left-skewed night factor moves stars to 46.7% (2024-25) but, with one size for everyone, worsens overall log loss
+  (0.3473 -> 0.3517). Next: a per-player minutes distribution (stable role plus occasional short nights; bench
+  minutes swing far more), which also matters for SGPs (blowouts change star minutes).
+
 ## Layout
 - `pipeline/fetch_data.sh`: play-by-play, box scores and schedules from the sportsdataverse-data GitHub releases
   (refreshed daily around 5 AM ET). Raw files are not committed.

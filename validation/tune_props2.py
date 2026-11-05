@@ -133,9 +133,11 @@ def means(P, cfg, alloc=None):
     gs = list(zip(D.game_id.values, D.side.values))
     out = {}
     for k in ('pts', 'reb', 'ast', 'fg3m'):
-        T = np.array([nodes[(g, sd, key[k])] for g, sd in gs]); ET = np.array([nodes[(g, sd, key[k] + '_mean')] for g, sd in gs])
+        tm = cfg.get('tmult', 1.0) if k == 'pts' else 1.0
+        T = tm * np.array([nodes[(g, sd, key[k])] for g, sd in gs]); ET = tm * np.array([nodes[(g, sd, key[k] + '_mean')] for g, sd in gs])
         out[k] = (share[k][:, None] * T, share[k] * ET)
-    Tp = np.array([nodes[(g, sd, 'pts')] for g, sd in gs]); ETp = np.array([nodes[(g, sd, 'pts_mean')] for g, sd in gs])
+    tm = cfg.get('tmult', 1.0)
+    Tp = tm * np.array([nodes[(g, sd, 'pts')] for g, sd in gs]); ETp = tm * np.array([nodes[(g, sd, 'pts_mean')] for g, sd in gs])
     mp = out['pts'][1] + out['reb'][1] + out['ast'][1]
     out['pra'] = ((mp / ETp)[:, None] * Tp, mp)
     return out
@@ -145,11 +147,15 @@ def ll(y, p):
     p = np.clip(p, 1e-4, 1 - 1e-4); return float(-np.mean(y * np.log(p) + (1 - y) * np.log(1 - p)))
 
 
-PGRID = [0.25, 0.4, 0.6, 0.9, 1.4, 2.0, 3.0]      # dispersion proportional to the player's mean: phi = c x mean
+PGRID = [0.25, 0.4, 0.6, 0.9, 1.4, 2.0, 3.0]
+POWGRID = [(p, gm) for p in (2, 3, 4, 6, 9, 14, 20, 30) for gm in (0.5, 0.75, 1.0, 1.25, 1.5, 2.0)]      # dispersion proportional to the player's mean: phi = c x mean
 
 
 def nb_mix(L, nodesM, f, m, mode):
-    ph = f if mode == 'fixed' else np.maximum(f * m, 0.3)[:, None]
+    if mode == 'fixed': ph = f
+    elif mode == 'prop': ph = np.maximum(f * m, 0.3)[:, None]
+    else:                # 'pow': f = (phi at a 10-unit mean, exponent): phi = phi10 x (mean / 10)^g
+        ph = np.maximum(f[0] * (np.maximum(m, 1e-3) / 10) ** f[1], 0.3)[:, None]
     return nbinom.sf(np.floor(L)[:, None], ph, ph / (ph + np.maximum(nodesM, 1e-6))).mean(1)
 
 
@@ -162,7 +168,8 @@ def score(P, mu, k, phi=None, mode='fixed'):
     b = D[f'b_{k}'].values[ok]; a = D[f'a_{k}'].values[ok]
     lines = [np.floor(b) + 0.5] + [np.full(ok.sum(), L) for L in FIXED[k]]
     res = {}
-    for f in ([phi] if phi else (GRID if mode == 'fixed' else PGRID)):
+    cands = [phi] if phi is not None else (GRID if mode == 'fixed' else PGRID if mode == 'prop' else POWGRID)
+    for f in cands:
         ys, ps = [], []
         for L in lines:
             ys.append((a > L).astype(float)); ps.append(nb_mix(L, nodesM, f, m, mode))
@@ -176,7 +183,7 @@ def score(P, mu, k, phi=None, mode='fixed'):
         sel = (b >= q[i]) & (b <= q[i + 1]) if i == 4 else (b >= q[i]) & (b < q[i + 1])
         tiers.append([round(float(b[sel].mean()), 2), round(float(m[sel].mean()), 2), round(float(a[sel].mean()), 2),
                       round(float(pr[sel].mean()), 3), round(float((a[sel] > L[sel]).mean()), 3)])
-    return {'ll': round(res[f], 5), 'phi': f, 'mode': mode, 'book_ll': round(ll((a > L).astype(float), pr), 5),
+    return {'ll': round(res[f], 5), 'phi': list(f) if isinstance(f, tuple) else f, 'mode': mode, 'book_ll': round(ll((a > L).astype(float), pr), 5),
             'mae': round(float(np.mean(np.abs(a - m))), 3), 'tiers': tiers}
 
 
@@ -241,5 +248,49 @@ def test(Y):
     report(Y, base, new)
 
 
+def tune3(Y):
+    """Step 3 (on 2024-25 only): start from validation/props2_tuned.json, then (1) a finer minutes search,
+    (2) a team-points multiplier for the points-based markets, (3) a two-parameter dispersion per market (pow) vs the
+    step-2 choice; then re-check minutes. Objective: log loss over book + fixed lines, as before.
+    Writes validation/props3_tuned.json."""
+    P = pd.read_pickle(f'validation/props2_pre_{Y}.pkl')
+    T2 = json.load(open('validation/props2_tuned.json')); cfg = json.loads(json.dumps(T2['cfg'])); cfg['tmult'] = 1.0
+    disp = {k: dict(v) for k, v in T2['dispersion'].items()}
+    def sc(c, d=None, ks=MK):
+        mu = means(P, c); d = d or disp
+        return {k: score(P, mu, k, phi=(tuple(d[k]['f']) if d[k]['mode'] == 'pow' else d[k].get('c') or d[k].get('phi')), mode=d[k]['mode']) for k in ks}
+    tot = lambda s: sum(v['ll'] for v in s.values())
+    log = []
+    def note(tag, s): log.append({'step': tag, 'cfg': json.loads(json.dumps(cfg)), 'disp': json.loads(json.dumps(disp)),
+                                  'll': {k: v['ll'] for k, v in s.items()}, 'sum': round(tot(s), 5)}); print(tag, round(tot(s), 5), {k: v['ll'] for k, v in s.items()}, flush=True)
+    note('step 2 (start)', sc(cfg))
+    MIN3 = [{'hl': hl, 'pw': pw, 'target': t} for hl in (2, 3, 4, 6) for pw in (0, 0.25, 0.5, 1) for t in ('14', 'season') if not (pw == 0 and t == 'season')]
+    for rnd in range(2):
+        best = min(MIN3, key=lambda mc: tot(sc({**cfg, 'min': mc})))
+        cfg['min'] = best; note(f'minutes {rnd}', sc(cfg))
+        best = min((1.0, 1.005, 1.01, 1.015, 1.02), key=lambda t: tot(sc({**cfg, 'tmult': t}, ks=('pts', 'pra'))))
+        cfg['tmult'] = best; note(f'team-points multiplier {rnd} = {best}', sc(cfg))
+        mu = means(P, cfg)
+        for k in MK:
+            cur = score(P, mu, k, phi=(tuple(disp[k]['f']) if disp[k]['mode'] == 'pow' else disp[k].get('c') or disp[k].get('phi')), mode=disp[k]['mode'])
+            pw_ = score(P, mu, k, mode='pow')
+            if pw_['ll'] < cur['ll']: disp[k] = {'mode': 'pow', 'f': pw_['phi']}
+        note(f'dispersion {rnd}', sc(cfg))
+    final = sc(cfg); base = sc(T2['cfg'] | {'tmult': 1.0}, T2['dispersion'])
+    json.dump({'tuned_on': Y, 'cfg': cfg, 'dispersion': disp, 'step2': base, 'tuned': final, 'log': log}, open('validation/props3_tuned.json', 'w'), indent=1)
+    report(Y, base, final)
+
+
+def test3(Y):
+    P = pd.read_pickle(f'validation/props2_pre_{Y}.pkl')
+    T2 = json.load(open('validation/props2_tuned.json')); T3 = json.load(open('validation/props3_tuned.json'))
+    def sc(c, d):
+        mu = means(P, c)
+        return {k: score(P, mu, k, phi=(tuple(d[k]['f']) if d[k]['mode'] == 'pow' else d[k].get('c') or d[k].get('phi')), mode=d[k]['mode']) for k in MK}
+    base = sc(T2['cfg'], T2['dispersion']); new = sc(T3['cfg'], T3['dispersion'])
+    json.dump({'season': Y, 'step2': base, 'step3': new}, open(f'validation/props3_test_{Y}.json', 'w'), indent=1)
+    report(Y, base, new)
+
+
 if __name__ == '__main__':
-    {'prep': prep, 'tune': tune, 'test': test}[sys.argv[1]](int(sys.argv[2]))
+    {'prep': prep, 'tune': tune, 'test': test, 'tune3': tune3, 'test3': test3}[sys.argv[1]](int(sys.argv[2]))

@@ -1,0 +1,5 @@
+2024-25: spread fitted on all lines (current) vs on book-style lines only
+pts   current (6, 1.25): all-lines 0.34828 book 0.66617 top tier 0.436 | book-fitted (4, 1.5): all-lines 0.34850 book 0.66415 top tier 0.434 | actual 0.471
+ast   current (30, 1.0): all-lines 0.37809 book 0.65597 top tier 0.426 | book-fitted (30, 0.75): all-lines 0.37809 book 0.65568 top tier 0.427 | actual 0.458
+fg3m  current (30, 0.75): all-lines 0.43881 book 0.58696 top tier 0.378 | book-fitted (30, 0.5): all-lines 0.43883 book 0.58658 top tier 0.38 | actual 0.4
+pra   current (4, 1.25): all-lines 0.38411 book 0.65419 top tier 0.468 | book-fitted (2, 1.5): all-lines 0.38850 book 0.65022 top tier 0.462 | actual 0.486
