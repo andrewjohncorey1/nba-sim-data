@@ -108,19 +108,19 @@ Show Display Settings Add Lineup Alerts
     
     [M. Williams](https://www.rotowire.com/basketball/player/mark-williams-5647 "Mark Williams") Out
 
-**Referees:**  Not announced yet
+**Referees:**  [Karl Lane](https://www.rotowire.com/basketball/ref.php?id=525083), [Mark Lindsay](https://www.rotowire.com/basketball/ref.php?id=350431),
 
-**LINE**  \-112 PHX -110 PHX -110 PHX -118 –
+**LINE**  PHX -116 – PHX -117 PHX -115 –
 
-**SPREAD**  \-1.5 PHX -1.5 PHX -1.5 PHX -1.5 –
+**SPREAD**  PHX -1.5 PHX -1.5 PHX -1.5 PHX -1.5 –
 
-    **O/U**  223.5 Pts 223.5 Pts 222.5 Pts 223.5 Pts –
+    **O/U**  223.0 Pts 222.5 Pts 222.5 Pts 223.5 Pts –
 
-[![](https://assets.rotowire.com/images/props/prizepicks.svg)](https://www.rotowire.com/picks/prizepicks/) [Make The Right Picks](https://www.rotowire.com/picks/prizepicks/) [![](https://assets.rotowire.com/images/picks-promo-screen.png)](https://www.rotowire.com/picks/prizepicks/)
+[![](https://assets.rotowire.com/images/props/underdog.svg)](https://www.rotowire.com/picks/underdog/) [Make The Right Picks](https://www.rotowire.com/picks/underdog/) [![](https://assets.rotowire.com/images/picks-promo-screen.png)](https://www.rotowire.com/picks/underdog/)
 
-If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our best picks for today's NBA games.
+If you play on Underdog, you should check out the RotoWire Picks tool. Get our best picks for today's NBA games.
 
-[See Our Top Picks For PrizePicks](https://www.rotowire.com/picks/prizepicks/)
+[See Our Top Picks For Underdog](https://www.rotowire.com/picks/underdog/)
 
 10:00 PM ET
 
@@ -186,13 +186,13 @@ If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our
     
     [Gui Santos](https://www.rotowire.com/basketball/player/gui-santos-5738 "Gui Santos") Out
 
-**Referees:**  Not announced yet
+**Referees:**  [Bill Kennedy](https://www.rotowire.com/basketball/ref.php?id=3584), [Jason Goldenberg](https://www.rotowire.com/basketball/ref.php?id=896908), [Chelisa Painter](https://www.rotowire.com/basketball/ref.php?id=1326850)
 
-**LINE**  GSW -288 GSW -290 GSW -281 GSW -295 –
+**LINE**  GSW -160 GSW -154 GSW -161 GSW -160 –
 
-**SPREAD**  GSW -7.5 GSW -7.5 GSW -7.5 GSW -7.5 –
+**SPREAD**  GSW -3.5 GSW -3.5 GSW -3.5 GSW -3.5 –
 
-    **O/U**  235.5 Pts 235.5 Pts 235.5 Pts 235.5 Pts –
+    **O/U**  236.0 Pts 236.5 Pts 235.5 Pts 236.5 Pts –
 
 You may also be interested in...
 
@@ -227,6 +227,87 @@ See stats based on who is on/off the court.
 [Advanced Lineups](https://www.rotowire.com/daily/nba/nba_adv_lineups.php)
 
 Lineups with advanced stats and insights.
+
+Estimated Chance To Play
+
+This is our best guess for players whose lineup status is in question. If a player doesn't have a color bar next to their position, that indicates that they're expected to play.
+
+Very Unlikely
+
+Unlikely
+
+Toss Up
+
+Likely
+
+Very Likely
+
+Beware the "late scratch"!
+
+Learn how we set lineups
+
+How We Set Our Daily NBA Lineups
+
+Our staff sets the expected daily lineups 24-30 hours before tip-off. The expected lineups are then tweaked throughout the day of the game.
+
+Lineups are only confirmed when an official NBA source provides that information.
+
+Unfortunately, the NBA does not require that starting lineups be submitted before tipoff, which is why we are sometimes limited to waiting until a game tips off to accurately pass on who is starting for some games. Also, sometimes players are "scratched" at the very last minute.
+
+If a player has a color bar next to his name, that reflects some level of uncertainty about whether he'll be active for the game. Most players have a color bar when dealing with an injury, but we will also add estimates if a player's status in doubt due to rest or other off-court issues.
+
+×
+
+Stay Ahead of the Game
+
+## Get updates faster, directly to your inbox
+
+ Send me the latest news
+
+?
+
+You're all set!
+
+We'll send you the latest news and updates.
+# Tomorrow's NBA Lineups
+
+[![RotoWire](https://assets.rotowire.com/images/assets/logo_icon_red.svg) Every start/sit, every waiver, every trade, plus NBA and NHL all winter. We make the call. Every start/sit, every waiver, every trade. We make the call. Win my league](https://www.rotowire.com/subscribe/payment/?plan=fantasy&billing=12)
+
+Date
+
+[Today](https://www.rotowire.com/basketball/nba-lineups.php) [Tomorrow](https://www.rotowire.com/basketball/nba-lineups.php?date=tomorrow)
+
+Display Preference
+
+Standard
+
+Compact
+
+Simple
+
+Hide Games That Started
+
+Yes
+
+No
+
+Sportsbook Odds
+
+Composite
+
+DraftKings
+
+FanDuel
+
+BetMGM
+
+PointsBet
+
+Show Display Settings Add Lineup Alerts
+
+Tomorrow's schedule is reserved for RotoWire subscribers.
+
+Want to see the lineups? [Subscribe Now](https://www.rotowire.com/subscribe/).
 
 Estimated Chance To Play
 
