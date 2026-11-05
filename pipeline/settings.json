@@ -330,12 +330,7 @@
  "props": {
   "half_life": 180,
   "prior_min": 300,
-  "markets": [
-   "pts",
-   "ast",
-   "fg3m",
-   "pra"
-  ],
+  "markets": [],
   "phi": {
    "pts": 5,
    "ast": 12,
@@ -350,7 +345,14 @@
    "fg3m": "Threes made",
    "pra": "Pts+Reb+Ast"
   },
-  "note": "Dispersions chosen on 2024-25; markets kept only if they beat both baselines on 2025-26. Rebounds beat them on log loss but ran 5 points high on overs and had a worse average error than the season average, so they are off."
+  "note": "Dispersions chosen on 2024-25; markets kept only if they beat both baselines on 2025-26. Rebounds beat them on log loss but ran 5 points high on overs and had a worse average error than the season average, so they are off.",
+  "markets_tested": [
+   "pts",
+   "ast",
+   "fg3m",
+   "pra"
+  ],
+  "paused": "Player props are paused (Nov 5, 2026). A held-out check found them compressed toward the middle: on players projected for 15+ points the model's over chance averaged 36% but those overs hit 49% (bench players ran the other way), and assists and threes had the same problem. They come back once the minutes and per-minute-rate fixes pass the held-out test."
  },
  "rest_effects": {
   "note": "Back-to-back (margin only) improved 2024-25 (margin RMSE 14.024 -> 13.967, moneyline 0.5959 -> 0.5930) but not 2025-26 (14.263 -> 14.263, 0.5831 -> 0.5844), so it is off. Rest of 3+ days, travel and time zones were not significant on 2021-24 and are off."

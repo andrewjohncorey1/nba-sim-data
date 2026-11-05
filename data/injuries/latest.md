@@ -110,17 +110,17 @@ Show Display Settings Add Lineup Alerts
 
 **Referees:**  Not announced yet
 
-**LINE**  PHX -114 PHX -112 PHX -114 PHX -118 –
+**LINE**  \-112 PHX -110 PHX -110 PHX -118 –
 
-**SPREAD**  PHX -1.0 PHX -1.5 PHX -1.5 PHX -1.5 –
+**SPREAD**  \-1.5 PHX -1.5 PHX -1.5 PHX -1.5 –
 
-    **O/U**  223.5 Pts 223.5 Pts 223.5 Pts 223.5 Pts –
+    **O/U**  223.5 Pts 223.5 Pts 222.5 Pts 223.5 Pts –
 
-[![](https://assets.rotowire.com/images/props/sleeper.svg)](https://www.rotowire.com/picks/sleeper/) [Make The Right Picks](https://www.rotowire.com/picks/sleeper/) [![](https://assets.rotowire.com/images/picks-promo-screen.png)](https://www.rotowire.com/picks/sleeper/)
+[![](https://assets.rotowire.com/images/props/prizepicks.svg)](https://www.rotowire.com/picks/prizepicks/) [Make The Right Picks](https://www.rotowire.com/picks/prizepicks/) [![](https://assets.rotowire.com/images/picks-promo-screen.png)](https://www.rotowire.com/picks/prizepicks/)
 
-If you play on Sleeper, you should check out the RotoWire Picks tool. Get our best picks for today's NBA games.
+If you play on PrizePicks, you should check out the RotoWire Picks tool. Get our best picks for today's NBA games.
 
-[See Our Top Picks For Sleeper](https://www.rotowire.com/picks/sleeper/)
+[See Our Top Picks For PrizePicks](https://www.rotowire.com/picks/prizepicks/)
 
 10:00 PM ET
 
@@ -188,9 +188,9 @@ If you play on Sleeper, you should check out the RotoWire Picks tool. Get our be
 
 **Referees:**  Not announced yet
 
-**LINE**  GSW -292 GSW -290 GSW -281 GSW -295 –
+**LINE**  GSW -288 GSW -290 GSW -281 GSW -295 –
 
-**SPREAD**  GSW -7.0 GSW -7.5 GSW -7.5 GSW -7.5 –
+**SPREAD**  GSW -7.5 GSW -7.5 GSW -7.5 GSW -7.5 –
 
     **O/U**  235.5 Pts 235.5 Pts 235.5 Pts 235.5 Pts –
 
