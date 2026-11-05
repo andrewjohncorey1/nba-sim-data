@@ -332,6 +332,7 @@
   "prior_min": 300,
   "markets": [
    "pts",
+   "reb",
    "fg3m"
   ],
   "phi": {
@@ -348,7 +349,7 @@
    "fg3m": "Threes made",
    "pra": "Pts+Reb+Ast"
   },
-  "note": "Minutes model (Nov 5, 2026): tuned on 2024-25, tested on 2025-26 (validation/props5_test_2026.log). Live: points (scoring plays given the night) and threes; players with 18+ projected minutes. Off: assists (stars 2.6 points under above 18 minutes), points+rebounds+assists and rebounds (rebounds run high).",
+  "note": "Minutes model (Nov 5, 2026): tuned on 2024-25, tested on 2025-26 (validation/props5_test_2026.log). Live: points (scoring plays given the night), rebounds (team rebounds removed, Nov 5) and threes; players with 18+ projected minutes. Off: assists (stars 2.6 points under above 18 minutes), points+rebounds+assists (stars 2.3 points under).",
   "markets_tested": [
    "pts",
    "ast",
@@ -422,21 +423,22 @@
     "shape": "nb",
     "beta": 1.0,
     "f": [
-     14,
-     0.5
+     9,
+     1.0
     ]
    },
    "reb": {
     "shape": "nb",
     "beta": 1.0,
     "f": [
-     9,
+     80,
      0.5
     ]
    }
   },
   "tmult": 1.015,
-  "min_minutes": 18
+  "min_minutes": 18,
+  "rmult": 0.87
  },
  "rest_effects": {
   "note": "Back-to-back (margin only) improved 2024-25 (margin RMSE 14.024 -> 13.967, moneyline 0.5959 -> 0.5930) but not 2025-26 (14.263 -> 14.263, 0.5831 -> 0.5844), so it is off. Rest of 3+ days, travel and time zones were not significant on 2021-24 and are off."
@@ -599,20 +601,20 @@
       "no: stars 2.6 points under"
      ],
      [
-      "Pts+Reb+Ast",
-      "0.3840",
-      "0.4337",
-      "0.4241",
-      "\u2014",
-      "no: middle tiers 2-3 points high"
-     ],
-     [
       "Rebounds",
-      "0.4246",
+      "0.4107",
       "0.4381",
       "0.4378",
-      "\u2014",
-      "no: 4-6 points high"
+      "44.9% / 46.0%",
+      "yes"
+     ],
+     [
+      "Pts+Reb+Ast",
+      "0.3830",
+      "0.4337",
+      "0.4241",
+      "42.7% / 45.0%",
+      "no: stars 2.3 points under"
      ]
     ]
    }

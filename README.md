@@ -242,6 +242,14 @@ simulated margin; that is step 3 of the plan).
   from rebounds), rebounds (4-6 high; team-rebound fix next).
 - The engine prices the same way (`propOverPlays`, `propOverMix`), checked against the Python test code to 5 decimals.
 
+### Props step 5: rebounds (Nov 5, 2026; live)
+The simulation counts every rebound, including team rebounds (out of bounds, end of period) that box scores credit to
+no player: 44.0 player rebounds per team-game against 50.2 simulated (2024-25; 0.887 per miss in 2022-23 and 2023-24).
+Player rebound shares are now scaled by rmult, tuned on 2024-25: 0.87 (`validation/props_reb.py`, logs `props_reb_*`).
+- 2025-26: rebounds all-lines 0.4246 -> 0.4107 (season-average baseline 0.4381), book 0.6598 -> 0.6558; 18+ minutes,
+  by fifth, predicted/actual over 54.8/54.7, 49.2/48.1, 48.5/47.4, 45.4/46.7, 44.9/46.0. Live.
+- PRA 0.3840 -> 0.3830, but the top fifth is 42.7/45.0 (stars' points and assists each slightly under): stays off.
+
 ## Layout
 - `pipeline/fetch_data.sh`: play-by-play, box scores and schedules from the sportsdataverse-data GitHub releases
   (refreshed daily, usually between 5 and 7:30 AM ET). Raw files are not committed.

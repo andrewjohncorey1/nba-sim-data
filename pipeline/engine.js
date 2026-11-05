@@ -296,7 +296,7 @@ function playerProps(D,players,hist,minMin){
   for(const [i,p] of players.entries()){
     const em=ems[i],cm0=Math.min(48,em/Math.max(0.05,p.pp??1)),cm=cm0*mult[i];
     if(cm0<(minMin??P.min_minutes??8)||!p.r)continue;
-    const sh={pts:tm*p.r.pts*cm/R.pts,fg3m:p.r.fg3m*cm/R.fg3m,ast:p.r.ast*cm/R.fgm,reb:p.r.reb*cm/(P.reb_ref||R.reb)};
+    const sh={pts:tm*p.r.pts*cm/R.pts,fg3m:p.r.fg3m*cm/R.fg3m,ast:p.r.ast*cm/R.fgm,reb:(P.rmult||1)*p.r.reb*cm/(P.reb_ref||R.reb)};   // rmult: share of simulated rebounds credited to players
     const H={pts:hist.pts,fg3m:hist.fg3m,ast:hist.fgm,reb:hist.reb};
     const m={},line={},pr={};
     for(const k of mk){

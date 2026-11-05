@@ -34,7 +34,8 @@
     "target": "own"
    }
   },
-  "tmult": 1.015
+  "tmult": 1.015,
+  "rmult": 0.87
  },
  "choice": {
   "minutes": {
@@ -68,15 +69,15 @@
    "shape": "nb",
    "beta": 1.0,
    "f": [
-    14,
-    0.5
+    9,
+    1.0
    ]
   },
   "reb": {
    "shape": "nb",
    "beta": 1.0,
    "f": [
-    9,
+    80,
     0.5
    ]
   }
@@ -1423,5 +1424,6 @@
    "er": "none",
    "beta": 1.3
   }
- ]
+ ],
+ "reb_note": "rmult 0.87 chosen on 2024-25 (validation/props_reb_tune_2025.log)"
 }

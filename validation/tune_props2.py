@@ -133,7 +133,7 @@ def means(P, cfg, alloc=None):
     gs = list(zip(D.game_id.values, D.side.values))
     out = {}
     for k in ('pts', 'reb', 'ast', 'fg3m'):
-        tm = cfg.get('tmult', 1.0) if k == 'pts' else 1.0
+        tm = cfg.get('tmult', 1.0) if k == 'pts' else cfg.get('rmult', 1.0) if k == 'reb' else 1.0   # rmult: share of rebounds credited to players
         T = tm * np.array([nodes[(g, sd, key[k])] for g, sd in gs]); ET = tm * np.array([nodes[(g, sd, key[k] + '_mean')] for g, sd in gs])
         out[k] = (share[k][:, None] * T, share[k] * ET)
     tm = cfg.get('tmult', 1.0)
