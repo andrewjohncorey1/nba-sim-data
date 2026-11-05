@@ -1,0 +1,158 @@
+{
+"season": 2025,
+"phi_fixed": null,
+"half_life": 180,
+"prior_min": 300,
+"results": {
+"ast book": {
+"n": 25381,
+"model": 0.6559,
+"season_avg": 0.6919,
+"recent_10": 0.7018,
+"phi": {
+"model": 3,
+"season_avg": 8,
+"recent_10": 8
+},
+"pred_over": 0.441,
+"act_over": 0.449,
+"mae_model": 1.32,
+"mae_season": 1.367
+},
+"ast fixed": {
+"n": 101524,
+"model": 0.3096,
+"season_avg": 0.3285,
+"recent_10": 0.3299,
+"phi": {
+"model": 3,
+"season_avg": 8,
+"recent_10": 8
+},
+"pred_over": 0.244,
+"act_over": 0.252,
+"mae_model": 1.32,
+"mae_season": 1.367
+},
+"fg3m book": {
+"n": 25381,
+"model": 0.5864,
+"season_avg": 0.6179,
+"recent_10": 0.6399,
+"phi": {
+"model": 3,
+"season_avg": 5,
+"recent_10": 3
+},
+"pred_over": 0.364,
+"act_over": 0.375,
+"mae_model": 0.889,
+"mae_season": 0.905
+},
+"fg3m fixed": {
+"n": 101524,
+"model": 0.4022,
+"season_avg": 0.4197,
+"recent_10": 0.4295,
+"phi": {
+"model": 3,
+"season_avg": 5,
+"recent_10": 3
+},
+"pred_over": 0.294,
+"act_over": 0.306,
+"mae_model": 0.889,
+"mae_season": 0.905
+},
+"pra book": {
+"n": 25381,
+"model": 0.6537,
+"season_avg": 0.6985,
+"recent_10": 0.6961,
+"phi": {
+"model": 3,
+"season_avg": 5,
+"recent_10": 5
+},
+"pred_over": 0.491,
+"act_over": 0.489,
+"mae_model": 5.911,
+"mae_season": 6.294
+},
+"pra fixed": {
+"n": 126905,
+"model": 0.3311,
+"season_avg": 0.3813,
+"recent_10": 0.3739,
+"phi": {
+"model": 3,
+"season_avg": 5,
+"recent_10": 5
+},
+"pred_over": 0.296,
+"act_over": 0.295,
+"mae_model": 5.911,
+"mae_season": 6.294
+},
+"pts book": {
+"n": 25381,
+"model": 0.6658,
+"season_avg": 0.7002,
+"recent_10": 0.7016,
+"phi": {
+"model": 3,
+"season_avg": 3,
+"recent_10": 3
+},
+"pred_over": 0.444,
+"act_over": 0.474,
+"mae_model": 4.51,
+"mae_season": 4.735
+},
+"pts fixed": {
+"n": 126905,
+"model": 0.286,
+"season_avg": 0.3195,
+"recent_10": 0.3185,
+"phi": {
+"model": 3,
+"season_avg": 3,
+"recent_10": 3
+},
+"pred_over": 0.205,
+"act_over": 0.215,
+"mae_model": 4.51,
+"mae_season": 4.735
+},
+"reb book": {
+"n": 25381,
+"model": 0.6683,
+"season_avg": 0.69,
+"recent_10": 0.6944,
+"phi": {
+"model": 3,
+"season_avg": 5,
+"recent_10": 5
+},
+"pred_over": 0.524,
+"act_over": 0.457,
+"mae_model": 1.987,
+"mae_season": 1.956
+},
+"reb fixed": {
+"n": 101524,
+"model": 0.3616,
+"season_avg": 0.3777,
+"recent_10": 0.379,
+"phi": {
+"model": 3,
+"season_avg": 5,
+"recent_10": 5
+},
+"pred_over": 0.297,
+"act_over": 0.256,
+"mae_model": 1.987,
+"mae_season": 1.956
+}
+}
+}
