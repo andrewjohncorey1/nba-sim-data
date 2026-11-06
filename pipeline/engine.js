@@ -300,10 +300,15 @@ function playerProps(D,players,hist,minMin){
   const er=(cm)=>{const b=bandOf(cm);if(b<0)return 1;const q=MD.q[b];return q.reduce((a,c)=>a+c,0)/q.length;};
   const mult=players.map((p,i)=>{const cm=Math.min(48,ems[i]/Math.max(0.05,p.pp??1));return CH&&CH.minutes&&CH.minutes.er==='rotation'&&cm>=24?er(cm):1;});
   players.forEach((p,i)=>{for(const k in R)R[k]+=(p.r?p.r[k]:0)*ems[i]*mult[i];});
+  // shot-zone matchup (pipeline/matchup.py, validation/shot_matchup.py): each player's points mix (rim / mid / three /
+  // free throws) against the opponent's points allowed by zone re-divides the team's points; team total unchanged
+  const zf=P.zone_lambda&&hist.opp&&P.zdef?P.zdef[hist.opp]:null;let zm=players.map(()=>1);
+  if(zf){const x=players.map(p=>{const w=p.zm||P.zlg;return w.reduce((a,v,j)=>a+v*zf[j],0);}),e=players.map((p,i)=>(p.r?p.r.pts:0)*ems[i]*mult[i]);
+    const se=e.reduce((a,v)=>a+v,0),avg=se>0?x.reduce((a,v,i)=>a+v*e[i],0)/se:1;zm=x.map(v=>Math.pow(v/avg,P.zone_lambda));}
   for(const [i,p] of players.entries()){
     const em=ems[i],cm0=Math.min(48,em/Math.max(0.05,p.pp??1)),cm=cm0*mult[i];
     if(cm0<(minMin??P.min_minutes??8)||!p.r)continue;
-    const sh={pts:tm*p.r.pts*cm/R.pts,fg3m:p.r.fg3m*cm/R.fg3m,ast:p.r.ast*cm/R.fgm,reb:(P.rmult||1)*p.r.reb*cm/(P.reb_ref||R.reb)};   // rmult: share of simulated rebounds credited to players
+    const sh={pts:tm*zm[i]*p.r.pts*cm/R.pts,fg3m:p.r.fg3m*cm/R.fg3m,ast:p.r.ast*cm/R.fgm,reb:(P.rmult||1)*p.r.reb*cm/(P.reb_ref||R.reb)};   // rmult: share of simulated rebounds credited to players
     const H={pts:hist.pts,fg3m:hist.fg3m,ast:hist.fgm,reb:hist.reb};
     const m={},line={},pr={};let sg=null;
     for(const k of mk){

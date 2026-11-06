@@ -439,7 +439,8 @@
   },
   "tmult": 1.015,
   "min_minutes": 18,
-  "rmult": 0.87
+  "rmult": 0.87,
+  "zone_lambda": 0.5
  },
  "rest_effects": {
   "note": "Back-to-back (margin only) improved 2024-25 (margin RMSE 14.024 -> 13.967, moneyline 0.5959 -> 0.5930) but not 2025-26 (14.263 -> 14.263, 0.5831 -> 0.5844), so it is off. Rest of 3+ days, travel and time zones were not significant on 2021-24 and are off."

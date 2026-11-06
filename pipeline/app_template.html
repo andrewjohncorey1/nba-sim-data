@@ -252,8 +252,8 @@ function renderDetail(el,g,c){
   </div>
   <section class="panel"><h2>Halves and quarters</h2><p class="sub">Each period on its own. Win % counts a tied period as not won; fair spread is the half-point line nearest the expected margin.</p><div class="tblwrap"><table>${segTable(H,home,away)}</table></div></section>
   <section class="panel"><h2>Player props</h2><p class="sub">Chance of going over the line shown, then the fair price; lines are each player's simulated average rounded down to the half point. Props assume the player plays (they are void if he doesn't). Shown for players projected for 18+ minutes, and only for markets that passed the held-out test (points, rebounds and threes; assists and points+rebounds+assists are still off). Each price mixes over the player's own minutes distribution: a stable role with occasional short nights.</p>
-    ${(DATA.props.markets||[]).length?propsHtml(DATA,c.sh.a.players,{pts:H.a,fgm:H.stat.a.fgm,fg3m:H.stat.a.fg3m,reb:H.stat.a.reb,mb:H.mb.a},{t:away,c:'--b'})+
-      propsHtml(DATA,c.sh.h.players,{pts:H.h,fgm:H.stat.h.fgm,fg3m:H.stat.h.fg3m,reb:H.stat.h.reb,mb:H.mb.h},{t:home,c:'--a'}):`<p class="warn">${DATA.props.paused||'Player props are paused.'}</p>`}</section>
+    ${(DATA.props.markets||[]).length?propsHtml(DATA,c.sh.a.players,{pts:H.a,fgm:H.stat.a.fgm,fg3m:H.stat.a.fg3m,reb:H.stat.a.reb,mb:H.mb.a,opp:home},{t:away,c:'--b'})+
+      propsHtml(DATA,c.sh.h.players,{pts:H.h,fgm:H.stat.h.fgm,fg3m:H.stat.h.fg3m,reb:H.stat.h.reb,mb:H.mb.h,opp:away},{t:home,c:'--a'}):`<p class="warn">${DATA.props.paused||'Player props are paused.'}</p>`}</section>
   <section class="panel" data-sgp="1"></section>
   <section class="panel how"><h2>How this number was built</h2>${howHtml(g,c,H)}</section>`;
   const sp=el.querySelector('[data-sgp]');if((DATA.props.markets||[]).includes('pts'))sgpBuilder(sp,g,c,pinT??tl);else sp.remove();}
@@ -265,7 +265,7 @@ function renderDetail(el,g,c){
 // tested together on 2025-26 (validation/sgp6.py): player points overs (up to two per team), team wins, game total over.
 function sgpBuilder(el,g,c,tot0){
   const H=c.H,home=g.home,away=g.away;
-  const mkh=s=>({pts:H[s],fgm:H.stat[s].fgm,fg3m:H.stat[s].fg3m,reb:H.stat[s].reb,mb:H.mb[s]});
+  const mkh=s=>({pts:H[s],fgm:H.stat[s].fgm,fg3m:H.stat[s].fg3m,reb:H.stat[s].reb,mb:H.mb[s],opp:s==='h'?away:home});
   const PL={h:playerProps(DATA,c.sh.h.players,mkh('h'),10).filter(p=>p.sg),a:playerProps(DATA,c.sh.a.players,mkh('a'),10).filter(p=>p.sg)};
   for(const s of ['h','a'])PL[s].sort((x,y)=>y.m.pts-x.m.pts);
   const legs=[];let price='';

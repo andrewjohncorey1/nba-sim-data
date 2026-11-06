@@ -45,7 +45,7 @@ plus $0.0067 per game). Pinnacle is pulled on the afternoon run only. Expected c
    that same link (`url` parameter) so the URL never changes.
 
 6. **Record.** `cp build/ratings.json build/published_ratings.json`, then commit the current season's
-   `data/derived/{games,teamgames,poss,players}_<season>.parquet`, everything new in `data/injuries/`, `data/odds/`,
+   `data/derived/{games,teamgames,poss,players,zones}_<season>.parquet`, everything new in `data/injuries/`, `data/odds/`,
    `data/predictions/` (never edit or delete files in data/odds or data/predictions) and
    `build/published_ratings.json`, with a message like
    `Update YYYY-MM-DD HH:MM: N games through <date>, M on the slate, P priced`, and push.

@@ -9,7 +9,7 @@ held-out test tables shown in the app.
 """
 import sys, json, os
 import numpy as np, pandas as pd
-import ratings as RT, players as PS
+import ratings as RT, players as PS, matchup as MU
 
 Y = int(sys.argv[1])
 S = json.load(open('pipeline/settings.json'))
@@ -108,6 +108,21 @@ mdistc = None          # the same by final-margin bucket (validation/minutes_dis
 if os.path.exists('pipeline/minutes_distc.json'):
     _m = json.load(open('pipeline/minutes_distc.json'))
     mdistc = {'edges': _m['edges'], 'medges': _m['medges'], 'share': _m['share'], 'q': [[q[0::2] for q in row] for row in _m['q']], 'fit_on': _m['fit_on']}
+# shot-zone matchup for points props (pipeline/matchup.py): players' zone mix and teams' zone defense as of today
+zone = {}
+if pp.get('zone_lambda'):
+    for y in (Y - 1, Y):
+        if y == Y or not os.path.exists(f'data/derived/zones_{y}.parquet'):
+            if os.path.exists(f'data/raw/play_by_play_{y}.parquet'): MU.zones(y)
+    zmix, zdef, zlg = MU.asof(MU.player_games([y for y in (Y - 1, Y) if os.path.exists(f'data/derived/zones_{y}.parquet')]),
+                              MU.team_poss([Y - 1, Y]), now)
+    zone = dict(zdef={t: [round(float(v), 4) for v in zdef.loc[t]] if t in zdef.index else [1, 1, 1, 1] for t in RT.TEAMS},
+                zlg=[round(float(v), 4) for v in zlg])
+    for t in teams:
+        for p in t['roster']:
+            if p['pid'] in zmix.index: p['zm'] = [round(float(v), 4) for v in zmix.loc[p['pid']]]
+    for pid, p in pool.items():
+        if pid in zmix.index: p['zm'] = [round(float(v), 4) for v in zmix.loc[pid]]
 cal = json.load(open('pipeline/calib.json')) if os.path.exists('pipeline/calib.json') else {}
 out = dict(asOf=str(last_game.date()), generated=pd.Timestamp.now('UTC').strftime('%Y-%m-%dT%H:%M:%SZ'), season=Y,
            teams=RT.TEAMS, names={t: S['team_names'][t][0] for t in RT.TEAMS},
@@ -115,7 +130,7 @@ out = dict(asOf=str(last_game.date()), generated=pd.Timestamp.now('UTC').strftim
                  for k in RT.COMPS},
            pace={'mu': R['pace']['mu'], 'P': [round(v, 5) for v in R['pace']['P']]},
            engine={**E, **cal}, avail=dict(alpha=P['ratings']['alpha'], repl=repl, ppp0=E['base_ppp'], sens=E['ppp_sens']),
-           rest=S.get('rest_effects', {}), props=dict(**S.get('props', {}), posavg=posavg, mdist=mdist, mdistc=mdistc),
+           rest=S.get('rest_effects', {}), props=dict(**S.get('props', {}), posavg=posavg, mdist=mdist, mdistc=mdistc, **zone),
            rosters=teams, pool=pool, tests=S.get('tests', {}), notes=S.get('notes', {}))
 json.dump(out, open('build/ratings.json', 'w'), separators=(',', ':'))
 nr = {t['abbr']: t for t in teams}

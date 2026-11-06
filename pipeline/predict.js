@@ -69,7 +69,7 @@ for (const g of SLATE.games) {
   // player props from the simulation the app shows
   const PR = {};
   for (const [side, team, opp, av] of [['h', g.home, g.away, sh.h], ['a', g.away, g.home, sh.a]]) {
-    const hist = { pts: W[side], fgm: W.stat[side].fgm, fg3m: W.stat[side].fg3m, reb: W.stat[side].reb, mb: W.mb[side] };
+    const hist = { pts: W[side], fgm: W.stat[side].fgm, fg3m: W.stat[side].fg3m, reb: W.stat[side].reb, mb: W.mb[side], opp };
     PR[side] = E.playerProps(D, av.players, hist);
     for (const pr of PR[side]) {
       for (const k of Object.keys(pr.m)) prow.push([new Date(now).toISOString(), g.id, g.start, team, opp, pr.pid, pr.name, f2(pr.min), A ? 1 : 0,

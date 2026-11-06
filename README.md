@@ -350,6 +350,29 @@ margin-linked minutes, scoring plays, teammate copula), each combo against its o
 - `pipeline/predict.js` logs those shapes before tip-off (`data/predictions/sgp_<stamp>.csv`); `pipeline/score.py`
   scores them (joint vs legs multiplied, a parlay with a player who did not play is void) into the Track record.
 
+### Props: opponent matchups (Nov 6, 2026; shot-zone matchup kept for points, defense vs position rejected)
+`validation/shot_matchup.py`, `pipeline/matchup.py` (logs `shot_matchup_tune_2025.*`, `shot_matchup_test_2026.*`).
+Before this a player's points were his share of the team's points whatever the opponent; the opponent's defense only
+moved the team total. Two candidates, each re-dividing the team's expected points (team total unchanged):
+- **Shot-zone matchup**: his points mix (rim / mid-range / three / free throws, from the play-by-play, 180-day
+  half-life, shrunk to the league mix with 60 points) against the opponent's points allowed per possession in each
+  zone relative to the league (180-day half-life, shrunk with 1,000 possessions). mult = (his / team average)^lambda.
+- **Defense vs position**: the opponent's points allowed per possession to guards / forwards / centers, same form.
+
+| 2024-25 scan (log loss) | book line | all lines |
+|---|---|---|
+| none | 0.65562 | 0.34624 |
+| zone 0.5 / 1.0 / 1.5 / 2.0 | 0.65553 / 0.65555 / 0.65569 / 0.65595 | 0.34618 / 0.34620 / 0.34631 / 0.34649 |
+| position 0.5 / 1.0 / 1.5 | 0.65558 / 0.65618 / 0.65742 | 0.34629 / 0.34679 / 0.34774 |
+
+- Chosen: zone 0.5 (multipliers mostly 0.988-1.012, i.e. about +-0.25 points on a 20-point scorer). Position: none
+  (worse on all lines at every strength; past 0.5 clearly worse: defense-vs-position numbers mostly reflect who a team
+  happened to play).
+- 2025-26 held out, zone 0.5: book line 0.65123 -> 0.65103 (+0.00020, +0.00006 to +0.00035); all lines 0.34495 ->
+  0.34484 (+0.00011, +0.00004 to +0.00019). Small but the interval is above zero on both: kept, live for points
+  (`props.zone_lambda`). Threes and rebounds: no zone term (a team's threes are already split by each shooter's own
+  rate; the opponent's three defense moves the team's threes in the simulation).
+
 ## Layout
 - `pipeline/fetch_data.sh`: play-by-play, box scores and schedules from the sportsdataverse-data GitHub releases
   (refreshed daily, usually between 5 and 7:30 AM ET). Raw files are not committed.
