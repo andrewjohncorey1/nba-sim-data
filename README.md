@@ -397,7 +397,7 @@ when 2026-27 is complete.
 | Candidate | Picked on 2024-25 | 2025-26 gain (book line / all lines) | Verdict |
 |---|---|---|---|
 | Usage tilt when rotation teammates sit (high-usage teammates take more of the freed shots) | worse at every strength, both directions | -0.00380 / -0.00263 | rejected: the model's proportional split (shares re-normalized among who plays) is already right |
-| Recent form (last 3 games' points per minute, weight 0.1) | 0.1 | +0.00013 (-0.00007 to +0.00034) / +0.00014 (+0.00002 to +0.00026) | **kept** (passes on all lines; small: a player 50% hot over 100 minutes moves about +1.6%) |
+| Recent form (last 3 games' points per minute, weight 0.1) | 0.1 | +0.00013 (-0.00007 to +0.00034) / +0.00014 (+0.00002 to +0.00026) | **kept** (passes on all lines; small: a player scoring 50% above his rate over 100 minutes moves about +3%) |
 | Foul-prone players' minutes spread | -0.2 (book +, all lines -) | +0.00021 / -0.00037 (-0.00056 to -0.00018) | rejected |
 | Rebound matchup (his offensive/defensive mix vs the boards this opponent leaves) | 1.5 | -0.00003 / -0.00005 | rejected (no signal) |
 
