@@ -1,0 +1,9 @@
+game-level candidates, season ending 2026 (1321 games); log loss gain vs current model (positive = better) [95% by game]
+  schedule coefficients (points, home minus away for margin; summed for total): margin 3 in 4 -0.73, 4 in 6 -0.26, 5th+ straight road +0.11, West early East start -2.28 | total 3 in 4 -1.94, 4 in 6 +1.57, 5th+ straight road +1.40
+  games with each spot (either team): 3 in 4 442, 4 in 6 470, 5th+ straight road 68, West early East start 9
+sched (margin)                               moneyline +0.00054 [-0.00027,+0.00139]  spread +0.00063 [-0.00114,+0.00223]
+sched (total)                                total -0.00279 [-0.00542,-0.00010]  total -8 -0.00214 [-0.00461,+0.00034]  total +8 -0.00223 [-0.00466,+0.00018]
+homeT K40 w1.0                               moneyline +0.00028 [-0.00166,+0.00210]  spread +0.00067 [-0.00238,+0.00385]
+teamres K40 w0.5                             moneyline +0.00100 [-0.00024,+0.00219]  spread +0.00136 [-0.00113,+0.00402]
+teamres K40 w0.5 (first 20 games)            moneyline +0.00251 [+0.00052,+0.00438]  spread +0.00142 [-0.00362,+0.00573]
+totroll N200 K100                            total +0.00377 [-0.00094,+0.00851]  total -8 +0.00091 [-0.00377,+0.00553]  total +8 +0.00103 [-0.00381,+0.00522]

@@ -123,6 +123,14 @@ if pp.get('zone_lambda'):
             if p['pid'] in zmix.index: p['zm'] = [round(float(v), 4) for v in zmix.loc[p['pid']]]
     for pid, p in pool.items():
         if pid in zmix.index: p['zm'] = [round(float(v), 4) for v in zmix.loc[pid]]
+# recent form for points props (validation/props_adj.py 'hot'): points and minutes over each player's last 3 games
+if pp.get('hot_g'):
+    l3 = PL[(PL['min'] > 0) & (PL.date < now)].sort_values('date').groupby('pid').tail(3).groupby('pid')[['pts', 'min']].sum()
+    for t in teams:
+        for p in t['roster']:
+            if p['pid'] in l3.index: p['l3'] = [round(float(l3.at[p['pid'], 'pts']), 1), round(float(l3.at[p['pid'], 'min']), 1)]
+    for pid, p in pool.items():
+        if pid in l3.index: p['l3'] = [round(float(l3.at[pid, 'pts']), 1), round(float(l3.at[pid, 'min']), 1)]
 cal = json.load(open('pipeline/calib.json')) if os.path.exists('pipeline/calib.json') else {}
 out = dict(asOf=str(last_game.date()), generated=pd.Timestamp.now('UTC').strftime('%Y-%m-%dT%H:%M:%SZ'), season=Y,
            teams=RT.TEAMS, names={t: S['team_names'][t][0] for t in RT.TEAMS},

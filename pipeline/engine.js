@@ -305,6 +305,11 @@ function playerProps(D,players,hist,minMin){
   const zf=P.zone_lambda&&hist.opp&&P.zdef?P.zdef[hist.opp]:null;let zm=players.map(()=>1);
   if(zf){const x=players.map(p=>{const w=p.zm||P.zlg;return w.reduce((a,v,j)=>a+v*zf[j],0);}),e=players.map((p,i)=>(p.r?p.r.pts:0)*ems[i]*mult[i]);
     const se=e.reduce((a,v)=>a+v,0),avg=se>0?x.reduce((a,v,i)=>a+v*e[i],0)/se:1;zm=x.map(v=>Math.pow(v/avg,P.zone_lambda));}
+  // recent form (validation/props_adj.py 'hot'): points per minute over his last 3 games vs his rate,
+  // 1 + g x min/(min+60) x (z - 1), re-normalized so the team's expected points are unchanged
+  if(P.hot_g){const e=players.map((p,i)=>(p.r?p.r.pts:0)*ems[i]*mult[i]*zm[i]);
+    const hm=players.map(p=>{if(!p.l3||!p.r||!p.l3[1])return 1;const z=Math.min(3,Math.max(0.3,(p.l3[0]/p.l3[1])/Math.max(p.r.pts,1e-3))),w=p.l3[1]/(p.l3[1]+60);return 1+P.hot_g*w*(z-1);});
+    const se=e.reduce((a,v)=>a+v,0),sh=e.reduce((a,v,i)=>a+v*hm[i],0);if(sh>0)zm=zm.map((v,i)=>v*hm[i]*se/sh);}
   for(const [i,p] of players.entries()){
     const em=ems[i],cm0=Math.min(48,em/Math.max(0.05,p.pp??1)),cm=cm0*mult[i];
     if(cm0<(minMin??P.min_minutes??8)||!p.r)continue;
@@ -366,17 +371,24 @@ function playerLegBySim(pl,H,side,line){
     let v=cache.get(key);if(v===undefined){const f=pl.sg.fb[b];let o=0;for(const x of f)o+=1-playsCdf(Math.max(1e-6,pl.sg.share*T*x),pl.sg.fr,K);v=o/f.length;cache.set(key,v);}
     out[s]=v;}
   return out;}
-// legs: [{t:'win',side}, {t:'over',line}, {t:'under',line}, {t:'pts',side,pl,line}]  (at most two players per team)
+// legs: {t:'win',side} | {t:'cover',side,line} (side's spread line, e.g. -4.5) | {t:'over'|'under',line} (game total) |
+// {t:'pts',side,pl,line,dir:'over'|'under'}; at most two players per team. A player under is 1 - his over in that
+// simulated game; two teammates use the copula with the sign flipped when their directions differ
+// (validation/sgp7.py tested unders, spreads and mixed directions).
 function sgpPrice(H,legs,rho){
   const N=H.n,rows=H.rows;rho=rho??-0.2;
-  const P={h:[],a:[]};for(const L of legs)if(L.t==='pts')P[L.side].push(L.v||(L.v=playerLegBySim(L.pl,H,L.side,L.line)));
+  const P={h:[],a:[]};for(const L of legs)if(L.t==='pts'){L.v=L.v||playerLegBySim(L.pl,H,L.side,L.line);P[L.side].push(L);}
+  const pv=(L,s)=>L.dir==='under'?1-L.v[s]:L.v[s];
   let J=0;const marg=legs.map(()=>0);
   for(let s=0;s<N;s++){const h=rows[2*s],a=rows[2*s+1];let w=1;
     for(let i=0;i<legs.length;i++){const L=legs[i];let x;
-      if(L.t==='win')x=(L.side==='h'?h>a:a>h)?1:0;else if(L.t==='over')x=h+a>L.line?1:0;else if(L.t==='under')x=h+a<L.line?1:0;else x=L.v[s];
+      if(L.t==='win')x=(L.side==='h'?h>a:a>h)?1:0;
+      else if(L.t==='cover')x=((L.side==='h'?h-a:a-h)+L.line>0)?1:0;
+      else if(L.t==='over')x=h+a>L.line?1:0;else if(L.t==='under')x=h+a<L.line?1:0;else x=pv(L,s);
       marg[i]+=x;if(L.t!=='pts')w*=x;}
     if(w===0)continue;
-    for(const sd of ['h','a']){const v=P[sd];if(v.length===1)w*=v[0][s];else if(v.length===2)w*=copulaBoth(v[0][s],v[1][s],rho);}
+    for(const sd of ['h','a']){const v=P[sd];if(v.length===1)w*=pv(v[0],s);
+      else if(v.length===2)w*=copulaBoth(pv(v[0],s),pv(v[1],s),(v[0].dir==='under')!==(v[1].dir==='under')?-rho:rho);}
     J+=w;}
   const pm=marg.map(m=>m/N);return {joint:J/N,legs:pm.reduce((x,y)=>x*y,1),each:pm};}
 

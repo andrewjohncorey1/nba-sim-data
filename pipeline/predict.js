@@ -28,18 +28,21 @@ const scols = ['snap_utc', 'game_id', 'start', 'anchored', 'combo', 'side', 'pid
 function sgpCombos(W, PR, totLine) {
   const top = s => PR[s].filter(p => p.sg && p.line.pts != null).sort((x, y) => y.m.pts - x.m.pts);
   const T = { h: top('h'), a: top('a') }, out = [];
-  const pl = (s, p) => ({ t: 'pts', side: s, pl: p, line: p.line.pts, pid: p.pid, name: p.name });
+  const pl = (s, p, dir) => ({ t: 'pts', side: s, pl: p, line: p.line.pts, pid: p.pid, name: p.name, dir: dir || 'over' });
   for (const s of ['h', 'a']) {
     const o = s === 'h' ? 'a' : 'h', st = T[s][0], nd = T[s][1], op = T[o][0];
     if (!st) continue;
-    const win = { t: 'win', side: s }, ov = { t: 'over', line: totLine };
-    const shapes = [['star + team wins', [pl(s, st), win]], ['star + game over', [pl(s, st), ov]], ['star + team wins + game over', [pl(s, st), win, ov]]];
+    const win = { t: 'win', side: s }, ov = { t: 'over', line: totLine }, un = { t: 'under', line: totLine }, lose = { t: 'win', side: o };
+    const hl = Math.round(-E.hmean(W.m)) + 0.5, cov = { t: 'cover', side: s, line: s === 'h' ? hl : -hl };
+    const shapes = [['star + team wins', [pl(s, st), win]], ['star + game over', [pl(s, st), ov]], ['star + team wins + game over', [pl(s, st), win, ov]],
+      ['star under + team loses', [pl(s, st, 'under'), lose]], ['star under + game under', [pl(s, st, 'under'), un]],
+      ['star under + team loses + game under', [pl(s, st, 'under'), lose, un]], ['star + team covers', [pl(s, st), cov]]];
     if (nd) shapes.push(['star + teammate', [pl(s, st), pl(s, nd)]], ['star + teammate + team wins', [pl(s, st), pl(s, nd), win]],
       ['star + teammate + game over', [pl(s, st), pl(s, nd), ov]], ['star + teammate + team wins + game over', [pl(s, st), pl(s, nd), win, ov]]);
     if (op) { shapes.push(['star + opposing star + team wins', [pl(s, st), pl(o, op), win]]);
       if (s === 'h') shapes.push(['both stars', [pl(s, st), pl(o, op)]], ['both stars + game over', [pl(s, st), pl(o, op), ov]]); }
     for (const [k, legs] of shapes) { const r = E.sgpPrice(W, legs);
-      out.push({ k, side: s, legs: legs.map(l => ({ t: l.t, side: l.side, pid: l.pid, name: l.name, line: l.line })), joint: +r.joint.toFixed(4), lm: +r.legs.toFixed(4) }); }
+      out.push({ k, side: s, legs: legs.map(l => ({ t: l.t, side: l.side, pid: l.pid, name: l.name, line: l.line, dir: l.dir })), joint: +r.joint.toFixed(4), lm: +r.legs.toFixed(4) }); }
   }
   return out;
 }
@@ -81,7 +84,7 @@ for (const g of SLATE.games) {
   const SG = sgpCombos(W, PR, A && od && od.tot_line != null ? od.tot_line : Math.floor(E.expTotal(W)) + 0.5);
   market[g.id].sgp = SG;
   for (const c of SG) srow.push([new Date(now).toISOString(), g.id, g.start, A ? 1 : 0, c.k, c.side, c.legs.map(l => l.pid ?? '').join('|'),
-    c.legs.map(l => l.line ?? '').join('|'), c.legs.map(l => l.t).join('|'), f4(c.joint), f4(c.lm)]);
+    c.legs.map(l => l.line ?? '').join('|'), c.legs.map(l => [l.t, l.side ?? '', l.dir ?? ''].join(':')).join('|'), f4(c.joint), f4(c.lm)]);
   const spl = half(-E.hmean(H.m)), ttl = half(E.expTotal(H));
   rows.push([new Date(now).toISOString(), ver, g.id, g.start, g.home, g.away, g.neutral, (ha.out || []).length, (aa.out || []).length,
     f2(sh.ptsH), f2(sh.ptsA), g.rest ? g.rest.b2b_h : '', g.rest ? g.rest.b2b_a : '',

@@ -373,6 +373,55 @@ moved the team total. Two candidates, each re-dividing the team's expected point
   (`props.zone_lambda`). Threes and rebounds: no zone term (a team's threes are already split by each shooter's own
   rate; the opponent's three defense moves the team's threes in the simulation).
 
+### Candidate adjustments, round 2 (Nov 6, 2026)
+Each tuned on 2024-25 and tested once on 2025-26; "passes" = the 95% interval (by game) above zero on 2025-26.
+
+**Game level** (`validation/game_adj.py`, logs `game_adj_2025.*`, `game_adj_2026.*`; prices moved on the held-out
+simulations, fair-line moneyline / spread / totals)
+
+| Candidate | Picked on 2024-25 | 2025-26 gain | Verdict |
+|---|---|---|---|
+| Schedule spots, margin (3 in 4, 4 in 6, 5th+ straight road game, West team in an early Eastern start) | ridge fit | moneyline +0.00054 (-0.00027 to +0.00139), spread +0.00063 (-0.00114 to +0.00223) | not passed |
+| Schedule spots, totals | ridge fit | total -0.00279 (-0.00542 to -0.00010) | rejected (worse) |
+| Team-specific home court (previous two seasons, shrunk 40 games) | K 40, weight 1 | moneyline +0.00028 (-0.00166 to +0.00210), spread +0.00067 | not passed |
+| Team residual carry-over (rating lag / roster change) | K 40, weight 0.5 | moneyline +0.00100 (-0.00024 to +0.00219); first 20 games of each team +0.00251 (+0.00052 to +0.00438), spread +0.00142 (spans 0) | not passed overall; early-season moneyline only |
+| Rolling totals offset (league's previous 200 games, shrunk 100) | N 200, K 100 | total +0.00377 (-0.00094 to +0.00851) | not passed |
+| Referee crews | - | - | no free historical crew data in our sources; not testable yet |
+
+None go live. The schedule-spot margin effect, team home court, early-season carry-over and the rolling totals offset
+are positive in both seasons but small enough that one season cannot separate them from noise; worth re-testing
+when 2026-27 is complete.
+
+**Props** (`validation/props_adj.py`, logs `props_adj_2025.*`, `props_adj_2026.*`; props harness, only the one change)
+
+| Candidate | Picked on 2024-25 | 2025-26 gain (book line / all lines) | Verdict |
+|---|---|---|---|
+| Usage tilt when rotation teammates sit (high-usage teammates take more of the freed shots) | worse at every strength, both directions | -0.00380 / -0.00263 | rejected: the model's proportional split (shares re-normalized among who plays) is already right |
+| Recent form (last 3 games' points per minute, weight 0.1) | 0.1 | +0.00013 (-0.00007 to +0.00034) / +0.00014 (+0.00002 to +0.00026) | **kept** (passes on all lines; small: a player 50% hot over 100 minutes moves about +1.6%) |
+| Foul-prone players' minutes spread | -0.2 (book +, all lines -) | +0.00021 / -0.00037 (-0.00056 to -0.00018) | rejected |
+| Rebound matchup (his offensive/defensive mix vs the boards this opponent leaves) | 1.5 | -0.00003 / -0.00005 | rejected (no signal) |
+
+**Same-game parlay legs** (`validation/sgp7.py`, logs `sgp7_2025.*`, `sgp7_2026.*`; same model and simulations as
+`sgp6.py`)
+
+| 2025-26 family | Joint vs legs multiplied | Avg joint / legs mult / actual | 2024-25 |
+|---|---|---|---|
+| Unders (star under + team loses / + game under / both, 3 legs) | +0.00441 (+0.00186 to +0.00691) PASS | 23.8% / 21.2% / 24.6% | +0.00248 |
+| Spreads (star over + team covers / + game over / + teammate) | +0.00119 (-0.00102 to +0.00351) | 18.7% / 16.7% / 17.8% | +0.00312 PASS |
+| Mixed directions (star over + game under, star over + teammate under, both under) | -0.00010 (-0.00129 to +0.00113) | 24.2% / 25.3% / 24.7% | +0.00103 |
+| Controls (team covers + game over / under) | -0.00036 (-0.00074 to +0.00004) | 25.0% / 25.0% / 25.0% | +0.00021 |
+
+- Live in the builder: player points unders, game under, team spread, mixed directions. Unders passed; spreads passed
+  in 2024-25 and lean the same way in 2025-26; mixed directions tie legs multiplied on log loss but the joint price
+  level is closer to what happened in both seasons (legs multiplied overprices the negatively linked ones). Side +
+  total controls stay independent.
+- Correlations tab adds star under + team loses, star under + game under, the 3-leg version, and star + team covers;
+  all logged and scored in the Track record (`score.py` reads `type:side:direction` legs).
+
+**Later injury/lineup refresh** (not a model test): a 6:41 PM ET run for the 7 PM games would cost about $0.01 a run
+with the lineups page only (about $0.30 a month), or about $0.13 a run if Pinnacle is re-pulled to re-anchor
+(about $4 a month). Not scheduled yet.
+
 ## Layout
 - `pipeline/fetch_data.sh`: play-by-play, box scores and schedules from the sportsdataverse-data GitHub releases
   (refreshed daily, usually between 5 and 7:30 AM ET). Raw files are not committed.

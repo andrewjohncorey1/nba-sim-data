@@ -268,26 +268,31 @@ function sgpBuilder(el,g,c,tot0){
   const mkh=s=>({pts:H[s],fgm:H.stat[s].fgm,fg3m:H.stat[s].fg3m,reb:H.stat[s].reb,mb:H.mb[s],opp:s==='h'?away:home});
   const PL={h:playerProps(DATA,c.sh.h.players,mkh('h'),10).filter(p=>p.sg),a:playerProps(DATA,c.sh.a.players,mkh('a'),10).filter(p=>p.sg)};
   for(const s of ['h','a'])PL[s].sort((x,y)=>y.m.pts-x.m.pts);
+  const hl=Math.round(-hmean(H.m))+0.5;             // home's fair spread line (half point)
   const legs=[];let price='';
-  const team=s=>s==='h'?home:away;
-  const lab=L=>L.t==='win'?`${NICK(team(L.side))} win`:L.t==='over'?`Game over ${L.line.toFixed(1)}`:`${L.pl.name} over ${L.line.toFixed(1)} pts`;
+  const team=s=>s==='h'?home:away,sg=v=>(v>0?'+':'')+v.toFixed(1);
+  const lab=L=>L.t==='win'?`${NICK(team(L.side))} win`:L.t==='cover'?`${NICK(team(L.side))} ${sg(L.line)}`:L.t==='over'||L.t==='under'?`Game ${L.t} ${L.line.toFixed(1)}`:`${L.pl.name} ${L.dir} ${L.line.toFixed(1)} pts`;
   const opts=['a','h'].map(s=>`<optgroup label="${NAME(team(s))}">${PL[s].map((p,i)=>`<option value="${s}:${i}">${p.name} (${p.line.pts.toFixed(1)})</option>`).join('')}</optgroup>`).join('');
-  el.innerHTML=`<h2>Same-game parlay</h2><p class="sub">Fair odds for legs together, priced inside each of the ${H.n.toLocaleString()} simulated games: when a team wins or the game goes over, its scorers' chances move with it; two teammates compete for the same shots and minutes. Legs offered are the ones tested together on last season's games (2025-26, untouched while building the model): player points overs (up to two per team), team to win, game total over; up to four legs. Props legs assume the player plays. Type an offered price to see the expected return at that price.</p>
+  const ou=k=>`<select data-${k}><option value="over">Over</option><option value="under">Under</option></select>`;
+  el.innerHTML=`<h2>Same-game parlay</h2><p class="sub">Fair odds for legs together, priced inside each of the ${H.n.toLocaleString()} simulated games: when a team wins or the game goes over, its scorers' chances move with it; two teammates compete for the same shots and minutes. Legs offered are the ones tested together on last season's games (2025-26, untouched while building the model): player points over or under (up to two per team), team to win, team spread, game total over or under; up to four legs. Props legs assume the player plays. Type an offered price to see the expected return at that price.</p>
     <div class="sgpctl">
       <div class="field"><span class="lbl">Team wins</span><div class="seg"><button type="button" data-w="a">${NICK(away)}</button><button type="button" data-w="h">${NICK(home)}</button></div></div>
-      <div class="field"><label>Game total over</label><span><input class="ln" type="number" step="0.5" value="${tot0}" data-tl> <button type="button" class="add" data-addt>Add</button></span></div>
-      <div class="field"><label>Player points over</label><span><select data-ps>${opts}</select> <input class="ln" type="number" step="0.5" data-pl> <button type="button" class="add" data-addp>Add</button></span></div>
+      <div class="field"><label>Spread</label><span><select data-st><option value="a">${NICK(away)}</option><option value="h">${NICK(home)}</option></select> <input class="ln" type="number" step="0.5" data-sl> <button type="button" class="add" data-adds>Add</button></span></div>
+      <div class="field"><label>Game total</label><span>${ou('td')} <input class="ln" type="number" step="0.5" value="${tot0}" data-tl> <button type="button" class="add" data-addt>Add</button></span></div>
+      <div class="field"><label>Player points</label><span><select data-ps>${opts}</select> ${ou('pd')} <input class="ln" type="number" step="0.5" data-pl> <button type="button" class="add" data-addp>Add</button></span></div>
     </div>
     <div class="chips" data-chips></div><div data-res></div>`;
-  const $q=x=>el.querySelector(x),ps=$q('[data-ps]'),pl=$q('[data-pl]');
+  const $q=x=>el.querySelector(x),ps=$q('[data-ps]'),pl=$q('[data-pl]'),st=$q('[data-st]'),sl=$q('[data-sl]');
   const cur=()=>{const [s,i]=ps.value.split(':');return {s,p:PL[s][+i]};};
   const syncLine=()=>{if(ps.value)pl.value=cur().p.line.pts.toFixed(1);};ps.onchange=syncLine;syncLine();
+  const syncSp=()=>{sl.value=(st.value==='h'?hl:-hl).toFixed(1);};st.onchange=syncSp;syncSp();
   const full=()=>legs.length>=4;
   const draw=()=>{
     $q('[data-chips]').innerHTML=legs.length?legs.map((L,i)=>`<span class="chip">${lab(L)}<button type="button" aria-label="Remove" data-rm="${i}">×</button></span>`).join(''):'<span class="sub">Add two or more legs.</span>';
     el.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{legs.splice(+b.dataset.rm,1);draw();});
     el.querySelectorAll('[data-w]').forEach(b=>{const on=legs.some(L=>L.t==='win'&&L.side===b.dataset.w);b.setAttribute('aria-pressed',String(on));});
-    $q('[data-addt]').disabled=full()||legs.some(L=>L.t==='over');
+    $q('[data-addt]').disabled=full()||legs.some(L=>L.t==='over'||L.t==='under');
+    $q('[data-adds]').disabled=full()||legs.some(L=>L.t==='cover');
     const ok=ps.value&&!full()&&legs.filter(L=>L.t==='pts'&&L.side===cur().s).length<2&&!legs.some(L=>L.t==='pts'&&L.pl===cur().p);
     $q('[data-addp]').disabled=!ok;
     const R=$q('[data-res]');if(legs.length<2){R.innerHTML='';return;}
@@ -303,8 +308,9 @@ function sgpBuilder(el,g,c,tot0){
     const px=$q('[data-px]');px.onchange=()=>{const v=px.value.replace(/[^0-9+\-−]/g,'').replace('−','-');price=v===''||isNaN(+v)?'':+v;draw();};};
   el.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{const s=b.dataset.w,i=legs.findIndex(L=>L.t==='win');
     if(i>=0&&legs[i].side===s)legs.splice(i,1);else if(i>=0)legs[i]={t:'win',side:s};else if(!full())legs.push({t:'win',side:s});draw();});
-  $q('[data-addt]').onclick=()=>{const v=+$q('[data-tl]').value;if(v>0){legs.push({t:'over',line:v});draw();}};
-  $q('[data-addp]').onclick=()=>{const {s,p}=cur(),v=+pl.value;if(v>0){legs.push({t:'pts',side:s,pl:p,line:v});draw();}};
+  $q('[data-adds]').onclick=()=>{const v=+sl.value;if(!isNaN(v)&&v%1!==0){legs.push({t:'cover',side:st.value,line:v});draw();}};
+  $q('[data-addt]').onclick=()=>{const v=+$q('[data-tl]').value;if(v>0){legs.push({t:$q('[data-td]').value,line:v});draw();}};
+  $q('[data-addp]').onclick=()=>{const {s,p}=cur(),v=+pl.value;if(v>0){legs.push({t:'pts',side:s,pl:p,line:v,dir:$q('[data-pd]').value});draw();}};
   draw();}
 
 /* ---------- correlations tab ---------- */
@@ -313,7 +319,7 @@ const COR_COLS=[['legs','Legs',c=>c._txt,'asc'],['chance','Chance',c=>c.joint,'d
   ['lm','Legs multiplied',c=>c.lm<0.5?(1/c.lm-1)*100:-100/(1/c.lm-1),'desc'],['corr','Correlation',c=>c.joint/c.lm,'desc']];
 function corTable(g){
   const st=corSort[g.id]||{col:'chance',dir:'desc'},C=COR_COLS.find(x=>x[0]===st.col),key=C[2],sg=st.dir==='asc'?1:-1;
-  const legTxt=L=>L.t==='win'?`${NICK(L.side==='h'?g.home:g.away)} win`:L.t==='over'?`over ${(+L.line).toFixed(1)}`:`${L.name} o${(+L.line).toFixed(1)}`;
+  const legTxt=L=>L.t==='win'?`${NICK(L.side==='h'?g.home:g.away)} win`:L.t==='cover'?`${NICK(L.side==='h'?g.home:g.away)} ${(L.line>0?'+':'')+(+L.line).toFixed(1)}`:L.t==='over'||L.t==='under'?`${L.t} ${(+L.line).toFixed(1)}`:`${L.name} ${L.dir==='under'?'u':'o'}${(+L.line).toFixed(1)}`;
   const rows=g.mkt.sgp.map(c=>({...c,_txt:c.legs.map(legTxt).join(' + ')}))
     .sort((x,y)=>{const a=key(x),b=key(y);return (typeof a==='string'?a.localeCompare(b):a-b)*sg||y.joint-x.joint;});
   const th=([k,lab])=>`<th aria-sort="${st.col===k?(st.dir==='asc'?'ascending':'descending'):'none'}"><button type="button" class="sortbtn" data-g="${g.id}" data-col="${k}">${lab}<span aria-hidden="true">${st.col===k?(st.dir==='asc'?' ▲':' ▼'):''}</span></button></th>`;

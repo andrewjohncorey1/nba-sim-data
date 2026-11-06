@@ -115,13 +115,16 @@ if sf:
         g = gm.loc[x.game_id]; hp, ap = g.home_pts, g.away_pts
         legs, pids, lines = x.legs.split('|'), str(x.pids).split('|'), str(x.lines).split('|')
         ok, hit = True, True
-        for t, pid, L in zip(legs, pids, lines):
-            if t == 'win': hit &= (hp > ap) if x.side == 'h' else (ap > hp)
+        for tok, pid, L in zip(legs, pids, lines):
+            t, sd, dr = (tok.split(':') + ['', ''])[:3]; sd = sd or x.side      # 'type:side:direction' (older rows: type only)
+            if t == 'win': hit &= (hp > ap) if sd == 'h' else (ap > hp)
+            elif t == 'cover': hit &= ((hp - ap) if sd == 'h' else (ap - hp)) + float(L) > 0
             elif t == 'over': hit &= (hp + ap) > float(L)
+            elif t == 'under': hit &= (hp + ap) < float(L)
             elif t == 'pts':
                 v = pts.get((x.game_id, int(float(pid))))
                 if v is None: ok = False; break
-                hit &= v > float(L)
+                hit &= (v < float(L)) if dr == 'under' else (v > float(L))
         if ok: rows.append((x.combo, len(legs), int(hit), x.joint, x.legs_mult))
     if rows:
         R_ = pd.DataFrame(rows, columns=['combo', 'n_legs', 'y', 'joint', 'lm'])

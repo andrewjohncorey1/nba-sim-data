@@ -1,0 +1,17 @@
+SGP legs beyond the first test (unders, spreads, mixed directions), season ending 2026: joint price vs legs multiplied (positive = joint better; 95% interval by game)
+U1 star under + team loses                  legs 2 n  2492  gain +0.00167 [+0.00003,+0.00333] PASS  avg joint 0.2708 legs mult 0.2502 actual 0.2713  thirds (joint/legs/actual) 0.133/0.121/0.114 | 0.262/0.239/0.259 | 0.417/0.391/0.440
+U2 star under + game under                  legs 2 n  2492  gain +0.00499 [+0.00135,+0.00867] PASS  avg joint 0.2898 legs mult 0.2572 actual 0.3002  thirds (joint/legs/actual) 0.203/0.174/0.262 | 0.303/0.268/0.299 | 0.363/0.329/0.339
+U3 star under + team loses + game under     legs 3 n  2492  gain +0.00656 [+0.00344,+0.01005] PASS  avg joint 0.1545 legs mult 0.1275 actual 0.1649  thirds (joint/legs/actual) 0.078/0.062/0.078 | 0.151/0.122/0.168 | 0.235/0.199/0.249
+S1 star over + team covers                  legs 2 n  2492  gain +0.00251 [-0.00008,+0.00508]       avg joint 0.2702 legs mult 0.2477 actual 0.2652  thirds (joint/legs/actual) 0.195/0.178/0.227 | 0.260/0.236/0.264 | 0.356/0.329/0.304
+S2 star over + team covers + game over      legs 3 n  2492  gain +0.00055 [-0.00265,+0.00381]       avg joint 0.1483 legs mult 0.1215 actual 0.1344  thirds (joint/legs/actual) 0.112/0.088/0.111 | 0.145/0.116/0.131 | 0.189/0.161/0.161
+S3 star + teammate over + team covers       legs 3 n  2492  gain +0.00051 [-0.00186,+0.00308]       avg joint 0.1431 legs mult 0.1303 actual 0.1332  thirds (joint/legs/actual) 0.070/0.068/0.084 | 0.121/0.110/0.131 | 0.238/0.213/0.184
+N1 star over + game under                   legs 2 n  2492  gain -0.00050 [-0.00400,+0.00324]       avg joint 0.2197 legs mult 0.2523 actual 0.2299  thirds (joint/legs/actual) 0.147/0.180/0.185 | 0.206/0.241/0.210 | 0.306/0.336/0.295
+N2 star over + teammate under               legs 2 n  2492  gain +0.00002 [-0.00130,+0.00130]       avg joint 0.2479 legs mult 0.2347 actual 0.2452  thirds (joint/legs/actual) 0.189/0.178/0.186 | 0.251/0.237/0.271 | 0.304/0.289/0.278
+N3 star under + teammate under              legs 2 n  2492  gain +0.00017 [-0.00120,+0.00160]       avg joint 0.2584 legs mult 0.2716 actual 0.2665  thirds (joint/legs/actual) 0.119/0.131/0.143 | 0.263/0.277/0.265 | 0.394/0.407/0.391
+T1 team covers + game over (control)        legs 2 n  2492  gain -0.00082 [-0.00138,-0.00028]       avg joint 0.2452 legs mult 0.2452 actual 0.2352  thirds (joint/legs/actual) 0.232/0.233/0.223 | 0.245/0.245/0.246 | 0.259/0.257/0.236
+T2 team covers + game under (control)       legs 2 n  2492  gain +0.00011 [-0.00045,+0.00066]       avg joint 0.2547 legs mult 0.2547 actual 0.2657  thirds (joint/legs/actual) 0.239/0.242/0.248 | 0.255/0.255/0.263 | 0.270/0.268/0.286
+pooled by family (every combo of the family in a game counted, interval by game):
+  unders               n   7476  gain +0.00441 [+0.00186,+0.00691] PASS  avg joint 0.2384 legs mult 0.2116 actual 0.2455
+  spreads              n   7476  gain +0.00119 [-0.00102,+0.00351]       avg joint 0.1872 legs mult 0.1665 actual 0.1776
+  mixed directions     n   7476  gain -0.00010 [-0.00129,+0.00113]       avg joint 0.2420 legs mult 0.2529 actual 0.2472
+  controls             n   4984  gain -0.00036 [-0.00074,+0.00004]       avg joint 0.2500 legs mult 0.2500 actual 0.2504
