@@ -106,6 +106,8 @@ tr.mark td{background:var(--soft);font-weight:500}
 .plist label:hover{background:var(--soft)}
 .plist .m{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
 .plist label.isout span:nth-child(2){text-decoration:line-through;color:var(--muted)}
+.sortbtn{all:unset;cursor:pointer;font:inherit;color:inherit;letter-spacing:inherit;text-transform:inherit;white-space:nowrap}
+.sortbtn:hover{color:var(--ink)}.sortbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 /* same-game parlay builder */
 .sgpctl{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:end;margin:6px 0 10px}
 .sgpctl .field input,.sgpctl .field select{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink)}
@@ -306,15 +308,26 @@ function sgpBuilder(el,g,c,tot0){
   draw();}
 
 /* ---------- correlations tab ---------- */
+const corSort={};          // per game: {col, dir}; default chance, highest first
+const COR_COLS=[['legs','Legs',c=>c._txt,'asc'],['chance','Chance',c=>c.joint,'desc'],['fair','Fair',c=>c.joint<0.5?(1/c.joint-1)*100:-100/(1/c.joint-1),'desc'],
+  ['lm','Legs multiplied',c=>c.lm<0.5?(1/c.lm-1)*100:-100/(1/c.lm-1),'desc'],['corr','Correlation',c=>c.joint/c.lm,'desc']];
+function corTable(g){
+  const st=corSort[g.id]||{col:'chance',dir:'desc'},C=COR_COLS.find(x=>x[0]===st.col),key=C[2],sg=st.dir==='asc'?1:-1;
+  const legTxt=L=>L.t==='win'?`${NICK(L.side==='h'?g.home:g.away)} win`:L.t==='over'?`over ${(+L.line).toFixed(1)}`:`${L.name} o${(+L.line).toFixed(1)}`;
+  const rows=g.mkt.sgp.map(c=>({...c,_txt:c.legs.map(legTxt).join(' + ')}))
+    .sort((x,y)=>{const a=key(x),b=key(y);return (typeof a==='string'?a.localeCompare(b):a-b)*sg||y.joint-x.joint;});
+  const th=([k,lab])=>`<th aria-sort="${st.col===k?(st.dir==='asc'?'ascending':'descending'):'none'}"><button type="button" class="sortbtn" data-g="${g.id}" data-col="${k}">${lab}<span aria-hidden="true">${st.col===k?(st.dir==='asc'?' ▲':' ▼'):''}</span></button></th>`;
+  return `<table><tr>${COR_COLS.map(th).join('')}</tr>
+    ${rows.map(c=>`<tr><td>${c._txt}</td><td>${pct(c.joint)}</td><td>${american(c.joint)}</td><td>${american(c.lm)}</td><td>×${(c.joint/c.lm).toFixed(2)}</td></tr>`).join('')}</table>`;}
 function renderCor(){
   const el=$('corView');const G_=SLATE.games.filter(g=>g.mkt&&g.mkt.sgp&&g.mkt.sgp.length);
-  const head=`<section class="panel"><h2>Correlations</h2><p class="sub">Fair odds for common same-game parlays on today's slate, from the same simulations as the game pages (Pinnacle-anchored where Pinnacle prices the game). Star = the team's top projected scorer, teammate = the next one; player lines are the props lines (simulated average rounded down to the half point); game total at Pinnacle's line when anchored, otherwise the fair line. "Legs multiplied" is what the same legs cost if they were unrelated. These shapes are logged before tip-off and scored in the Track record. Build any other combination from a game's page.</p></section>`;
+  const head=`<section class="panel"><h2>Correlations</h2><p class="sub">Fair odds for common same-game parlays on today's slate, from the same simulations as the game pages (Pinnacle-anchored where Pinnacle prices the game). Players are each team's top two projected scorers at their props lines; the game total is Pinnacle's line when anchored, otherwise the fair line. "Legs multiplied" is what the same legs cost if they were unrelated. Click a column to sort a game by it; click again to reverse. Build any other combination from a game's page.</p></section>`;
   if(!G_.length){el.innerHTML=head+'<section class="panel"><p>No parlay prices on this slate yet.</p></section>';return;}
-  const legTxt=(L,g)=>L.t==='win'?`${NICK(L.side==='h'?g.home:g.away)} win`:L.t==='over'?`over ${(+L.line).toFixed(1)}`:`${L.name} o${(+L.line).toFixed(1)}`;
-  el.innerHTML=head+G_.map(g=>`<section class="panel"><h3>${NAME(g.away)} at ${NAME(g.home)} · ${tFmt.format(new Date(g.start))} ET</h3><div class="tblwrap"><table>
-    <tr><th>Parlay</th><th>Legs</th><th>Chance</th><th>Fair</th><th>Legs multiplied</th><th>Correlation</th></tr>
-    ${g.mkt.sgp.map(c=>`<tr><td>${c.k}</td><td>${c.legs.map(L=>legTxt(L,g)).join(' + ')}</td><td>${pct(c.joint)}</td><td>${american(c.joint)}</td><td>${american(c.lm)}</td><td>×${(c.joint/c.lm).toFixed(2)}</td></tr>`).join('')}
-    </table></div></section>`).join('');}
+  el.innerHTML=head+G_.map(g=>`<section class="panel"><h3>${NAME(g.away)} at ${NAME(g.home)} · ${tFmt.format(new Date(g.start))} ET</h3><div class="tblwrap" data-cor="${g.id}">${corTable(g)}</div></section>`).join('');
+  el.onclick=e=>{const b=e.target.closest('.sortbtn');if(!b)return;const g=G_.find(x=>String(x.id)===b.dataset.g),k=b.dataset.col;
+    const cur=corSort[g.id]||{col:'chance',dir:'desc'},def=COR_COLS.find(x=>x[0]===k)[3];
+    corSort[g.id]=cur.col===k?{col:k,dir:cur.dir==='asc'?'desc':'asc'}:{col:k,dir:def};
+    const w=el.querySelector(`[data-cor="${g.id}"]`);w.innerHTML=corTable(g);w.querySelector(`[data-col="${k}"]`).focus();};}
 function howHtml(g,c,H){
   const od=g.odds||{},sh=c.sh,p=[];
   p.push(`<p>Team strength comes from every possession of recent games (turnovers, shot mix at the rim, mid-range and three, make rates, free-throw trips, offensive rebounds and pace), weighted toward recent games, each side against the opponent's defense, with home court.</p>`);
